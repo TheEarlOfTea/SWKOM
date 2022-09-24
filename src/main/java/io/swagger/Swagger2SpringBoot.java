@@ -3,8 +3,6 @@ package io.swagger;
 import io.swagger.configuration.LocalDateConverter;
 import io.swagger.configuration.LocalDateTimeConverter;
 
-import io.swagger.services.TestService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
@@ -17,15 +15,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import javax.annotation.PostConstruct;
-
 @SpringBootApplication
 @EnableOpenApi
 @ComponentScan(basePackages = { "io.swagger", "io.swagger.api" , "io.swagger.configuration"})
 public class Swagger2SpringBoot implements CommandLineRunner {
-
-    @Autowired
-    private TestService testService;
 
     @Override
     public void run(String... arg0) throws Exception {
@@ -55,9 +48,5 @@ public class Swagger2SpringBoot implements CommandLineRunner {
             return 10;
         }
 
-    }
-    @PostConstruct
-    public void startUp(){
-        testService.testService();
     }
 }
