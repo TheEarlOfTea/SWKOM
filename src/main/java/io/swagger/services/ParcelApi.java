@@ -6,9 +6,9 @@
 package io.swagger.services;
 
 import io.swagger.model.Error;
-import io.swagger.model.NewParcelInfo;
-import io.swagger.model.Parcel;
-import io.swagger.model.TrackingInformation;
+import io.swagger.services.dto.NewParcelInfo;
+import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.TrackingInformation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
