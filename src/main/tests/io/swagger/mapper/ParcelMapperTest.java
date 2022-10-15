@@ -1,6 +1,5 @@
 package io.swagger.mapper;
 
-import io.swagger.model.Hop;
 import io.swagger.model.HopArrival;
 import io.swagger.model.Recipient;
 import io.swagger.persistence.entity.ParcelEntity;
@@ -9,7 +8,6 @@ import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.*;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class ParcelMapperTest extends TestCase {
