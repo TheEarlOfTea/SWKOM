@@ -13,6 +13,7 @@ public interface ParcelMapper {
     
     ParcelMapper INSTANCE= Mappers.getMapper(ParcelMapper.class);
 
+
     @Mapping(source="newParcelInfo.trackingId", target = "trackingId")
     @Mapping(source="parcel.weight", target = "weight")
     @Mapping(source="parcel.recipient", target = "recipient")
@@ -21,4 +22,5 @@ public interface ParcelMapper {
     @Mapping(source="info.visitedHops", target = "visitedHops")
     @Mapping(source="info.futureHops", target = "futureHops")
     ParcelEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation info);
+
 }
