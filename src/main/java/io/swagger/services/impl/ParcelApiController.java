@@ -1,8 +1,8 @@
 package io.swagger.services.impl;
 
-import io.swagger.model.NewParcelInfo;
-import io.swagger.model.Parcel;
-import io.swagger.model.TrackingInformation;
+import io.swagger.services.dto.NewParcelInfo;
+import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.TrackingInformation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.services.ParcelApi;
 import io.swagger.v3.oas.annotations.Parameter;
