@@ -1,7 +1,11 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.Warehouse;
+import io.swagger.businessLayer.connector.impl.WarehouseConnector;
+import io.swagger.model.GeoCoordinate;
+import io.swagger.model.WarehouseNextHops;
+import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.Warehouse;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,36 +14,69 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class WarehouseApiControllerTest extends TestCase {
 
-    public static WarehouseApiController intialize() {
+    Warehouse warehouse;
+    WarehouseApiController controller;
+    WarehouseApiController controllerWithBadRequest;
+    ResponseEntity response;
+
+    public void intialize() {
 
 
         HttpServletRequest request= mock(HttpServletRequest.class);
         when(request.getHeader("Accept")).thenReturn("application/json");
 
         controller = new WarehouseApiController(mock(ObjectMapper.class), request);
-        return controller;
-    }
+        controllerWithBadRequest= new WarehouseApiController(mock(ObjectMapper.class), Mockito.mock(HttpServletRequest.class));
 
-    static WarehouseApiController controller= intialize();
+        warehouse= new Warehouse();
+        warehouse.setCode("ABCD1");
+        warehouse.setLevel(1);
+        ArrayList<WarehouseNextHops> list= new ArrayList<WarehouseNextHops>();
+        list.add(mock(WarehouseNextHops.class));
+        warehouse.setNextHops(list);
+        warehouse.setDescription("ABCD");
+        warehouse.setHopType("ABCD");
+        warehouse.setLocationCoordinates(mock(GeoCoordinate.class));
+        warehouse.setLocationName("ABCD");
+        warehouse.setProcessingDelayMins(1);
+    }
 
     @Test
     public void testExportWarehouses() {
-        ResponseEntity response= controller.exportWarehouses();
+        intialize();
+        response= controller.exportWarehouses();
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        response= controllerWithBadRequest.exportWarehouses();
+        assertEquals(HttpStatus.NOT_IMPLEMENTED, response.getStatusCode());
+
     }
     @Test
     public void testGetWarehouse() {
-        ResponseEntity response= controller.getWarehouse("12");
+        intialize();
+        response= controller.getWarehouse("ABCD12");
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        response= controller.getWarehouse("12");
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+        response=controllerWithBadRequest.getWarehouse("ABCD12");
+        assertEquals(HttpStatus.NOT_IMPLEMENTED, response.getStatusCode());
     }
     @Test
     public void testImportWarehouses() {
-        ResponseEntity response= controller.importWarehouses(Mockito.mock(Warehouse.class));
+        intialize();
+        response= controller.importWarehouses(warehouse);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        response= controller.importWarehouses(Mockito.mock(Warehouse.class));
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+
+        response= controllerWithBadRequest.importWarehouses(warehouse);
+        assertEquals(HttpStatus.NOT_IMPLEMENTED, response.getStatusCode());
     }
 }
