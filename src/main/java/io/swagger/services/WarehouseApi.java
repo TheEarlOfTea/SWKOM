@@ -6,8 +6,8 @@
 package io.swagger.services;
 
 import io.swagger.model.Error;
-import io.swagger.model.Hop;
-import io.swagger.model.Warehouse;
+import io.swagger.services.dto.Hop;
+import io.swagger.services.dto.Warehouse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

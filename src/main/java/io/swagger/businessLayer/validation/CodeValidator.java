@@ -1,7 +1,7 @@
 package io.swagger.businessLayer.validation;
 
-import io.swagger.persistence.entity.FullParcelEntity;
-import io.swagger.persistence.entity.ParcelEntity;
+import io.swagger.persistence.entity.CodeEntity;
+import io.swagger.persistence.entity.NewParcelInfoEntity;
 import lombok.extern.log4j.Log4j2;
 
 import javax.validation.ConstraintViolation;
@@ -10,12 +10,12 @@ import javax.validation.Validator;
 import java.util.Set;
 
 @Log4j2
-public class ParcelValidator {
+public class CodeValidator {
     private static Validator validator= Validation.buildDefaultValidatorFactory().getValidator();
 
-    public static boolean validateParcel(ParcelEntity parcel) {
-        Set<ConstraintViolation<ParcelEntity>> violations = validator.validate(parcel);
-        for (ConstraintViolation<ParcelEntity> violation : violations) {
+    public static boolean vaildateNewParcelInfo(CodeEntity code) {
+        Set<ConstraintViolation<CodeEntity>> violations = validator.validate(code);
+        for (ConstraintViolation<CodeEntity> violation : violations) {
             log.error(violation.getMessage());
         }
         if(violations.isEmpty()){

@@ -1,10 +1,9 @@
 package io.swagger.businessLayer.connector;
 
-import io.swagger.model.Warehouse;
-
-import java.util.List;
+import io.swagger.services.dto.Hop;
+import io.swagger.services.dto.Warehouse;
 
 public interface WarehouseAPIConnector {
-    public Warehouse getWarehouse(String code);
+    public Hop getWarehouse(String code);
     public boolean importWarehouse(Warehouse warehouse);
 }

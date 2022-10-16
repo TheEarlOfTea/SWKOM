@@ -45,16 +45,22 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
         String accept = request.getHeader("Accept");
-        if(connector.reportParcelDelivery(trackingId)){
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+        if (accept != null && accept.contains("application/json")) {
+            if(connector.reportParcelDelivery(trackingId)){
+                return new ResponseEntity<Void>(HttpStatus.CREATED);
+            }
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> reportParcelHop(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
         String accept = request.getHeader("Accept");
-        if(connector.reportParcelHop(trackingId, code)){
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+        if (accept != null && accept.contains("application/json")) {
+            if(connector.reportParcelHop(trackingId, code)){
+                return new ResponseEntity<Void>(HttpStatus.CREATED);
+            }
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -77,7 +83,6 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
         String accept = request.getHeader("Accept");
-        System.out.println("passt");
         if (accept != null && accept.contains("application/json")) {
 
             if(connector.trackParcel(trackingId)) {
@@ -88,8 +93,9 @@ public class ParcelApiController implements ParcelApi {
                     log.error("Couldn't serialize response for content type application/json", e);
 
                 }
-                return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
 
         return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_IMPLEMENTED);
@@ -98,14 +104,14 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<NewParcelInfo> transitionParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            if(connector.submitTransitionParcel(body)) {
+            if(connector.submitTransitionParcel(trackingId, body)) {
                 try {
                     return new ResponseEntity<NewParcelInfo>(objectMapper.readValue("{\n  \"trackingId\" : \"PYJRB4HZ6\"\n}", NewParcelInfo.class), HttpStatus.CREATED);
                 } catch (IOException e) {
                     log.error("Couldn't serialize response for content type application/json", e);
                 }
-                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);
