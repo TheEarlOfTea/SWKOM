@@ -1,11 +1,10 @@
-package io.swagger.model;
+package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+
 import javax.validation.constraints.*;
 
 /**
@@ -17,9 +16,15 @@ import javax.validation.constraints.*;
 
 public class GeoCoordinate   {
   @JsonProperty("lat")
+  @NotNull(message = "lat may not be null")
+  @DecimalMin(value="-180.0000000", message="latitude cannot be less than -180")
+  @DecimalMax(value="180.0000000", message="latitude cannot be higher than 180")
   private Double lat = null;
 
   @JsonProperty("lon")
+  @NotNull(message = "lat may not be null")
+  @DecimalMin(value="-180.0000000", message="longitude cannot be less than -180")
+  @DecimalMax(value="180.0000000", message="longitude cannot be higher than 180")
   private Double lon = null;
 
   public GeoCoordinate lat(Double lat) {

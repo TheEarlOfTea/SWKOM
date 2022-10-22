@@ -1,9 +1,10 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.Recipient;
+import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.Parcel;
 import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,15 @@ public class ParcelApiControllerTest extends TestCase {
 
         controller = new ParcelApiController(mock(ObjectMapper.class), request);
         controllerWithBadRequest= new ParcelApiController(mock(ObjectMapper.class), Mockito.mock(HttpServletRequest.class));
+    }
 
+    void initializeParcels(){
         parcel= new Parcel();
-        parcel.setRecipient(Mockito.mock(Recipient.class));
-        parcel.setSender(Mockito.mock(Recipient.class));
         parcel.setWeight(10.0f);
+        Recipient testRecipient= new Recipient();
+        testRecipient.setDummyData();
+        parcel.setSender(testRecipient);
+        parcel.setRecipient(testRecipient);
     }
 
 
@@ -59,8 +64,7 @@ public class ParcelApiControllerTest extends TestCase {
     @Test
     public void testSubmitParcel() {
         intialize();
-
-        parcel.setWeight(20.0f);
+        initializeParcels();
         response= controller.submitParcel(parcel);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         response= controller.submitParcel(Mockito.mock(Parcel.class));
@@ -78,6 +82,7 @@ public class ParcelApiControllerTest extends TestCase {
     @Test
     public void testTransitionParcel() {
         intialize();
+        initializeParcels();
         response= controller.transitionParcel("123456789", parcel);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         response= controller.transitionParcel("12", mock(Parcel.class));

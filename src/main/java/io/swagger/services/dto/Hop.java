@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import io.swagger.model.GeoCoordinate;
 import io.swagger.model.Transferwarehouse;
 import io.swagger.model.Truck;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,26 +27,45 @@ import javax.validation.constraints.*;
 
 public class Hop   {
   @JsonTypeId
+  @NotNull(message= "hopType may not be null")
   private String hopType = null;
 
   @JsonProperty("code")
+  @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "code has to match \'^[A-Z]{4}\\d{1,4}$\'")
+  @NotNull(message = "code may not be null")
   private String code = null;
 
   @JsonProperty("description")
+  @NotNull(message= "description may not be null")
+  @Pattern(regexp="^[A-Z0-9\\- ]*", message="description has to match \'^[A-Z0-9\\- ]*\'")
   private String description = null;
 
   @JsonProperty("processingDelayMins")
+  @NotNull(message= "processingDelayMins may not be null")
+  @Min(value = 1, message = "processingDelayMins cannot be less than 1")
   private Integer processingDelayMins = null;
 
   @JsonProperty("locationName")
+  @Pattern(regexp="^[A-Z0-9\\- ]*", message="location has to match \'^[A-Z0-9\\- ]*\'")
+  @NotNull(message= "locationName may not be null")
   private String locationName = null;
 
   @JsonProperty("locationCoordinates")
+  @NotNull(message= "locationCoordinates may not be null")
   private GeoCoordinate locationCoordinates = null;
 
   public Hop hopType(String hopType) {
     this.hopType = hopType;
     return this;
+  }
+
+  public void setDummyData() {
+    this.hopType="dummyHopType";
+    this.code="ABCD1234";
+    this.description="DUMMY";
+    this.processingDelayMins=1;
+    this.locationName="DUMMY";
+    this.locationCoordinates= new GeoCoordinate().lat(12.9).lon(12.9);
   }
 
   /**

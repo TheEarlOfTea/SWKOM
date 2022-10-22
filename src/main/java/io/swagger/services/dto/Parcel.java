@@ -2,7 +2,6 @@ package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.model.Recipient;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -17,12 +16,15 @@ import javax.validation.constraints.*;
 
 public class Parcel   {
   @JsonProperty("weight")
+  @DecimalMin(value="0.001", message="parcels must weight at least 1 gram")
   private Float weight = null;
 
   @JsonProperty("recipient")
+  @NotNull(message= "recipient cannot be null")
   private Recipient recipient = null;
 
   @JsonProperty("sender")
+  @NotNull(message= "sender cannot be null")
   private Recipient sender = null;
 
   public Parcel weight(Float weight) {
@@ -35,7 +37,6 @@ public class Parcel   {
    * @return weight
    **/
   @Schema(required = true, description = "")
-      @NotNull
 
     public Float getWeight() {
     return weight;

@@ -1,8 +1,7 @@
-package io.swagger.model;
+package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
@@ -18,12 +17,17 @@ import javax.validation.constraints.*;
 
 public class HopArrival   {
   @JsonProperty("code")
+  @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "has to match \'^[A-Z]{4}\\d{1,4}$\'")
+  @NotNull(message = "trackingId may not be null")
   private String code = null;
 
   @JsonProperty("description")
+  @NotNull(message= "description may not be null")
+  @Pattern(regexp="^[A-Z0-9\\- ]*", message="has to match \'^[A-Z0-9\\- ]*\'")
   private String description = null;
 
   @JsonProperty("dateTime")
+  @NotNull(message = "dateTime may not be null")
   private OffsetDateTime dateTime = null;
 
   public HopArrival code(String code) {

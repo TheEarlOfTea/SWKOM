@@ -16,6 +16,8 @@ import javax.validation.constraints.*;
 
 public class NewParcelInfo   {
   @JsonProperty("trackingId")
+  @Pattern(regexp="^[A-Z0-9]{9}$", message = "has to match \'^[A-Z0-9]{9}$\'")
+  @NotNull(message = "trackingId may not be null")
   private String trackingId = null;
 
   public NewParcelInfo trackingId(String trackingId) {

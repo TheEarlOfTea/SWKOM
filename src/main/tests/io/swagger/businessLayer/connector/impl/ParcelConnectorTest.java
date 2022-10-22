@@ -1,70 +1,68 @@
 package io.swagger.businessLayer.connector.impl;
 
-import io.swagger.model.Recipient;
+import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.Parcel;
 import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import javax.validation.ValidationException;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ParcelConnectorTest extends TestCase {
 
     Parcel goodParcel;
     Parcel badParcel;
-    String goodTrackingId;
-    String badTrackingId;
-    String goodCode;
-    String badCode;
+    String goodTrackingId="123456789";
+    String badTrackingId="1";
+    String goodCode="ABCD1";
+    String badCode="A";
 
-    ParcelConnector connector;
+    ParcelConnector connector= new ParcelConnector();
 
-    void initialize(){
+    void initializeParcels(){
         goodParcel= new Parcel();
         goodParcel.setWeight(10.0f);
-        goodParcel.setSender(Mockito.mock(Recipient.class));
-        goodParcel.setRecipient(Mockito.mock(Recipient.class));
+        Recipient testRecipient= new Recipient();
+        testRecipient.setDummyData();
+        goodParcel.setSender(testRecipient);
+        goodParcel.setRecipient(testRecipient);
 
         badParcel= Mockito.mock(Parcel.class);
-
-        goodTrackingId="123456789";
-        badTrackingId="1";
-        goodCode="ABCD1";
-        badCode="A";
-
-        connector= new ParcelConnector();
     }
 
+
     public void testSubmitParcel() {
-        initialize();
-        assert(connector.submitParcel(goodParcel));
-        assertFalse(connector.submitParcel(badParcel));
+        initializeParcels();
+
+        assertDoesNotThrow(() -> connector.submitParcel(goodParcel));
+        assertThrows(ValidationException.class, () -> connector.submitParcel(badParcel));
     }
 
     public void testTrackParcel() {
-        initialize();
-        assert(connector.trackParcel(goodTrackingId));
-        assertFalse(connector.trackParcel(badTrackingId));
+        assertDoesNotThrow(() -> connector.trackParcel(goodTrackingId));
+        assertThrows(ValidationException.class, () -> connector.trackParcel(badTrackingId));
     }
 
     public void testSubmitTransitionParcel() {
-        initialize();
-        assert(connector.submitTransitionParcel(goodTrackingId,goodParcel));
-        assertFalse(connector.submitTransitionParcel(badTrackingId, goodParcel));
-        assertFalse(connector.submitTransitionParcel(goodTrackingId, badParcel));
-        assertFalse(connector.submitTransitionParcel(badTrackingId,badParcel));
+        initializeParcels();
+
+        assertDoesNotThrow(() -> connector.submitTransitionParcel(goodTrackingId, goodParcel));
+        assertThrows(ValidationException.class, () -> connector.submitTransitionParcel(badTrackingId, goodParcel));
+        assertThrows(ValidationException.class, () -> connector.submitTransitionParcel(goodTrackingId, badParcel));
+        assertThrows(ValidationException.class, () -> connector.submitTransitionParcel(badTrackingId, badParcel));
     }
 
     public void testReportParcelDelivery() {
-        initialize();
-        assert(connector.reportParcelDelivery(goodTrackingId));
-        assertFalse(connector.reportParcelDelivery(badTrackingId));
+        assertDoesNotThrow(() -> connector.reportParcelDelivery(goodTrackingId));
+        assertThrows(ValidationException.class, () -> connector.reportParcelDelivery(badTrackingId));
     }
 
     public void testReportParcelHop() {
-        initialize();
-        assert connector.reportParcelHop(goodTrackingId, goodCode);
-        assertFalse(connector.reportParcelHop(goodTrackingId, badCode));
-        assertFalse(connector.reportParcelHop(badTrackingId, goodCode));
-        assertFalse(connector.reportParcelHop(badTrackingId, badCode));
+        assertDoesNotThrow(() -> connector.reportParcelHop(goodTrackingId, goodCode));
+        assertThrows(ValidationException.class, () -> connector.reportParcelHop(badTrackingId, goodCode));
+        assertThrows(ValidationException.class, () -> connector.reportParcelHop(goodTrackingId, badCode));
+        assertThrows(ValidationException.class, () -> connector.reportParcelHop(badTrackingId, badCode));
     }
 }

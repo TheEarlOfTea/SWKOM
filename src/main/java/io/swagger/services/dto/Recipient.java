@@ -1,11 +1,10 @@
-package io.swagger.model;
+package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+
 import javax.validation.constraints.*;
 
 /**
@@ -17,23 +16,38 @@ import javax.validation.constraints.*;
 
 public class Recipient   {
   @JsonProperty("name")
+  @NotNull(message = "name may not be null")
   private String name = null;
 
   @JsonProperty("street")
+  @Pattern(regexp = "^[A-Za-zß0-9 \\/-]*", message = "pattern must match ^[A-Za-zß0-9 \\/-]*")
   private String street = null;
 
   @JsonProperty("postalCode")
+  @NotNull
   private String postalCode = null;
 
   @JsonProperty("city")
+  @NotNull(message = "may not be null")
   private String city = null;
 
   @JsonProperty("country")
+  @NotNull
+  @Pattern(regexp = "[A-Za-z]*", message = "Country must match pattern [A-Za-z]*")
   private String country = null;
 
   public Recipient name(String name) {
     this.name = name;
     return this;
+  }
+
+  public void setDummyData(){
+    this.name="name";
+    this.city="testcity";
+    this.country="testcountry";
+    this.postalCode="ABCD";
+    this.street="dummyStreet";
+
   }
 
   /**

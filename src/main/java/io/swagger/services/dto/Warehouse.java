@@ -2,7 +2,6 @@ package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.model.WarehouseNextHops;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +18,13 @@ import javax.validation.constraints.*;
 
 public class Warehouse extends Hop  {
   @JsonProperty("level")
+  @NotNull(message = "level may not be null")
+  @Min(value = 0, message = "level must be 0 or higher")
   private Integer level = null;
 
   @JsonProperty("nextHops")
   @Valid
+  @NotNull(message = "may not be null")
   private List<WarehouseNextHops> nextHops = new ArrayList<WarehouseNextHops>();
 
   public Warehouse level(Integer level) {
@@ -43,6 +45,12 @@ public class Warehouse extends Hop  {
 
   public void setLevel(Integer level) {
     this.level = level;
+  }
+
+  public void setDummyData(){
+    super.setDummyData();
+    this.level=1;
+    this.setNextHops(new ArrayList<WarehouseNextHops>());
   }
 
   public Warehouse nextHops(List<WarehouseNextHops> nextHops) {

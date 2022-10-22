@@ -1,10 +1,8 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.businessLayer.connector.impl.WarehouseConnector;
-import io.swagger.model.GeoCoordinate;
-import io.swagger.model.WarehouseNextHops;
-import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.WarehouseNextHops;
+import io.swagger.services.dto.GeoCoordinate;
 import io.swagger.services.dto.Warehouse;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
@@ -36,16 +34,7 @@ public class WarehouseApiControllerTest extends TestCase {
         controllerWithBadRequest= new WarehouseApiController(mock(ObjectMapper.class), Mockito.mock(HttpServletRequest.class));
 
         warehouse= new Warehouse();
-        warehouse.setCode("ABCD1");
-        warehouse.setLevel(1);
-        ArrayList<WarehouseNextHops> list= new ArrayList<WarehouseNextHops>();
-        list.add(mock(WarehouseNextHops.class));
-        warehouse.setNextHops(list);
-        warehouse.setDescription("ABCD");
-        warehouse.setHopType("ABCD");
-        warehouse.setLocationCoordinates(mock(GeoCoordinate.class));
-        warehouse.setLocationName("ABCD");
-        warehouse.setProcessingDelayMins(1);
+        warehouse.setDummyData();
     }
 
     @Test

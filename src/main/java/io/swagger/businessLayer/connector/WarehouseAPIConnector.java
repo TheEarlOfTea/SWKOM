@@ -5,5 +5,5 @@ import io.swagger.services.dto.Warehouse;
 
 public interface WarehouseAPIConnector {
     public Hop getWarehouse(String code);
-    public boolean importWarehouse(Warehouse warehouse);
+    public void importWarehouse(Warehouse warehouse);
 }

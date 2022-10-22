@@ -4,7 +4,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.model.HopArrival;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,14 +56,17 @@ public class TrackingInformation   {
     }
   }
   @JsonProperty("state")
+  @NotNull(message="state may not be null")
   private StateEnum state = null;
 
   @JsonProperty("visitedHops")
   @Valid
+  @NotNull(message="visitedHops may not be null")
   private List<HopArrival> visitedHops = new ArrayList<HopArrival>();
 
   @JsonProperty("futureHops")
   @Valid
+  @NotNull(message="futureHops may not be null")
   private List<HopArrival> futureHops = new ArrayList<HopArrival>();
 
   public TrackingInformation state(StateEnum state) {

@@ -62,7 +62,7 @@ public class WarehouseApiController implements WarehouseApi {
                 //return new ResponseEntity<Hop>(objectMapper.readValue("{\n  \"code\" : \"code\",\n  \"locationName\" : \"locationName\",\n  \"processingDelayMins\" : 0,\n  \"hopType\" : \"hopType\",\n  \"description\" : \"description\",\n  \"locationCoordinates\" : {\n    \"lon\" : 1.4658129805029452,\n    \"lat\" : 6.027456183070403\n  }\n}", Hop.class), HttpStatus.CREATED);
                 return new ResponseEntity<Hop>(hop, HttpStatus.CREATED);
             }catch(ValidationException e){
-                log.error("bad code", e);
+                log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -72,13 +72,15 @@ public class WarehouseApiController implements WarehouseApi {
     public ResponseEntity<Void> importWarehouses(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Warehouse body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            if(connector.importWarehouse(body)) {
-                return new ResponseEntity<Void>(HttpStatus.CREATED);
+            try{
+               connector.importWarehouse(body);
+            }catch (ValidationException e){
+                log.error("Validation exception: " + e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<Void>(HttpStatus.CREATED);
         }
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
-
     }
 
 }
