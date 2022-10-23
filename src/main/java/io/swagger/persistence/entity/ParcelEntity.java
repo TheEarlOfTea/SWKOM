@@ -33,8 +33,7 @@ public class ParcelEntity {
 
     @Override
     public String toString() {
-        return "ParcelEntity{" +
-                "trackingId='" + trackingId + '\'' +
+        return "ParcelEntity{" +                "trackingId='" + trackingId + '\'' +
                 ", weight=" + weight +
                 ", recipient=" + recipient +
                 ", sender=" + sender +
