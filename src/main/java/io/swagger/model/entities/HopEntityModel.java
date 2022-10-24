@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
-import org.springframework.data.geo.Point;
+
 
 import javax.persistence.*;
 
@@ -37,7 +37,7 @@ public class HopEntityModel {
     private String locationName;
 
     @Column
-    @Type(type="org.springframework.data.geo.Point")//
+    @Type(type="")//
 
     private Point locationCoordinates;
 

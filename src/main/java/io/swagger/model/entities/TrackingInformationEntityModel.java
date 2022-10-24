@@ -1,6 +1,5 @@
 package io.swagger.model.entities;
 
-import io.swagger.services.dto.HopArrival;
 import io.swagger.services.dto.TrackingInformation;
 import lombok.*;
 
@@ -26,11 +25,11 @@ public class TrackingInformationEntityModel {
 
     @Column
     @OneToMany(mappedBy = "fk_visitedHop")
-    private List<HopArrival> visitedHops = new ArrayList<>();
+    private List<HopArrivalEntityModel> visitedHops = new ArrayList<>();
 
     @Column
     @OneToMany(mappedBy = "fk_futureHop")
-    private List<HopArrival> futureHops = new ArrayList<>();
+    private List<HopArrivalEntityModel> futureHops = new ArrayList<>();
 
 
 
