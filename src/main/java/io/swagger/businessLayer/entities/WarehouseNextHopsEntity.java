@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.services.dto.Hop;
 import lombok.*;
 
-@Builder
 @AllArgsConstructor
 @Getter
 @Setter

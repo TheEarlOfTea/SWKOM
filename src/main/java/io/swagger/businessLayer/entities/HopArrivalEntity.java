@@ -3,7 +3,6 @@ package io.swagger.businessLayer.entities;
 import lombok.*;
 import org.threeten.bp.OffsetDateTime;
 
-@Builder
 @AllArgsConstructor
 @Getter @Setter
 @Data

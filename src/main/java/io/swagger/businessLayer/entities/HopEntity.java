@@ -3,9 +3,8 @@ package io.swagger.businessLayer.entities;
 import io.swagger.services.dto.GeoCoordinate;
 import lombok.*;
 
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter @Setter
 @Data
 public class HopEntity {

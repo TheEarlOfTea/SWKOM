@@ -5,11 +5,10 @@ import lombok.*;
 
 import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @Getter @Setter
 @Data
-public class WarehouseEntity {
+public class WarehouseEntity extends HopEntity{
     private Integer level;
     private List<WarehouseNextHops> nextHops;
 }
