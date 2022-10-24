@@ -1,6 +1,6 @@
 package io.swagger.model.repositories;
 
-import io.swagger.model.entities.ErrorEntityModel;
+import io.swagger.model.entities.TruckEntityModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,18 +9,15 @@ import java.util.Optional;
 
 @Repository
 
-public interface ErrorRepository extends JpaRepository<ErrorEntityModel, Long> {
-
-    Optional<ErrorEntityModel> findById(long along);
-
-    @Override
-    <$ extends ErrorEntityModel> $ save($ entity);
+public interface TruckRepository extends JpaRepository<TruckEntityModel, Long> {
+    Optional<TruckEntityModel> findById(long along);
 
     @Override
-    List<ErrorEntityModel> findAll();
+    <$ extends TruckEntityModel> $ save($ entity);
+
+    @Override
+    List<TruckEntityModel> findAll();
 
     @Override
     void deleteById(Long along);
-
-
 }

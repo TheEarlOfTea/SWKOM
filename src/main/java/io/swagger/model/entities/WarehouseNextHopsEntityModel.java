@@ -32,7 +32,7 @@ public class WarehouseNextHopsEntityModel {
     @Column
     @ManyToMany
     @JoinColumn(name = "warehouse_id",nullable = false,updatable = false)
-    private WareHouseEntityModel warehouse;
+    private WarehouseEntityModel warehouse;
 
 
 

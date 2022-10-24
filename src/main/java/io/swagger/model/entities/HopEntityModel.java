@@ -1,16 +1,13 @@
 package io.swagger.model.entities;
-import org.springframework.data.geo.Point;
 
-
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Type;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.*;
-import java.awt.*;
 
 @Entity(name = "Hop")
 @NoArgsConstructor

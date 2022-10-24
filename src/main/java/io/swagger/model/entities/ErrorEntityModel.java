@@ -12,6 +12,8 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Builder
 
+
+
 public class ErrorEntityModel {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column

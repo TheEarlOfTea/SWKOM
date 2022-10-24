@@ -1,14 +1,12 @@
 package io.swagger.model.entities;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.services.dto.GeoCoordinate;
+
 import io.swagger.services.dto.HopArrival;
 import io.swagger.services.dto.TrackingInformation;
 import lombok.*;
-import java.util.List;
-import java.util.ArrayList;
-
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "trackingInformation")
 @Getter
@@ -24,7 +22,7 @@ public class TrackingInformationEntityModel {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private TrackingInformation.StateEnum state; //
+    private TrackingInformation.StateEnum state;
 
     @Column
     @OneToMany(mappedBy = "fk_visitedHop")
