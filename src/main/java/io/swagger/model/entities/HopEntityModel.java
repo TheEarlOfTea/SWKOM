@@ -36,11 +36,11 @@ public class HopEntityModel {
     @Column
     private String locationName;
 
-    @Column
+    /*@Column
     @Type(type="")//
 
     private Point locationCoordinates;
-
+*/
 
 
 }
