@@ -1,18 +1,17 @@
-package io.swagger.persistence.entity;
-import io.swagger.services.dto.Recipient;
+package io.swagger.businessLayer.entities;
+
 import io.swagger.services.dto.HopArrival;
-import java.util.List;
+import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.TrackingInformation.StateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ParcelEntity {
     @Pattern(regexp="^[A-Z0-9]{9}$", message = "has to match \'^[A-Z0-9]{9}$\'")

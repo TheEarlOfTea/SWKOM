@@ -5,7 +5,7 @@
  */
 package io.swagger.services;
 
-import io.swagger.model.Error;
+import io.swagger.services.dto.Error;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;

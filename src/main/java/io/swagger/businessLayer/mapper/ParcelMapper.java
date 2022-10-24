@@ -1,6 +1,6 @@
-package io.swagger.mapper;
+package io.swagger.businessLayer.mapper;
 
-import io.swagger.persistence.entity.ParcelEntity;
+import io.swagger.businessLayer.entities.ParcelEntity;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;

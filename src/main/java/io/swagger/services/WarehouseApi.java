@@ -5,7 +5,7 @@
  */
 package io.swagger.services;
 
-import io.swagger.model.Error;
+import io.swagger.services.dto.Error;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Warehouse;
 import io.swagger.v3.oas.annotations.Operation;

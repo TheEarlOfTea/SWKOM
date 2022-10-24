@@ -1,8 +1,7 @@
-package io.swagger.model;
+package io.swagger.services.dto;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.services.dto.Hop;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
@@ -17,12 +16,15 @@ import javax.validation.constraints.*;
 
 public class Transferwarehouse extends Hop  {
   @JsonProperty("regionGeoJson")
+  @NotNull
   private String regionGeoJson = null;
 
   @JsonProperty("logisticsPartner")
+  @NotNull
   private String logisticsPartner = null;
 
   @JsonProperty("logisticsPartnerUrl")
+  @NotNull
   private String logisticsPartnerUrl = null;
 
   public Transferwarehouse regionGeoJson(String regionGeoJson) {
