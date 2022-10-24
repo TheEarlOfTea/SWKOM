@@ -1,18 +1,15 @@
 package io.swagger.businessLayer.validation;
 
-import io.swagger.services.dto.Recipient;
-import io.swagger.services.dto.WarehouseNextHops;
 import io.swagger.services.dto.*;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.threeten.bp.OffsetDateTime;
 
 import javax.validation.ValidationException;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ValidatorTest {
 

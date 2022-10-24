@@ -1,7 +1,8 @@
 package io.swagger.businessLayer.connector.impl;
 
-import io.swagger.services.dto.Recipient;
+import io.swagger.connector.impl.ParcelConnector;
 import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.Recipient;
 import junit.framework.TestCase;
 import org.mockito.Mockito;
 

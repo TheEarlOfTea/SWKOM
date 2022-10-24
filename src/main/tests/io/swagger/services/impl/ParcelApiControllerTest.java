@@ -1,10 +1,9 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.Recipient;
 import junit.framework.TestCase;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;

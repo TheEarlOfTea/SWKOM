@@ -1,8 +1,6 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.services.dto.WarehouseNextHops;
-import io.swagger.services.dto.GeoCoordinate;
 import io.swagger.services.dto.Warehouse;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
@@ -11,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
-
-import java.util.ArrayList;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

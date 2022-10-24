@@ -1,20 +1,17 @@
 package io.swagger;
 
-import io.swagger.configuration.LocalDateTimeConverter;
 import io.swagger.configuration.LocalDateConverter;
-
+import io.swagger.configuration.LocalDateTimeConverter;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-
-import springfox.documentation.oas.annotations.EnableOpenApi;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,

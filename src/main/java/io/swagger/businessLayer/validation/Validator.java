@@ -1,7 +1,10 @@
 package io.swagger.businessLayer.validation;
+
 import lombok.extern.log4j.Log4j2;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.ValidationException;
 import java.util.Set;
 
 @Log4j2
