@@ -1,12 +1,13 @@
 package io.swagger.mapper;
 
-import io.swagger.persistence.entity.ParcelEntity;
+import io.swagger.businessLayer.entities.ParcelBusinessEntity;
+import io.swagger.businessLayer.mappers.ParcelMapper;
 import io.swagger.services.dto.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ParcelMapperTest {
 
@@ -21,7 +22,7 @@ class ParcelMapperTest {
 
         TrackingInformation trackingInformation= new TrackingInformation().state(TrackingInformation.StateEnum.DELIVERED).visitedHops(new ArrayList<HopArrival>()).futureHops(new ArrayList<HopArrival>());
 
-        ParcelEntity entity= ParcelMapper.INSTANCE.from(newParcelInfo, parcel, trackingInformation);
+        ParcelBusinessEntity entity= ParcelMapper.INSTANCE.from(newParcelInfo, parcel, trackingInformation);
 
         assertEquals(newParcelInfo.getTrackingId(), entity.getTrackingId());
         assert(parcel.getWeight()==entity.getWeight());

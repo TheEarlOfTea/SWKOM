@@ -1,12 +1,11 @@
-package io.swagger.model;
+package io.swagger.services.dto;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.services.dto.Hop;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 /**
  * Truck
@@ -17,9 +16,11 @@ import javax.validation.constraints.*;
 
 public class Truck extends Hop  {
   @JsonProperty("regionGeoJson")
+  @NotNull
   private String regionGeoJson = null;
 
   @JsonProperty("numberPlate")
+  @NotNull
   private String numberPlate = null;
 
   public Truck regionGeoJson(String regionGeoJson) {

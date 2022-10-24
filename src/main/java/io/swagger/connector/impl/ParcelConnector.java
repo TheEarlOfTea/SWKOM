@@ -1,6 +1,7 @@
-package io.swagger.businessLayer.connector.impl;
-import io.swagger.businessLayer.connector.ParcelAPIConnector;
+package io.swagger.connector.impl;
+
 import io.swagger.businessLayer.validation.Validator;
+import io.swagger.connector.ParcelAPIConnector;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;

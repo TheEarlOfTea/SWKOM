@@ -1,7 +1,7 @@
-package io.swagger.businessLayer.connector.impl;
+package io.swagger.connector.impl;
 
-import io.swagger.businessLayer.connector.WarehouseAPIConnector;
 import io.swagger.businessLayer.validation.Validator;
+import io.swagger.connector.WarehouseAPIConnector;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Warehouse;
 

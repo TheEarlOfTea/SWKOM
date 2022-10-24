@@ -1,4 +1,4 @@
-package io.swagger.businessLayer.connector;
+package io.swagger.connector;
 
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Warehouse;
