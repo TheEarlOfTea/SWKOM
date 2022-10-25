@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Setter
 @ToString(exclude = {"hop","warehouse"})
 
-
+//Todo: clarify manytomany stuff
 public class WarehouseNextHopsDataAccessEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column

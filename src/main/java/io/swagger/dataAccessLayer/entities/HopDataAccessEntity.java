@@ -14,6 +14,7 @@ import javax.persistence.*;
 @ToString(exclude = {"locationCoordinates"})
 
 
+//todo: location coordiante
 public class HopDataAccessEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column

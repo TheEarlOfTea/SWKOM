@@ -8,19 +8,28 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+
+//todo: parcel mapper anpassen, recipient auf recipiententity
+
 @Mapper
-public interface ParcelMapper {
+public class ParcelMapper {
 
-    ParcelMapper INSTANCE= Mappers.getMapper(ParcelMapper.class);
 
-    @Mapping(source="newParcelInfo.trackingId", target = "trackingId")
-    @Mapping(source="parcel.weight", target = "weight")
-    @Mapping(source="parcel.recipient", target = "recipient")
-    @Mapping(source="parcel.sender", target = "sender")
-    @Mapping(source="trackingInformation.state", target = "state")
-    @Mapping(source="trackingInformation.visitedHops", target = "visitedHops")
-    @Mapping(source="trackingInformation.futureHops", target = "futureHops")
-    ParcelDataAccessEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation);
+    public static ParcelDataAccessEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation){
+
+        if ( newParcelInfo == null || parcel==null || trackingInformation==null ) {
+            return null;
+        }
+
+        ParcelDataAccessEntity entity= new ParcelDataAccessEntity();
+        entity.setTrackingId(newParcelInfo.getTrackingId());
+        entity.setWeight(parcel.getWeight());
+        entity.setRecipient(RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient()));
+        entity.setSender(RecipientMapper.INSTANCE.fromDTO(parcel.getSender()));
+        entity.setState(trackingInformation.getState());
+        return entity;
+
+    }
 
 
 }

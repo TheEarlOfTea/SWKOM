@@ -1,6 +1,7 @@
 package io.swagger.mapper;
 
 import io.swagger.businessLayer.mappers.ParcelMapper;
+import io.swagger.businessLayer.mappers.RecipientMapper;
 import io.swagger.dataAccessLayer.entities.ParcelDataAccessEntity;
 import io.swagger.services.dto.*;
 import org.junit.jupiter.api.Test;
@@ -22,12 +23,12 @@ class ParcelMapperTest {
 
         TrackingInformation trackingInformation= new TrackingInformation().state(TrackingInformation.StateEnum.DELIVERED).visitedHops(new ArrayList<HopArrival>()).futureHops(new ArrayList<HopArrival>());
 
-        ParcelDataAccessEntity entity= ParcelMapper.INSTANCE.from(newParcelInfo, parcel, trackingInformation);
+        ParcelDataAccessEntity entity= ParcelMapper.from(newParcelInfo, parcel, trackingInformation);
 
         assertEquals(newParcelInfo.getTrackingId(), entity.getTrackingId());
         assert(parcel.getWeight()==entity.getWeight());
-        assertEquals(parcel.getSender(), entity.getSender());
-        assertEquals(parcel.getRecipient(), entity.getRecipient());
+        assertEquals(parcel.getSender(), RecipientMapper.INSTANCE.fromEntity(entity.getSender()));
+        assertEquals(parcel.getRecipient(), RecipientMapper.INSTANCE.fromEntity(entity.getRecipient()));
         assertEquals(trackingInformation.getState(), entity.getState());
         assertEquals(trackingInformation.getVisitedHops(), entity.getVisitedHops());
         assertEquals(trackingInformation.getFutureHops(), entity.getFutureHops());

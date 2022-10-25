@@ -23,13 +23,19 @@ public class ParcelDataAccessEntity {
     @Column
     private float weight;
     @Column
-    private Recipient recipient;
+    @ManyToOne
+    @JoinColumn(name = "fk_recipient")
+    private RecipientDataAccessEntity recipient;
     @Column
-    private Recipient sender;
+    @ManyToOne
+    @JoinColumn(name = "fk_sender")
+    private RecipientDataAccessEntity sender;
     @Column
     private TrackingInformation.StateEnum state;
     @Column
-    private List<HopArrival> visitedHops;
+    @ManyToMany
+    private List<HopArrivalDataAccessEntity> visitedHops;
     @Column
-    private List<HopArrival> futureHops;
+    @ManyToMany
+    private List<HopArrivalDataAccessEntity> futureHops;
 }
