@@ -3,11 +3,15 @@ package io.swagger.dataAccessLayer.entities;
 import io.swagger.services.dto.HopArrival;
 import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.TrackingInformation;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "parcel")
+@Getter
+@Setter
 //TODO: fix the manytoone and stuff
 public class ParcelDataAccessEntity {
     @Id

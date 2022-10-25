@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.businessLayer.entities.GeoCoordinateBusinessEntity;
+import io.swagger.dataAccessLayer.entities.GeoCoordinateDataAccessEntity;
 import io.swagger.services.dto.GeoCoordinate;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -10,7 +10,7 @@ public interface GeoCoordinateMapper {
 
     GeoCoordinateMapper INSTANCE= Mappers.getMapper(GeoCoordinateMapper.class);
 
-    GeoCoordinateBusinessEntity fromDTO(GeoCoordinate error);
-    GeoCoordinate fromEntity(GeoCoordinateBusinessEntity entity);
+    GeoCoordinateDataAccessEntity fromDTO(GeoCoordinate error);
+    GeoCoordinate fromEntity(GeoCoordinateDataAccessEntity entity);
 
 }

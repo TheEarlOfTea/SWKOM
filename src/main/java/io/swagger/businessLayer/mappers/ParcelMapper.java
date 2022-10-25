@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.businessLayer.entities.ParcelBusinessEntity;
+import io.swagger.dataAccessLayer.entities.ParcelDataAccessEntity;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;
@@ -20,7 +20,7 @@ public interface ParcelMapper {
     @Mapping(source="trackingInformation.state", target = "state")
     @Mapping(source="trackingInformation.visitedHops", target = "visitedHops")
     @Mapping(source="trackingInformation.futureHops", target = "futureHops")
-    ParcelBusinessEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation);
+    ParcelDataAccessEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation);
 
 
 }

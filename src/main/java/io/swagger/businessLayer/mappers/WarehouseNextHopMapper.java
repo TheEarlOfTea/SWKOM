@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.businessLayer.entities.WarehouseNextHopsBusinessEntity;
+import io.swagger.dataAccessLayer.entities.WarehouseNextHopsDataAccessEntity;
 import io.swagger.services.dto.WarehouseNextHops;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface WarehouseNextHopMapper {
     WarehouseNextHopMapper INSTANCE= Mappers.getMapper(WarehouseNextHopMapper.class);
 
-    WarehouseNextHopsBusinessEntity fromDTO(WarehouseNextHops warehouseNextHops);
-    WarehouseNextHops fromEntity(WarehouseNextHopsBusinessEntity entity);
+    WarehouseNextHopsDataAccessEntity fromDTO(WarehouseNextHops warehouseNextHops);
+    WarehouseNextHops fromEntity(WarehouseNextHopsDataAccessEntity entity);
 }
