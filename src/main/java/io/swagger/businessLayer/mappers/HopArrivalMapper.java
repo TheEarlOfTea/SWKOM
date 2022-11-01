@@ -8,6 +8,6 @@ import org.mapstruct.factory.Mappers;
 public interface HopArrivalMapper {
     HopArrivalMapper INSTANCE= Mappers.getMapper(HopArrivalMapper.class);
 
-    /*HopArrivalDataAccessEntity fromDTO(HopArrival error);
-    HopArrival fromEntity(HopArrivalDataAccessEntity entity);*/
+    HopArrivalDataAccessEntity fromDTO(HopArrival hopArrival);
+    HopArrival fromEntity(HopArrivalDataAccessEntity entity);
 }

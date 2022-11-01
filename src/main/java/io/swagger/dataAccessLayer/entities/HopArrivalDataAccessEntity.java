@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
+import org.threeten.bp.OffsetDateTime;
 
 @Entity(name = "HopArrival")
 @Getter
