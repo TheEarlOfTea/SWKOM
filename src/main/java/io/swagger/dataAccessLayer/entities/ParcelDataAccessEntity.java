@@ -3,11 +3,15 @@ package io.swagger.dataAccessLayer.entities;
 import io.swagger.services.dto.HopArrival;
 import io.swagger.services.dto.Recipient;
 import io.swagger.services.dto.TrackingInformation;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "parcel")
+@Getter
+@Setter
 //TODO: fix the manytoone and stuff
 public class ParcelDataAccessEntity {
     @Id
@@ -19,13 +23,19 @@ public class ParcelDataAccessEntity {
     @Column
     private float weight;
     @Column
-    private Recipient recipient;
+    @ManyToOne
+    @JoinColumn(name = "fk_recipient")
+    private RecipientDataAccessEntity recipient;
     @Column
-    private Recipient sender;
+    @ManyToOne
+    @JoinColumn(name = "fk_sender")
+    private RecipientDataAccessEntity sender;
     @Column
     private TrackingInformation.StateEnum state;
     @Column
-    private List<HopArrival> visitedHops;
+    @ManyToMany
+    private List<HopArrivalDataAccessEntity> visitedHops;
     @Column
-    private List<HopArrival> futureHops;
+    @ManyToMany
+    private List<HopArrivalDataAccessEntity> futureHops;
 }

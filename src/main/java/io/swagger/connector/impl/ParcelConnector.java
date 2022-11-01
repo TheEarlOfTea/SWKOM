@@ -2,12 +2,15 @@ package io.swagger.connector.impl;
 
 import io.swagger.businessLayer.validation.Validator;
 import io.swagger.connector.ParcelAPIConnector;
+import io.swagger.dataAccessLayer.JDBC.DatabaseConnector;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import lombok.extern.log4j.Log4j2;
 
 import javax.validation.ValidationException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 @Log4j2
 public class ParcelConnector implements ParcelAPIConnector {
