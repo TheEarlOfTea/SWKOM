@@ -1,22 +1,20 @@
-package io.swagger.dataAccessLayer.entities;
+package io.swagger.persistence.entities;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "error")
+@Entity
+@Table(name="t_errors")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 
-
-
-public class ErrorDataAccessEntity {
+public class ErrorEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Long Id;

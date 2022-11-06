@@ -1,4 +1,4 @@
-package io.swagger.dataAccessLayer.JDBC;
+package io.swagger.persistence.JDBC;
 
 import io.swagger.Injector;
 import io.swagger.configuration.jdbc.Configuration;

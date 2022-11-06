@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.dataAccessLayer.entities.HopDataAccessEntity;
+import io.swagger.persistence.entities.HopEntity;
 import io.swagger.services.dto.Hop;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface HopMapper {
     HopMapper INSTANCE= Mappers.getMapper(HopMapper.class);
 
-    HopDataAccessEntity fromDTO(Hop hop);
-    Hop fromEntity(HopDataAccessEntity entity);
+    HopEntity fromDTO(Hop hop);
+    Hop fromEntity(HopEntity entity);
 }

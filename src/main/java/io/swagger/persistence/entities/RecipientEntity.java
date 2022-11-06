@@ -1,19 +1,18 @@
-package io.swagger.dataAccessLayer.entities;
+package io.swagger.persistence.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "Recipient")
+@Entity
+@Table(name = "t_recipients")
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
 
-public class RecipientDataAccessEntity {
+public class RecipientEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private long id;
@@ -21,7 +20,7 @@ public class RecipientDataAccessEntity {
     private String name;
     @Column
     private String street;
-    @Column
+    @Column(name = "postalCode")
     private String postalCode;
     @Column
     private String city;

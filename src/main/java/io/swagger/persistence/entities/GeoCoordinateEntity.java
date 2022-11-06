@@ -1,19 +1,21 @@
-package io.swagger.dataAccessLayer.entities;
+package io.swagger.persistence.entities;
 
 import lombok.*;
 
 import javax.persistence.*;
 
 
-@Entity(name = "geoCoordinate")
+@Entity
+@Table(name="t_geocoordinates")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class GeoCoordinateDataAccessEntity {
+public class GeoCoordinateEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-
     @Column
     private Long id;
 
@@ -21,7 +23,7 @@ public class GeoCoordinateDataAccessEntity {
     private Double lat;
 
     @Column
-    private Double aLong;
+    private Double lon;
 
 }
 

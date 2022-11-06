@@ -1,4 +1,4 @@
-package io.swagger.dataAccessLayer.entities;
+package io.swagger.persistence.entities;
 
 
 import lombok.*;
@@ -7,16 +7,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import org.threeten.bp.OffsetDateTime;
 
-@Entity(name = "HopArrival")
+@Entity
+@Table(name = "t_hoparrivals")
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-@ToString(exclude = {"visitedHops","futureHops"})
-@EqualsAndHashCode(exclude = {"visitedHops","futureHops"})
 
 
 
-public class HopArrivalDataAccessEntity {
+public class HopArrivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
@@ -29,7 +30,7 @@ public class HopArrivalDataAccessEntity {
     @Column
     private String description;
 
-    @Column
+    @Column(name = "dateTime")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private OffsetDateTime dateTime;
 }

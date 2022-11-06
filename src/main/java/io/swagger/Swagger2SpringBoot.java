@@ -13,11 +13,10 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
-@SpringBootApplication(exclude = {
-        DataSourceAutoConfiguration.class,
-})
+
 @EnableOpenApi
 @ComponentScan(basePackages = { "io.swagger", "io.swagger.services", "io.swagger.configuration"})
+@SpringBootApplication
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override

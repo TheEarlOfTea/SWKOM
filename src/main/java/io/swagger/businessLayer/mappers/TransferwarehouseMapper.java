@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.dataAccessLayer.entities.TransferwarehouseDataAccessEntity;
+import io.swagger.persistence.entities.TransferwarehouseEntity;
 import io.swagger.services.dto.Transferwarehouse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface TransferwarehouseMapper {
     TransferwarehouseMapper INSTANCE= Mappers.getMapper(TransferwarehouseMapper.class);
 
-    TransferwarehouseDataAccessEntity fromDTO(Transferwarehouse recipient);
-    Transferwarehouse fromEntity(TransferwarehouseDataAccessEntity entity);
+    TransferwarehouseEntity fromDTO(Transferwarehouse recipient);
+    Transferwarehouse fromEntity(TransferwarehouseEntity entity);
 }

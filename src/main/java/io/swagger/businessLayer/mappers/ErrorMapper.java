@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.dataAccessLayer.entities.ErrorDataAccessEntity;
+import io.swagger.persistence.entities.ErrorEntity;
 import io.swagger.services.dto.Error;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -9,6 +9,6 @@ import org.mapstruct.factory.Mappers;
 public interface ErrorMapper{
     ErrorMapper INSTANCE= Mappers.getMapper(ErrorMapper.class);
 
-    ErrorDataAccessEntity fromDTO(Error error);
-    Error fromEntity(ErrorDataAccessEntity entity);
+    ErrorEntity fromDTO(Error error);
+    Error fromEntity(ErrorEntity entity);
 }

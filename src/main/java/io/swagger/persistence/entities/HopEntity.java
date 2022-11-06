@@ -1,21 +1,18 @@
-package io.swagger.dataAccessLayer.entities;
+package io.swagger.persistence.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "Hop")
+@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
-@ToString(exclude = {"locationCoordinates"})
 
-
-//todo: location coordiante
-public class HopDataAccessEntity {
+//todo: fix geocoordinate
+public class HopEntity {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private long id;

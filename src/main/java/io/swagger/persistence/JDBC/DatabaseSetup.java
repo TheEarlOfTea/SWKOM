@@ -1,4 +1,4 @@
-package io.swagger.dataAccessLayer.JDBC;
+package io.swagger.persistence.JDBC;
 
 import java.sql.Connection;
 import java.sql.SQLException;

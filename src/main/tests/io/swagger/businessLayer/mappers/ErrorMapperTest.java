@@ -1,6 +1,6 @@
 package io.swagger.businessLayer.mappers;
 
-import io.swagger.dataAccessLayer.entities.ErrorDataAccessEntity;
+import io.swagger.persistence.entities.ErrorEntity;
 import io.swagger.services.dto.Error;
 import org.junit.jupiter.api.Test;
 
@@ -12,13 +12,13 @@ class ErrorMapperTest {
 
     @Test
     void fromDTO() {
-        ErrorDataAccessEntity entity= ErrorMapper.INSTANCE.fromDTO(error);
+        ErrorEntity entity= ErrorMapper.INSTANCE.fromDTO(error);
         assertEquals(error.getErrorMessage(), entity.getErrorMessage());
     }
 
     @Test
     void fromEntity() {
-        ErrorDataAccessEntity entity= ErrorMapper.INSTANCE.fromDTO(error);
+        ErrorEntity entity= ErrorMapper.INSTANCE.fromDTO(error);
         Error newError= ErrorMapper.INSTANCE.fromEntity(entity);
         assertEquals(entity.getErrorMessage(), newError.getErrorMessage());
     }
