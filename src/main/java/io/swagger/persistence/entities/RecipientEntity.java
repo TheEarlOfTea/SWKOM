@@ -20,7 +20,7 @@ public class RecipientEntity {
     private String name;
     @Column
     private String street;
-    @Column(name = "postalCode")
+    @Column
     private String postalCode;
     @Column
     private String city;

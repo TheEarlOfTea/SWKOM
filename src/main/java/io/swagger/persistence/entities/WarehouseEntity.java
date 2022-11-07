@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Table(name = "t_warehouses")
+@Table(name = "t_warehouses")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,7 +20,6 @@ public class WarehouseEntity extends HopEntity {
 
     @Column
     @OneToMany
-    //@JoinTable(name="t_nextHops")
     private List<WarehouseEntity> nextHops = new ArrayList();
 
 

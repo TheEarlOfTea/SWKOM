@@ -1,12 +1,15 @@
 package io.swagger.persistence.entities;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="t_hops")
 @Builder
 @Getter
 @Setter
@@ -32,11 +35,10 @@ public class HopEntity {
     @Column
     private String locationName;
 
-    /*@Column
+    @Column
     @Type(type="")//
-
     private Point locationCoordinates;
-*/
+
 
 
 }

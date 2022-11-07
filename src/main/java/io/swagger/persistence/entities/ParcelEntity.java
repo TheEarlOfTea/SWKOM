@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-//@Table(name="t_parcels")
+@Table(name="t_parcels")
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
@@ -23,17 +23,17 @@ public class ParcelEntity {
     @Column
     private float weight;
     @ManyToOne
-    //@JoinColumn(name = "fk_recipients")
+    @JoinColumn(name = "fk_recipients")
     private RecipientEntity recipient;
     @ManyToOne
-    //@JoinColumn(name = "fk_sender")
+    @JoinColumn(name = "fk_sender")
     private RecipientEntity sender;
     @Column
     private TrackingInformation.StateEnum state;
     @ManyToMany(targetEntity = HopArrivalEntity.class)
-    //@JoinTable(name="t_visitedHops")
+    @JoinTable(name="t_visitedHops")
     private List<HopArrivalEntity> visitedHops;
     @ManyToMany(targetEntity = HopArrivalEntity.class)
-    //@JoinTable(name="t_futureHops")
+    @JoinTable(name="t_futureHops")
     private List<HopArrivalEntity> futureHops;
 }
