@@ -1,7 +1,7 @@
 package io.swagger.mapper;
 
-import io.swagger.businessLayer.mappers.ParcelMapper;
-import io.swagger.businessLayer.mappers.RecipientMapper;
+import io.swagger.services.mapper.ParcelMapper;
+import io.swagger.services.mapper.RecipientMapper;
 import io.swagger.persistence.entities.ParcelEntity;
 import io.swagger.services.dto.*;
 import org.junit.jupiter.api.Test;

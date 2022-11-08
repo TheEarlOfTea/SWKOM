@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.services;
+package io.swagger.controller.rest;
 
 import io.swagger.services.dto.Error;
 import io.swagger.services.dto.Hop;

@@ -1,4 +1,4 @@
-package io.swagger.businessLayer.mappers;
+package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.RecipientEntity;
 import io.swagger.services.dto.Recipient;

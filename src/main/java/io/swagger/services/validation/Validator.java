@@ -1,4 +1,4 @@
-package io.swagger.businessLayer.validation;
+package io.swagger.services.validation;
 
 import lombok.extern.log4j.Log4j2;
 

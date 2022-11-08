@@ -1,8 +1,7 @@
-package io.swagger.services.impl;
+package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.connector.impl.ParcelConnector;
-import io.swagger.services.ParcelApi;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;

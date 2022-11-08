@@ -1,6 +1,7 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.controller.rest.WarehouseApiController;
 import io.swagger.services.dto.Warehouse;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;

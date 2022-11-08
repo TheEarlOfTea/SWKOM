@@ -1,7 +1,8 @@
-package io.swagger.businessLayer.mappers;
+package io.swagger.businessLayer.mapper;
 
 import io.swagger.persistence.entities.ErrorEntity;
 import io.swagger.services.dto.Error;
+import io.swagger.services.mapper.ErrorMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

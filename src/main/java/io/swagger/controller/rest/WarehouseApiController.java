@@ -1,8 +1,7 @@
-package io.swagger.services.impl;
+package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.connector.impl.WarehouseConnector;
-import io.swagger.services.WarehouseApi;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Warehouse;
 import io.swagger.v3.oas.annotations.Parameter;

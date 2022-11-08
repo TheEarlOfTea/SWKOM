@@ -1,4 +1,4 @@
-package io.swagger.businessLayer.mappers;
+package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.WarehouseEntity;
 import io.swagger.services.dto.Warehouse;

@@ -1,6 +1,7 @@
 package io.swagger.services.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.controller.rest.ParcelApiController;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.Recipient;
 import junit.framework.TestCase;
