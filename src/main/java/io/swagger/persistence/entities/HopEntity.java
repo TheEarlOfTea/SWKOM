@@ -36,7 +36,6 @@ public class HopEntity {
     private String locationName;
 
     @Column
-    @Type(type="")//
     private Point locationCoordinates;
 
 
