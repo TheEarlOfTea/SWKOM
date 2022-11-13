@@ -23,7 +23,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-        with:
+        env:
           db-url: ${{secrets.DB_URL}}
           db-username: ${{secrets.DB_USERNAME}}
           db-password: ${{secrets.DB_PASSWORD}}
