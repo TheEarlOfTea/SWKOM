@@ -23,6 +23,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+        env:
+          db-url: ${{ secrets.DB_URL }}
+          db-username: ${{ secrets.DB_USERNAME }}
+          db-password: ${{ secrets.DB_PASSWORD }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -49,5 +53,5 @@ jobs:
         with:
           app-name: 'earls-warehouse'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A86C447909174E97ABC9446883AE816F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D166E877FC734521A1F4BC90CA7F8266 }}
           package: '*.jar'

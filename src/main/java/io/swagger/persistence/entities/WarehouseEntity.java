@@ -3,6 +3,8 @@ package io.swagger.persistence.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +18,13 @@ import java.util.List;
 public class WarehouseEntity extends HopEntity {
 
     @Column
+    @NotNull(message = "level may not be null")
+    @Min(value = 0, message = "level must be 0 or higher")
     private Integer level;
 
     @Column
     @OneToMany
+    @NotNull(message = "may not be null")
     private List<WarehouseEntity> nextHops = new ArrayList();
 
 
