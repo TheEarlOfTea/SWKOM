@@ -16,11 +16,11 @@ import java.util.Objects;
 
 public class Truck extends Hop  {
   @JsonProperty("regionGeoJson")
-  @NotNull
+  @NotNull(message = "regionGeoJson may not be null")
   private String regionGeoJson = null;
 
   @JsonProperty("numberPlate")
-  @NotNull
+  @NotNull(message = "numberPlate may not be null")
   private String numberPlate = null;
 
   public Truck regionGeoJson(String regionGeoJson) {

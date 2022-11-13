@@ -4,6 +4,8 @@ package io.swagger.persistence.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="t_warehouseNextHops")
@@ -19,6 +21,8 @@ public class WarehouseNextHopsEntity {
     private long id;
 
     @Column
+    @NotNull(message = "traveltimeMins may not be null")
+    @Min(value = 1, message = "traveltimeMins may not be lower than 1")
     private Integer traveltimeMins;
 
     @OneToOne
