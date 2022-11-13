@@ -16,15 +16,15 @@ import java.util.Objects;
 
 public class Transferwarehouse extends Hop  {
   @JsonProperty("regionGeoJson")
-  @NotNull
+  @NotNull(message = "regiongGeoJson may not be null")
   private String regionGeoJson = null;
 
   @JsonProperty("logisticsPartner")
-  @NotNull
+  @NotNull(message = "logisticsPartner may not be null")
   private String logisticsPartner = null;
 
   @JsonProperty("logisticsPartnerUrl")
-  @NotNull
+  @NotNull(message = "logisticsPartnerUrl may not be null")
   private String logisticsPartnerUrl = null;
 
   public Transferwarehouse regionGeoJson(String regionGeoJson) {

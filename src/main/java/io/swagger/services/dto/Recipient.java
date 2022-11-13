@@ -25,15 +25,15 @@ public class Recipient   {
   private String street = null;
 
   @JsonProperty("postalCode")
-  @NotNull
+  @NotNull(message = "postalcode may not be null")
   private String postalCode = null;
 
   @JsonProperty("city")
-  @NotNull(message = "may not be null")
+  @NotNull(message = "city may not be null")
   private String city = null;
 
   @JsonProperty("country")
-  @NotNull
+  @NotNull(message = "country may not be null")
   @Pattern(regexp = "[A-Za-z]*", message = "Country must match pattern [A-Za-z]*")
   private String country = null;
 

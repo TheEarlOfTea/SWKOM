@@ -4,6 +4,7 @@ package io.swagger.persistence.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="t_errors")
@@ -20,6 +21,7 @@ public class ErrorEntity {
     private Long Id;
 
     @Column
+    @NotNull
     private String errorMessage;
 
 }
