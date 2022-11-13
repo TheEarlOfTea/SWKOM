@@ -1,4 +1,7 @@
-name: Master CI
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy JAR app to Azure Web App - earls-warehouse
 
 on:
   push:
@@ -46,5 +49,5 @@ jobs:
         with:
           app-name: 'earls-warehouse'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A86C447909174E97ABC9446883AE816F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D166E877FC734521A1F4BC90CA7F8266 }}
           package: '*.jar'
