@@ -1,23 +1,15 @@
 package io.swagger.services;
 import io.swagger.persistence.entities.ParcelEntity;
+import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Parcel;
 
 import java.util.List;
 
 public interface ParcelService {
-    // Save operation
-    ParcelEntity saveParcelEntity(Parcel parcel);
 
-    // Read operation
-    List<Parcel> fetchParcelEntityList();
-
-    //getAll
-    void getAllParcelEntity(Parcel parcel);
-
-    //getAll
-    void findParcelEntityByIdAll(Long parcelId);
-
-    // Delete operation
-    void deleteParcelEntityById(Long parcelId);
+    void save(Parcel parcel);
+    List<Parcel> findAll();
+    void deleteById(long id);
+    Parcel getById(long id);
 
 }

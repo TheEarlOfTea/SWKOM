@@ -1,54 +1,47 @@
 package io.swagger.services.impl;
 
-
 import io.swagger.persistence.entities.ErrorEntity;
 import io.swagger.persistence.repositories.ErrorRepository;
 import io.swagger.services.ErrorService;
 import io.swagger.services.dto.Error;
 import io.swagger.services.mapper.ErrorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-@Service
 public class ErrorServiceImpl implements ErrorService {
-    @Autowired
-    private ErrorRepository errorRepository;
-    @Autowired
-    private ErrorMapper errorMapper;
 
-    // Save operation
+    @Autowired
+    private ErrorRepository repository;
+
     @Override
-    public ErrorEntity saveErrorEntity(Error error) {
-        return errorRepository.save(errorMapper.fromDTO(error));
+    public void save(Error error) {
+        repository.save(ErrorMapper.INSTANCE.fromDTO(error));
+
     }
 
-
-    // Read operation
-    @Override public List<Error> fetchErrorEntityList() {
-        List<Error> errors = new LinkedList<>();
-        for (ErrorEntity errorEntity:errorRepository.findAll()) {
-            errors.add(errorMapper.fromEntity(errorEntity));
+    @Override
+    public List<Error> findAll() {
+        LinkedList<Error> list= new LinkedList<Error>();
+        for(ErrorEntity e : repository.findAll()){
+            list.add(ErrorMapper.INSTANCE.fromEntity(e));
         }
-        return errors;
+        return list;
     }
 
     @Override
-    public void getAllErrorEntity(Error error) {
-
+    public void deleteById(long id) {
+        repository.deleteById(id);
     }
 
     @Override
-    public void findErrorEntityByIdAll(Long errorId) {
-
-    }
-
-
-    // Delete operation
-    @Override
-    public void deleteErrorEntityById(Long Id){
-        errorRepository.deleteById(Id);
+    public Error getById(long id) {
+        Optional<ErrorEntity> entity= repository.findById(id);
+        if(entity.isPresent()){
+            return ErrorMapper.INSTANCE.fromEntity(entity.get());
+        }
+        return null;
     }
 }

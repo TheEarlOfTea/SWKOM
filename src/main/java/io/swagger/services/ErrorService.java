@@ -9,18 +9,12 @@ import io.swagger.services.dto.Error;
 import java.util.List;
 
 public interface ErrorService {
-    // Save operation
-    ErrorEntity saveErrorEntity(Error error);
 
-    // Read operation
-    List<Error> fetchErrorEntityList();
+    void save(Error error);
+    List<Error> findAll();
+    void deleteById(long id);
+    Error getById(long id);
 
-    //getAll
-    void getAllErrorEntity(Error error);
 
-    //getAll
-    void findErrorEntityByIdAll(Long errorId);
 
-    // Delete operation
-    void deleteErrorEntityById(Long errorId);
 }
