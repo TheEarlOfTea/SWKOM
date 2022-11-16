@@ -7,12 +7,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface TruckMapper {
+public interface TruckMapper extends CoordinateToPointMapper{
 
     TruckMapper INSTANCE= Mappers.getMapper(TruckMapper.class);
 
-
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "geoCoordinateToPoint")
     TruckEntity fromDTO(Truck hop);
-
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "pointToGeoCoordinate")
     Truck fromEntity(TruckEntity entity);
 }

@@ -17,8 +17,8 @@ class TransferwarehouseMapperTest {
         assertEquals(transferwarehouse.getCode(), entity.getCode());
         assertEquals(transferwarehouse.getDescription(), entity.getDescription());
         assertEquals(transferwarehouse.getHopType(), entity.getHopType());
-        assertEquals(transferwarehouse.getLocationCoordinates().getLon(), entity.getLocationCoordinates().getLon());
-        assertEquals(transferwarehouse.getLocationCoordinates().getLat(), entity.getLocationCoordinates().getLat());
+        assert(transferwarehouse.getLocationCoordinates().getLon() == entity.getLocationCoordinates().getX());
+        assert(transferwarehouse.getLocationCoordinates().getLat() == entity.getLocationCoordinates().getY());
         assertEquals(transferwarehouse.getLocationName(), entity.getLocationName());
         assertEquals(transferwarehouse.getProcessingDelayMins(), entity.getProcessingDelayMins());
         assertEquals(transferwarehouse.getLogisticsPartnerUrl(), entity.getLogisticsPartnerUrl());
@@ -34,8 +34,8 @@ class TransferwarehouseMapperTest {
         assertEquals(entity.getCode(), newWarehouse.getCode());
         assertEquals(entity.getDescription(), newWarehouse.getDescription());
         assertEquals(entity.getHopType(), newWarehouse.getHopType());
-        assertEquals(entity.getLocationCoordinates().getLon(), newWarehouse.getLocationCoordinates().getLon());
-        assertEquals(entity.getLocationCoordinates().getLat(), newWarehouse.getLocationCoordinates().getLat());
+        assert(entity.getLocationCoordinates().getX() == newWarehouse.getLocationCoordinates().getLon());
+        assert(entity.getLocationCoordinates().getY() == newWarehouse.getLocationCoordinates().getLat());
         assertEquals(entity.getLocationName(), newWarehouse.getLocationName());
         assertEquals(entity.getProcessingDelayMins(), newWarehouse.getProcessingDelayMins());
         assertEquals(entity.getLogisticsPartnerUrl(), newWarehouse.getLogisticsPartnerUrl());

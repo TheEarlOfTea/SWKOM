@@ -18,8 +18,8 @@ class HopMapperTest {
         assertEquals(hop.getCode(), entity.getCode());
         assertEquals(hop.getDescription(), entity.getDescription());
         assertEquals(hop.getHopType(), entity.getHopType());
-        assertEquals(hop.getLocationCoordinates().getLon(), entity.getLocationCoordinates().getLon());
-        assertEquals(hop.getLocationCoordinates().getLat(), entity.getLocationCoordinates().getLat());
+        assert(hop.getLocationCoordinates().getLon() == entity.getLocationCoordinates().getX());
+        assert(hop.getLocationCoordinates().getLat() == entity.getLocationCoordinates().getY());
         assertEquals(hop.getLocationName(), entity.getLocationName());
         assertEquals(hop.getProcessingDelayMins(), entity.getProcessingDelayMins());
     }
@@ -31,8 +31,8 @@ class HopMapperTest {
         assertEquals(entity.getCode(), newHop.getCode());
         assertEquals(entity.getDescription(), newHop.getDescription());
         assertEquals(entity.getHopType(), newHop.getHopType());
-        assertEquals(entity.getLocationCoordinates().getLon(), newHop.getLocationCoordinates().getLon());
-        assertEquals(entity.getLocationCoordinates().getLat(), newHop.getLocationCoordinates().getLat());
+        assert(entity.getLocationCoordinates().getX() == newHop.getLocationCoordinates().getLon());
+        assert(entity.getLocationCoordinates().getY() == newHop.getLocationCoordinates().getLat());
         assertEquals(entity.getLocationName(), newHop.getLocationName());
         assertEquals(entity.getProcessingDelayMins(), newHop.getProcessingDelayMins());
     }

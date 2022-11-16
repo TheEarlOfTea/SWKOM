@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Mapper
-public interface WarehouseMapper {
+public interface WarehouseMapper extends CoordinateToPointMapper{
     WarehouseMapper INSTANCE= Mappers.getMapper(WarehouseMapper.class);
 
     @Named("nextHopsDtoToEntity")
@@ -33,10 +33,11 @@ public interface WarehouseMapper {
         }
         return newList;
     }
-
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "geoCoordinateToPoint")
     @Mapping(source = "nextHops", target = "nextHops", qualifiedByName = "nextHopsDtoToEntity")
     WarehouseEntity fromDTO(Warehouse warehouse);
 
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "pointToGeoCoordinate")
     @Mapping(source = "nextHops", target = "nextHops", qualifiedByName = "nextHopsEntityToDto")
     Warehouse fromEntity(WarehouseEntity entity);
 }

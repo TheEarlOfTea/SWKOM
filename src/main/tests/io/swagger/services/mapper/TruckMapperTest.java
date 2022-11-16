@@ -18,8 +18,8 @@ class TruckMapperTest {
         assertEquals(truck.getCode(), entity.getCode());
         assertEquals(truck.getDescription(), entity.getDescription());
         assertEquals(truck.getHopType(), entity.getHopType());
-        assertEquals(truck.getLocationCoordinates().getLon(), entity.getLocationCoordinates().getLon());
-        assertEquals(truck.getLocationCoordinates().getLat(), entity.getLocationCoordinates().getLat());
+        assert(truck.getLocationCoordinates().getLon() == entity.getLocationCoordinates().getX());
+        assert(truck.getLocationCoordinates().getLat() == entity.getLocationCoordinates().getY());
         assertEquals(truck.getLocationName(), entity.getLocationName());
         assertEquals(truck.getProcessingDelayMins(), entity.getProcessingDelayMins());
         assertEquals(truck.getRegionGeoJson(), entity.getRegionGeoJson());
@@ -36,8 +36,8 @@ class TruckMapperTest {
         assertEquals(entity.getCode(), newTruck.getCode());
         assertEquals(entity.getDescription(), newTruck.getDescription());
         assertEquals(entity.getHopType(), newTruck.getHopType());
-        assertEquals(entity.getLocationCoordinates().getLon(), newTruck.getLocationCoordinates().getLon());
-        assertEquals(entity.getLocationCoordinates().getLat(), newTruck.getLocationCoordinates().getLat());
+        assert(entity.getLocationCoordinates().getX() == newTruck.getLocationCoordinates().getLon());
+        assert(entity.getLocationCoordinates().getY() == newTruck.getLocationCoordinates().getLat());
         assertEquals(entity.getLocationName(), newTruck.getLocationName());
         assertEquals(entity.getProcessingDelayMins(), newTruck.getProcessingDelayMins());
         assertEquals(entity.getRegionGeoJson(), newTruck.getRegionGeoJson());

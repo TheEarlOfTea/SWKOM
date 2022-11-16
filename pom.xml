@@ -11,13 +11,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <springfox-version>3.0.0</springfox-version>
     </properties>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.16.RELEASE</version>
     </parent>
     <build>
-
         <sourceDirectory>src/main/java</sourceDirectory>
         <plugins>
             <plugin>
@@ -34,20 +34,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-spatial</artifactId>
-            <version>6.1.5.Final</version>
-            <type>pom</type>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.2.3.Final</version>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -127,7 +113,6 @@
             <version>2.3.1</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -138,8 +123,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>6.1.5.Final</version>
+            <type>pom</type>
+        </dependency>
 
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
     </dependencies>
     <!-- add repositories for JTS and Hibernate Spatial and Hibernate (JBoss) -->
     <repositories>

@@ -50,7 +50,7 @@ public class HopEntity{
 
     @Column
     @NotNull(message= "locationCoordinates may not be null")
-    private GeoCoordinateEntity locationCoordinates;
+    private Point locationCoordinates;
 
 
 
