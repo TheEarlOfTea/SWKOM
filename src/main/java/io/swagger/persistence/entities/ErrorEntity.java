@@ -16,7 +16,11 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 @SuperBuilder
 
-public class ErrorEntity extends AbstractEntity{
+public class ErrorEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @NotNull

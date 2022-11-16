@@ -10,8 +10,6 @@ import org.mapstruct.factory.Mappers;
 public interface ErrorMapper{
     ErrorMapper INSTANCE= Mappers.getMapper(ErrorMapper.class);
 
-    @Mapping(source = "errorMessage", target = "errorMessage")
     ErrorEntity fromDTO(Error error);
-    @Mapping(source = "errorMessage", target = "errorMessage")
     Error fromEntity(ErrorEntity entity);
 }

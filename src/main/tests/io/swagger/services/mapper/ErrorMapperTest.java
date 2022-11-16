@@ -1,4 +1,4 @@
-package io.swagger.businessLayer.mapper;
+package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.ErrorEntity;
 import io.swagger.services.dto.Error;
@@ -13,6 +13,7 @@ class ErrorMapperTest {
 
     @Test
     void fromDTO() {
+
         ErrorEntity entity= ErrorMapper.INSTANCE.fromDTO(error);
         assertEquals(error.getErrorMessage(), entity.getErrorMessage());
     }

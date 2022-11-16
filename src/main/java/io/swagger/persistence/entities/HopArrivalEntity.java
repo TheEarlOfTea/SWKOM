@@ -20,7 +20,11 @@ import org.threeten.bp.OffsetDateTime;
 @SuperBuilder
 
 
-public class HopArrivalEntity extends AbstractEntity{
+public class HopArrivalEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "has to match \'^[A-Z]{4}\\d{1,4}$\'")

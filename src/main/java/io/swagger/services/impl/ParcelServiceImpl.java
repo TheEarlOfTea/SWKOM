@@ -21,8 +21,6 @@ public class ParcelServiceImpl implements ParcelService{
 
     @Autowired
     private ParcelRepository parcelRepository;
-    @Autowired
-    private ParcelMapper parcelMapper;
 
 
     //nicht sicher
@@ -31,14 +29,18 @@ public class ParcelServiceImpl implements ParcelService{
     private Object TrackingInformation;
 
 
-    // Save operation
     @Override
-    public ParcelEntity saveParcelEntity(Parcel parcel) {
-        return parcelRepository.save(parcelMapper.from(NewParcelInfo,Parcel,TrackingInformation)); // bei 3 Parameters - problem
+    public ParcelEntity saveParcelEntity(io.swagger.services.dto.Parcel parcel) {
+        return null;
     }
 
-
+    // Save operation
     @Override
+    /*public ParcelEntity saveParcelEntity(Parcel parcel) {
+        return parcelRepository.save(parcelMapper.from(NewParcelInfo,Parcel,TrackingInformation)); // bei 3 Parameters - problem
+    }*/
+
+
     public List<Parcel> fetchParcelEntityList() {
         return null;
     }

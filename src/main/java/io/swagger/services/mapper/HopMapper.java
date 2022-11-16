@@ -10,18 +10,8 @@ import org.mapstruct.factory.Mappers;
 public interface HopMapper {
     HopMapper INSTANCE= Mappers.getMapper(HopMapper.class);
 
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
+
     HopEntity fromDTO(Hop hop);
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
+
     Hop fromEntity(HopEntity entity);
 }

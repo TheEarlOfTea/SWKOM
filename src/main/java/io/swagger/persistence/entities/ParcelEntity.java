@@ -17,7 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ParcelEntity extends AbstractEntity{
+public class ParcelEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @Pattern(regexp="^[A-Z0-9]{9}$", message = "has to match \'^[A-Z0-9]{9}$\'")

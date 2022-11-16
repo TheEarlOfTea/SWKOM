@@ -1,32 +1,42 @@
 package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.WarehouseEntity;
+import io.swagger.persistence.entities.WarehouseNextHopsEntity;
 import io.swagger.services.dto.Warehouse;
+import io.swagger.services.dto.WarehouseNextHops;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Mapper
 public interface WarehouseMapper {
     WarehouseMapper INSTANCE= Mappers.getMapper(WarehouseMapper.class);
 
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "level", target = "level")
-    @Mapping(source = "nextHops", target = "nextHops")
+    @Named("nextHopsDtoToEntity")
+    public static List<WarehouseNextHopsEntity> nextHopsDtoToEntity(List<WarehouseNextHops> list){
+        LinkedList<WarehouseNextHopsEntity> newList= new LinkedList<WarehouseNextHopsEntity>();
+        for(WarehouseNextHops i : list){
+            newList.add(WarehouseNextHopMapper.INSTANCE.fromDTO(i));
+        }
+        return newList;
+    }
+
+    @Named("nextHopsEntityToDto")
+    public static List<WarehouseNextHops> nextHopsEntityToDto(List<WarehouseNextHopsEntity> list){
+        LinkedList<WarehouseNextHops> newList= new LinkedList<WarehouseNextHops>();
+        for(WarehouseNextHopsEntity i : list){
+            newList.add(WarehouseNextHopMapper.INSTANCE.fromEntity(i));
+        }
+        return newList;
+    }
+
+    @Mapping(source = "nextHops", target = "nextHops", qualifiedByName = "nextHopsDtoToEntity")
     WarehouseEntity fromDTO(Warehouse warehouse);
 
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "level", target = "level")
-    @Mapping(source = "nextHops", target = "nextHops")
+    @Mapping(source = "nextHops", target = "nextHops", qualifiedByName = "nextHopsEntityToDto")
     Warehouse fromEntity(WarehouseEntity entity);
 }

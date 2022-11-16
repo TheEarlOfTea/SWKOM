@@ -15,10 +15,12 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 
-public class RecipientEntity extends AbstractEntity{
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+public class RecipientEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private long id;
+    protected long id;
+
 
     @Column
     @NotNull(message = "name may not be null")

@@ -11,15 +11,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name="t_hops")
-@SuperBuilder
 @Getter
 @Setter
-
-//todo: fix geocoordinate
-public class HopEntity extends AbstractEntity{
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@SuperBuilder
+public class HopEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @NotNull(message= "hopType may not be null")
@@ -47,7 +50,7 @@ public class HopEntity extends AbstractEntity{
 
     @Column
     @NotNull(message= "locationCoordinates may not be null")
-    private Point locationCoordinates;
+    private GeoCoordinateEntity locationCoordinates;
 
 
 

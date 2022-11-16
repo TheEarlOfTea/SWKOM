@@ -10,11 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface WarehouseNextHopMapper {
     WarehouseNextHopMapper INSTANCE= Mappers.getMapper(WarehouseNextHopMapper.class);
 
-    @Mapping(source = "travelTimeMins", target = "travelTimeMins")
-    @Mapping(source = "hop", target = "hop")
     WarehouseNextHopsEntity fromDTO(WarehouseNextHops warehouseNextHops);
 
-    @Mapping(source = "travelTimeMins", target = "travelTimeMins")
-    @Mapping(source = "hop", target = "hop")
     WarehouseNextHops fromEntity(WarehouseNextHopsEntity entity);
 }
