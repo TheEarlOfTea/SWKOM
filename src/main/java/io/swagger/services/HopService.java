@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface HopService {
 
-        void save(Hop hop);
-        List<Hop> findAll();
+        void save(HopEntity entity);
+        List<HopEntity> findAll();
         void deleteById(long id);
-        Hop getById(long id);
+        HopEntity getById(long id);
 
 
 }

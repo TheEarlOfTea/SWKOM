@@ -1,29 +1,27 @@
 package io.swagger.services.impl;
 
 import io.swagger.persistence.entities.ErrorEntity;
+import io.swagger.persistence.entities.HopArrivalEntity;
 import io.swagger.persistence.repositories.ErrorRepository;
-import io.swagger.services.ErrorService;
-import io.swagger.services.dto.Error;
-import io.swagger.services.mapper.ErrorMapper;
+import io.swagger.persistence.repositories.HopArrivalRepository;
+import io.swagger.services.HopArrivalService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class ErrorServiceImpl implements ErrorService {
-
+public class HopArrivalServiceImpl implements HopArrivalService {
     @Autowired
-    private ErrorRepository repository;
+    private HopArrivalRepository repository;
 
     @Override
-    public void save(ErrorEntity entity) {
+    public void save(HopArrivalEntity entity) {
         repository.save(entity);
 
     }
 
     @Override
-    public List<ErrorEntity> findAll() {
+    public List<HopArrivalEntity> findAll() {
         return repository.findAll();
     }
 
@@ -33,11 +31,12 @@ public class ErrorServiceImpl implements ErrorService {
     }
 
     @Override
-    public ErrorEntity getById(long id) {
-        Optional<ErrorEntity> entity= repository.findById(id);
+    public HopArrivalEntity getById(long id) {
+        Optional<HopArrivalEntity> entity= repository.findById(id);
         if(entity.isPresent()){
             return entity.get();
         }
         return null;
     }
+
 }

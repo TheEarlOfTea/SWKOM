@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface HopArrivalService {
 
-    void save(HopArrival hopArrival);
-    List<HopArrival> findAll();
+    void save(HopArrivalEntity entity);
+    List<HopArrivalEntity> findAll();
     void deleteById(long id);
-    HopArrival getById(long id);
+    HopArrivalEntity getById(long id);
 
 
 }

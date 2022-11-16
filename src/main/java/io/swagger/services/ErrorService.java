@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface ErrorService {
 
-    void save(Error error);
-    List<Error> findAll();
+    void save(ErrorEntity error);
+    List<ErrorEntity> findAll();
     void deleteById(long id);
-    Error getById(long id);
+    ErrorEntity getById(long id);
 
 
 

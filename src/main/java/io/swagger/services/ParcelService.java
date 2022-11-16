@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface ParcelService {
 
-    void save(Parcel parcel);
-    List<Parcel> findAll();
+    void save(ParcelEntity entity);
+    List<ParcelEntity> findAll();
     void deleteById(long id);
-    Parcel getById(long id);
+    ParcelEntity getById(long id);
 
 }

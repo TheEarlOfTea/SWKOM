@@ -8,8 +8,8 @@ import io.swagger.services.dto.Recipient;
 import java.util.List;
 
 public interface RecipientService {
-    void save(Recipient recipient);
-    List<Recipient> findAll();
+    void save(RecipientEntity entity);
+    List<RecipientEntity> findAll();
     void deleteById(long id);
-    Recipient getById(long id);
+    RecipientEntity getById(long id);
 }
