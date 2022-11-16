@@ -1,21 +1,18 @@
 package io.swagger.persistence.entities;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "t_transferwarehouses")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 public class TransferwarehouseEntity extends HopEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private long id;
 
     @Column
     @NotNull(message = "regiongGeoJson may not be null")

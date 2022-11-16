@@ -1,6 +1,7 @@
 package io.swagger.persistence.entities;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -9,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "t_warehouses")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-//Todo: join tabelle
+@SuperBuilder
 public class WarehouseEntity extends HopEntity {
 
     @Column

@@ -2,6 +2,7 @@ package io.swagger.persistence.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -14,14 +15,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class GeoCoordinateEntity {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private Long id;
+@SuperBuilder
+public class GeoCoordinateEntity extends AbstractEntity{
 
     @Column
     @NotNull(message = "lat may not be null")
@@ -30,7 +28,7 @@ public class GeoCoordinateEntity {
     private Double lat;
 
     @Column
-    @NotNull(message = "lat may not be null")
+    @NotNull(message = "lon may not be null")
     @DecimalMin(value="-180.0000000", message="longitude cannot be less than -180")
     @DecimalMax(value="180.0000000", message="longitude cannot be higher than 180")
     private Double lon;

@@ -19,7 +19,7 @@ class HopArrivalRepositoryTest {
     public HopArrivalEntity entity;
     @BeforeEach
     void init(){
-        entity= new HopArrivalEntity().builder().code("test").description("test").dateTime(OffsetDateTime.MIN).build();
+        entity= new HopArrivalEntity().builder().code("TEST1234").description("TEST1234").dateTime(OffsetDateTime.MIN).build();
     }
 
     @Test

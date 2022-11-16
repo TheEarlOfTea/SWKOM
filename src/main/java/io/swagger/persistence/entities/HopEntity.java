@@ -1,6 +1,7 @@
 package io.swagger.persistence.entities;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.springframework.data.geo.Point;
 
@@ -13,15 +14,12 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="t_hops")
-@Builder
+@SuperBuilder
 @Getter
 @Setter
 
 //todo: fix geocoordinate
-public class HopEntity {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private long id;
+public class HopEntity extends AbstractEntity{
 
     @Column
     @NotNull(message= "hopType may not be null")

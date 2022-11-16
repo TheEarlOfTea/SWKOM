@@ -2,6 +2,7 @@ package io.swagger.persistence.entities;
 
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,15 +11,12 @@ import javax.validation.constraints.NotNull;
 @Table(name="t_errors")
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@SuperBuilder
 
-public class ErrorEntity {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private Long Id;
+public class ErrorEntity extends AbstractEntity{
 
     @Column
     @NotNull

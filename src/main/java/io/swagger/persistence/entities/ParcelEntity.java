@@ -2,6 +2,7 @@ package io.swagger.persistence.entities;
 
 import io.swagger.services.dto.TrackingInformation;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
@@ -12,15 +13,11 @@ import java.util.List;
 @Entity
 @Table(name="t_parcels")
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
-public class ParcelEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private long id;
+public class ParcelEntity extends AbstractEntity{
 
     @Column
     @Pattern(regexp="^[A-Z0-9]{9}$", message = "has to match \'^[A-Z0-9]{9}$\'")

@@ -2,6 +2,7 @@ package io.swagger.persistence.entities;
 
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -15,17 +16,11 @@ import org.threeten.bp.OffsetDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @NoArgsConstructor
+@SuperBuilder
 
 
-
-public class HopArrivalEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-
-    @Column
-    private Long id;
+public class HopArrivalEntity extends AbstractEntity{
 
     @Column
     @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "has to match \'^[A-Z]{4}\\d{1,4}$\'")

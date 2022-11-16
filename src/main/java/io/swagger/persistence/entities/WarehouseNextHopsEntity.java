@@ -2,6 +2,7 @@ package io.swagger.persistence.entities;
 
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -10,15 +11,12 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name="t_warehouseNextHops")
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 
-public class WarehouseNextHopsEntity {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
-    private long id;
+public class WarehouseNextHopsEntity extends AbstractEntity{
 
     @Column
     @NotNull(message = "traveltimeMins may not be null")

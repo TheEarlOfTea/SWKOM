@@ -1,6 +1,7 @@
 package io.swagger.persistence.entities;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,12 +10,12 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Table(name = "t_recipients")
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
 
-public class RecipientEntity {
+public class RecipientEntity extends AbstractEntity{
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private long id;
