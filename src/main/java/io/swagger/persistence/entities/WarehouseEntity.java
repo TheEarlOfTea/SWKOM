@@ -1,5 +1,6 @@
 package io.swagger.persistence.entities;
 
+import io.swagger.services.dto.WarehouseNextHops;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -25,7 +26,7 @@ public class WarehouseEntity extends HopEntity {
     @Column
     @OneToMany
     @NotNull(message = "may not be null")
-    private List<WarehouseEntity> nextHops = new ArrayList();
+    private List<WarehouseNextHopsEntity> nextHops = new ArrayList();
 
 
 

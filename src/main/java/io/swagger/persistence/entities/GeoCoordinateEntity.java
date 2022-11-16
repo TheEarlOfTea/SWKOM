@@ -19,7 +19,11 @@ import javax.validation.constraints.NotNull;
 @ToString
 @EqualsAndHashCode
 @SuperBuilder
-public class GeoCoordinateEntity extends AbstractEntity{
+public class GeoCoordinateEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @NotNull(message = "lat may not be null")

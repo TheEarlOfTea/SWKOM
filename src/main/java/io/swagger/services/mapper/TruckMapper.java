@@ -7,26 +7,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface TruckMapper {
+public interface TruckMapper extends CoordinateToPointMapper{
 
     TruckMapper INSTANCE= Mappers.getMapper(TruckMapper.class);
 
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "regionGeoJson", target = "regionGeoJson")
-    @Mapping(source = "numberPlate", target = "numberPlate")
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "geoCoordinateToPoint")
     TruckEntity fromDTO(Truck hop);
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "regionGeoJson", target = "regionGeoJson")
-    @Mapping(source = "numberPlate", target = "numberPlate")
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "pointToGeoCoordinate")
     Truck fromEntity(TruckEntity entity);
 }

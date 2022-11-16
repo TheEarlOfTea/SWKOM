@@ -9,12 +9,8 @@ import org.mapstruct.factory.Mappers;
 public interface HopArrivalMapper {
     HopArrivalMapper INSTANCE= Mappers.getMapper(HopArrivalMapper.class);
 
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "dateTime", target = "dateTime")
+
     HopArrivalEntity fromDTO(HopArrival hopArrival);
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "dateTime", target = "dateTime")
+
     HopArrival fromEntity(HopArrivalEntity entity);
 }

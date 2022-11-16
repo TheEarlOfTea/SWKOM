@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 public interface RecipientRepository extends JpaRepository<RecipientEntity, Long> {
 
+
 }

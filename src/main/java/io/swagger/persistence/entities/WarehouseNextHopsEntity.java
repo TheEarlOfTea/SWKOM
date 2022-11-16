@@ -16,7 +16,12 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 
-public class WarehouseNextHopsEntity extends AbstractEntity{
+public class WarehouseNextHopsEntity{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
+    protected long id;
 
     @Column
     @NotNull(message = "traveltimeMins may not be null")

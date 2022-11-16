@@ -7,27 +7,11 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface TransferwarehouseMapper {
+public interface TransferwarehouseMapper extends CoordinateToPointMapper{
     TransferwarehouseMapper INSTANCE= Mappers.getMapper(TransferwarehouseMapper.class);
 
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "regionGeoJson", target = "regionGeoJson")
-    @Mapping(source = "logisticsPartner", target = "logisticsPartner")
-    @Mapping(source = "logisticsPartnerUrl", target = "logisticsPartnerUrl")
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "geoCoordinateToPoint")
     TransferwarehouseEntity fromDTO(Transferwarehouse transferwarehouse);
-    @Mapping(source = "hopType", target = "hopType")
-    @Mapping(source = "code", target = "code")
-    @Mapping(source = "description", target = "description")
-    @Mapping(source = "processingDelayMins", target = "processingDelayMins")
-    @Mapping(source = "locationName", target = "locationName")
-    @Mapping(source = "locationCoordinates", target = "locationCoordinates")
-    @Mapping(source = "regionGeoJson", target = "regionGeoJson")
-    @Mapping(source = "logisticsPartner", target = "logisticsPartner")
-    @Mapping(source = "logisticsPartnerUrl", target = "logisticsPartnerUrl")
+    @Mapping(source = "locationCoordinates", target = "locationCoordinates", qualifiedByName = "pointToGeoCoordinate")
     Transferwarehouse fromEntity(TransferwarehouseEntity entity);
 }

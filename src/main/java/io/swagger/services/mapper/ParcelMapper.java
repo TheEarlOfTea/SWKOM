@@ -2,42 +2,50 @@ package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.HopArrivalEntity;
 import io.swagger.persistence.entities.ParcelEntity;
-import io.swagger.services.dto.HopArrival;
-import io.swagger.services.dto.NewParcelInfo;
-import io.swagger.services.dto.Parcel;
-import io.swagger.services.dto.TrackingInformation;
+import io.swagger.persistence.entities.WarehouseEntity;
+import io.swagger.persistence.entities.WarehouseNextHopsEntity;
+import io.swagger.services.dto.*;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.factory.Mappers;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @Mapper
-public class ParcelMapper {
+public interface ParcelMapper {
 
+    ParcelMapper INSTANCE= Mappers.getMapper(ParcelMapper.class);
 
-    public static ParcelEntity from(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation){
+    @Named("hopArrivalListDtoToEntity")
+    public static List<HopArrivalEntity> hopArrivalListDtoToEntity(List<HopArrival> list){
+        LinkedList<HopArrivalEntity> newList= new LinkedList<HopArrivalEntity>();
 
-        if ( newParcelInfo == null || parcel==null || trackingInformation==null ) {
-            return null;
+        for(HopArrival i : list){
+            newList.add(HopArrivalMapper.INSTANCE.fromDTO(i));
         }
-
-        ParcelEntity entity= new ParcelEntity();
-        entity.setTrackingId(newParcelInfo.getTrackingId());
-        entity.setWeight(parcel.getWeight());
-        entity.setRecipient(RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient()));
-        entity.setSender(RecipientMapper.INSTANCE.fromDTO(parcel.getSender()));
-        entity.setState(trackingInformation.getState());
-        entity.setFutureHops(new LinkedList<HopArrivalEntity>());
-        entity.setVisitedHops(new LinkedList<HopArrivalEntity>());
-
-        for(HopArrival a : trackingInformation.getFutureHops()){
-            entity.getFutureHops().add(HopArrivalMapper.INSTANCE.fromDTO(a));
-        }
-        for(HopArrival a : trackingInformation.getVisitedHops()){
-            entity.getVisitedHops().add(HopArrivalMapper.INSTANCE.fromDTO(a));
-        }
-        return entity;
-
+        return newList;
     }
+
+    @Named("hopArrivalListEntityToDto")
+    public static List<HopArrival> hopArrivalListEntityToDto(List<HopArrivalEntity> list){
+        LinkedList<HopArrival> newList= new LinkedList<HopArrival>();
+
+        for(HopArrivalEntity i : list){
+            newList.add(HopArrivalMapper.INSTANCE.fromEntity(i));
+        }
+        return newList;
+    }
+
+    @Mapping(source = "info.trackingId", target = "trackingId")
+    @Mapping(source = "parcel.weight", target = "weight")
+    @Mapping(source = "parcel.recipient", target = "recipient")
+    @Mapping(source = "parcel.sender", target = "sender")
+    @Mapping(source = "trackingInformation.state.", target = "state")
+    @Mapping(source = "trackingInformation.visitedHops", target = "visitedHops", qualifiedByName = "hopArrivalListDtoToEntity")
+    @Mapping(source = "trackingInformation.futureHops", target = "futureHops", qualifiedByName = "hopArrivalListDtoToEntity")
+    ParcelEntity fromDTO(NewParcelInfo info, Parcel parcel, TrackingInformation trackingInformation);
 
 
 }

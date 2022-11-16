@@ -11,11 +11,8 @@ public interface GeoCoordinateMapper {
 
     GeoCoordinateMapper INSTANCE= Mappers.getMapper(GeoCoordinateMapper.class);
 
-    @Mapping(source = "lat", target = "lat")
-    @Mapping(source = "lon", target = "lon")
     GeoCoordinateEntity fromDTO(GeoCoordinate error);
-    @Mapping(source = "lat", target = "lat")
-    @Mapping(source = "lon", target = "lon")
+
     GeoCoordinate fromEntity(GeoCoordinateEntity entity);
 
 }

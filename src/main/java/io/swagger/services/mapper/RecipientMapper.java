@@ -10,11 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface RecipientMapper {
     RecipientMapper INSTANCE= Mappers.getMapper(RecipientMapper.class);
 
-    @Mapping(source = "name", target = "name")
-    @Mapping(source = "street", target = "street")
-    @Mapping(source = "postalCode", target = "postalCode")
-    @Mapping(source = "city", target = "city")
-    @Mapping(source = "country", target = "country")
     RecipientEntity fromDTO(Recipient recipient);
+
     Recipient fromEntity(RecipientEntity entity);
 }
