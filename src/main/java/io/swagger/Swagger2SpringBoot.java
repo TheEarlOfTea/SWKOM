@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -15,8 +16,8 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @EnableOpenApi
 @ComponentScan(basePackages = { "io.swagger", "io.swagger.services", "io.swagger.configuration"})
-//@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,})
-@SpringBootApplication
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,})
+//@SpringBootApplication
 public class Swagger2SpringBoot implements CommandLineRunner {
 
     @Override
