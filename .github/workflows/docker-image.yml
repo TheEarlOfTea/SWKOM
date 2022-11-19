@@ -18,12 +18,12 @@ jobs:
         with:
           java-version: '17'
 
-      - name: Build Docker Image with Maven
+      - name: Build with Maven
         env:
           db-url: ${{ secrets.DB_URL }}
           db-username: ${{ secrets.DB_USERNAME }}
           db-password: ${{ secrets.DB_PASSWORD }}
-        run: mvn spring-boot:build-image -DskipTests
+        run: mvn clean install
         
       - name: login to docker hub
         env:
