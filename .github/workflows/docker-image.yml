@@ -31,11 +31,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-  build-docker-image:
-    runs-on: ubuntu-latest
-    steps:
-      - name: build docker image
-        run: docker build --tag parcel-swagger .
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag swagger-parcel:$(date +%s)
       - name: push docker image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/swkom
 
