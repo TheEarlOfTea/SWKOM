@@ -36,4 +36,6 @@ jobs:
     steps:
       - name: build docker image
         run: docker build --tag parcel-swagger .
+      - name: push docker image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/swkom
 
