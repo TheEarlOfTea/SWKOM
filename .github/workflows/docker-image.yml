@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build the Docker image
-        run: docker build . --tag swagger-parcel:$(date +%s)
+        run: docker build . -t parcel-image --build-arg db-url=${{ secrets.DB_URL }} --build-arg db-username=${{ secrets.DB_USERNAME }} --build-arg db-password=${{ secrets.DB_PASSWORD }}
         
   push-docker-image:
     needs: build-docker-image
