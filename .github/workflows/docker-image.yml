@@ -1,4 +1,4 @@
-name: Docker CI
+name: Master CI
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag swagger-parcel:$(date +%s)
+        run: docker build . --file ./Dockerfile --tag swagger-parcel:$(date +%s)
         
   push-docker-image:
     needs: build-docker-image
