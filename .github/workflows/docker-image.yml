@@ -22,7 +22,9 @@ jobs:
           db-url: ${{ secrets.DB_URL }}
           db-username: ${{ secrets.DB_USERNAME }}
           db-password: ${{ secrets.DB_PASSWORD }}
-        run: mvn clean install | cp /target/swagger-spring-1.0.0.jar .
+        run: mvn clean install
+      - name: move file for docker image
+        run: cp /target/swagger-spring-1.0.0.jar .
       
         
   build-and-push-docker-image:
