@@ -52,5 +52,5 @@ jobs:
         db-url: ${{secrets.DB_URL}}
         db-username: ${{secrets.DB_USERNAME}}
         db-password: ${{secrets.DB_PASSWORD}}
-        workspace: ${{github.WORKSPACE}}
+        path: ${{github.WORKSPACE}}
         
