@@ -23,11 +23,6 @@ jobs:
           db-username: ${{ secrets.DB_USERNAME }}
           db-password: ${{ secrets.DB_PASSWORD }}
         run: mvn clean install
-
-  build-and-push-docker-image:
-    needs: build-java-applicatio-and-docker-image
-    runs-on: ubuntu-latest
-    steps:
       - name: Check out the repo
         uses: actions/checkout@v3
       -
