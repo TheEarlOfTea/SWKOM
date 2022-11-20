@@ -29,9 +29,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: try something
-        run: ls
+
       -
         name: Build docker image
         run: docker build . -t parcel-swagger
