@@ -28,6 +28,10 @@ jobs:
   build-docker-image:
     needs: build-java-application
     runs-on: ubuntu-latest
+    services:
+      test:
+        volumes: 
+         - ${{ github.workspace }}
     steps:
       - name: Build the Docker image
         run: docker build . -t parcel-image --build-arg db-url=${{ secrets.DB_URL }} --build-arg db-username=${{ secrets.DB_USERNAME }} --build-arg db-password=${{ secrets.DB_PASSWORD }}
