@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  build-java-application:
+  build-java-applicatio-and-docker-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,12 +23,19 @@ jobs:
           db-username: ${{ secrets.DB_USERNAME }}
           db-password: ${{ secrets.DB_PASSWORD }}
         run: mvn clean install
-      - name: move file for docker image
-        run: cp ${{github.WORKSPACE}}/target/swagger-spring-1.0.0.jar . | echo ls
-      
+      - name: move file and build docker image
+        run: cp ${{github.WORKSPACE}}/target/swagger-spring-1.0.0.jar .
+      - name: build docker image
+        env:
+          db-url: ${{ secrets.DB_URL }}
+          db-username: ${{ secrets.DB_USERNAME }}
+          db-password: ${{ secrets.DB_PASSWORD }}
+        run: docker build --file Dockerfile . -t parcel-swagger --tag theearloftea/swkom:latest
+      - name: push docker image
+        run: docker push theearloftea/swkom:latest
         
   build-and-push-docker-image:
-    needs: build-java-application
+    needs: build-java-applicatio-and-docker-image
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2 # first action : checkout source code
@@ -44,6 +51,5 @@ jobs:
           db-password: ${{ secrets.DB_PASSWORD }}
       run: docker build --file Dockerfile . -t parcel-swagger --tag theearloftea/swkom:latest
       
-    - name: push docker image
-      run: docker push theearloftea/swkom:latest
+    
         
