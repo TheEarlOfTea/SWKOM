@@ -41,7 +41,7 @@ jobs:
           db-password: ${{secrets.DB_PASSWORD}}
       -
         name: push docker image
-        run: docker push theearloftea/swkom:latest
+        run: docker tag parcel-swagger theearloftea/swkom:latest | docker push theearloftea/swkom:latest
       
     
         
