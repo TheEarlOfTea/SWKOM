@@ -45,4 +45,8 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: swkom/parcel:latest
+        tags: theearloftea/swkom:latest
+        db-url: ${{secrets.DB_URL}}
+        db-username: ${{secrets.DB_USERNAME}}
+        db-password: ${{secrets.DB_PASSWORD}}
+        
