@@ -24,11 +24,14 @@ jobs:
           db-password: ${{ secrets.DB_PASSWORD }}
         run: mvn clean install
   build-and-push-docker-image:
+    needs: build-java-applicatio-and-docker-image
     runs-on: ubuntu-latest
     steps:
       -
         name: check out repository
         uses: actions/checkout@v3
+      - name: test repository
+        run: echo ${{github.WORKSPACE}}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
