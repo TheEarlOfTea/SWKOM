@@ -23,6 +23,10 @@ jobs:
           db-username: ${{ secrets.DB_USERNAME }}
           db-password: ${{ secrets.DB_PASSWORD }}
         run: mvn clean install
+      - name: make target folder
+        run: mkdir ${{github.workspace}}/target
+      - name: copy jar to right folder
+        run: cp ./target/swagger-spring-1.0.0.jar %{{github.WORKSPACE}}/target
   build-and-push-docker-image:
     needs: build-java-applicatio-and-docker-image
     runs-on: ubuntu-latest
