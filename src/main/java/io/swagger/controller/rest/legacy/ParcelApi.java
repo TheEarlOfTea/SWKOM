@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.controller.rest;
+package io.swagger.controller.rest.legacy;
 
 import io.swagger.services.dto.Error;
 import io.swagger.services.dto.NewParcelInfo;
