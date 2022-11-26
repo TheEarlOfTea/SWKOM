@@ -6,11 +6,13 @@ import io.swagger.services.ErrorService;
 import io.swagger.services.dto.Error;
 import io.swagger.services.mapper.ErrorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class ErrorServiceImpl implements ErrorService {
 
     @Autowired

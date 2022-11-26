@@ -1,6 +1,7 @@
 package io.swagger.services.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 public class Parcel   {
   @JsonProperty("weight")
   @DecimalMin(value="0.001", message="parcels must weight at least 1 gram")
+  @ApiModelProperty(required = true, notes = "Weight of the parcel")
   private Float weight = null;
 
   @JsonProperty("recipient")

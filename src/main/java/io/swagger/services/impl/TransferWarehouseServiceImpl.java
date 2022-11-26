@@ -5,10 +5,12 @@ import io.swagger.persistence.entities.TransferwarehouseEntity;
 import io.swagger.persistence.repositories.HopRepository;
 import io.swagger.services.TransferwarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 //TODO: hopentity durch richtige entities ersetzen (mit zusätlicher bedingung)
+@Service
 public class TransferWarehouseServiceImpl implements TransferwarehouseService {
     @Autowired
     private HopRepository repository;

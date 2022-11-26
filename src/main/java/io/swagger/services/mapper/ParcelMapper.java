@@ -48,4 +48,8 @@ public interface ParcelMapper {
     ParcelEntity fromDTO(NewParcelInfo info, Parcel parcel, TrackingInformation trackingInformation);
 
 
+    @Mapping(source = "entity.weight", target = "weight")
+    @Mapping(source = "entity.recipient", target = "recipient")
+    @Mapping(source = "entity.sender", target = "sender")
+    Parcel fromEntity(ParcelEntity entity);
 }

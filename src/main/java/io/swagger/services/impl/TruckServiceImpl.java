@@ -5,10 +5,12 @@ import io.swagger.persistence.entities.TruckEntity;
 import io.swagger.persistence.repositories.HopRepository;
 import io.swagger.services.TruckService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 //TODO: hopentity durch richtige entities ersetzen (mit zusätlicher bedingung)
+@Service
 public class TruckServiceImpl implements TruckService {
 
     @Autowired

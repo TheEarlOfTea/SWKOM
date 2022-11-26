@@ -6,10 +6,12 @@ import io.swagger.persistence.repositories.HopArrivalRepository;
 import io.swagger.persistence.repositories.HopRepository;
 import io.swagger.services.HopService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class HopServiceImpl implements HopService {
 
     @Autowired

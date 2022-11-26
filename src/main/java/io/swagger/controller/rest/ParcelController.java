@@ -2,6 +2,7 @@ package io.swagger.controller.rest;
 
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.services.dto.Parcel;
@@ -15,13 +16,12 @@ public interface ParcelController {
             @ApiResponse(code = 200, message = "Parcel successfully submited"),
             @ApiResponse(code = 400, message = "Error - Bad Parcel Body")
     })
-    //@PostMapping("/parcel")
     @RequestMapping(value = "/parcel",
         produces = { "application/json" },
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    public ResponseEntity<String> submitParcel(@RequestBody Parcel parcel);
+    public ResponseEntity<String> submitParcel(@RequestBody() Parcel parcel);
 
-    @GetMapping("/parcel/{id}")
-    public ResponseEntity<Parcel> getParcel(@PathVariable long id);
+    @GetMapping("/parcel/{trackingId}")
+    public ResponseEntity<Parcel> getParcelByTrackingId(String trackingId);
 }

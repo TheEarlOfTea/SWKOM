@@ -6,10 +6,12 @@ import io.swagger.persistence.repositories.ParcelRepository;
 import io.swagger.persistence.repositories.RecipientRepository;
 import io.swagger.services.RecipientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class RecipientServiceImpl implements RecipientService {
     @Autowired
     private RecipientRepository repository;
