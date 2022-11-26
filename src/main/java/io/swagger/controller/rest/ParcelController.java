@@ -15,7 +15,11 @@ public interface ParcelController {
             @ApiResponse(code = 200, message = "Parcel successfully submited"),
             @ApiResponse(code = 400, message = "Error - Bad Parcel Body")
     })
-    @PostMapping("/parcel")
+    //@PostMapping("/parcel")
+    @RequestMapping(value = "/parcel",
+        produces = { "application/json" },
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
     public ResponseEntity<String> submitParcel(@RequestBody Parcel parcel);
 
     @GetMapping("/parcel/{id}")

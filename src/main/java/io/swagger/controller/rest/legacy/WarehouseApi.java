@@ -35,9 +35,9 @@ public interface WarehouseApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "No hierarchy loaded yet.") })
-    @RequestMapping(value = "/warehouse",
+    /*@RequestMapping(value = "/warehouse",
         produces = { "application/json" }, 
-        method = RequestMethod.GET)
+        method = RequestMethod.GET)*/
     ResponseEntity<Warehouse> exportWarehouses();
 
 
@@ -48,9 +48,9 @@ public interface WarehouseApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "No hop with the specified id could be found.") })
-    @RequestMapping(value = "/warehouse/{code}",
+    /*@RequestMapping(value = "/warehouse/{code}",
         produces = { "application/json" }, 
-        method = RequestMethod.GET)
+        method = RequestMethod.GET)*/
     ResponseEntity<Hop> getWarehouse(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("code") String code);
 
 
@@ -59,10 +59,10 @@ public interface WarehouseApi {
         @ApiResponse(responseCode = "200", description = "Successfully loaded."),
         
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))) })
-    @RequestMapping(value = "/warehouse",
+    /*@RequestMapping(value = "/warehouse",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
-        method = RequestMethod.POST)
+        method = RequestMethod.POST)*/
     ResponseEntity<Void> importWarehouses(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Warehouse body);
 
 }
