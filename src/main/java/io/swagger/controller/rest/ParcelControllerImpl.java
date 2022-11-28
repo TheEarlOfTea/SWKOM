@@ -27,13 +27,13 @@ public class ParcelControllerImpl implements ParcelController{
         this.parcelService = parcelService;
     }
 
-    @Override
+    //@Override
     public ResponseEntity<String> submitParcel(Parcel parcel) {
         return new ResponseEntity<String>("Successfully submitted parcel", HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity getParcelByTrackingId(@PathVariable("trackingId") String trackingId) {
+    //@Override
+    public ResponseEntity getParcelByTrackingId(@PathVariable("trackingId") @Parameter(example = "ABCD",description = "blabla")String trackingId) {
         Parcel parcel=parcelService.findByTrackingId(trackingId);
         if(parcel==null){
             return new ResponseEntity<String>("No parcel with given trackingId found", HttpStatus.OK);

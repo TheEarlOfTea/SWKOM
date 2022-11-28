@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+//TODO: Services nicht an repositories anpassen, sondern mit sprechenden methoden
 @Service
 public class ParcelServiceImpl implements ParcelService {
 

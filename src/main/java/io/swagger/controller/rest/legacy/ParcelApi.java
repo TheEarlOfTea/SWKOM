@@ -77,9 +77,9 @@ public interface ParcelApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID.") })
-    /*@RequestMapping(value = "/parcel/{trackingId}",
+    @RequestMapping(value = "/parcel/{trackingId}",
         produces = { "application/json" }, 
-        method = RequestMethod.GET)*/
+        method = RequestMethod.GET)
     ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId);
 
 

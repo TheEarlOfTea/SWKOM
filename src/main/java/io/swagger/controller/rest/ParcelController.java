@@ -6,12 +6,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.services.dto.Parcel;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 public interface ParcelController {
-    @ApiOperation(value = "Submit a new Parcel", notes = "Adds Parcel to the Database")
+    /*@ApiOperation(value = "Submit a new Parcel", notes = "Adds Parcel to the Database")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Parcel successfully submited"),
             @ApiResponse(code = 400, message = "Error - Bad Parcel Body")
@@ -23,5 +24,5 @@ public interface ParcelController {
     public ResponseEntity<String> submitParcel(@RequestBody() Parcel parcel);
 
     @GetMapping("/parcel/{trackingId}")
-    public ResponseEntity<Parcel> getParcelByTrackingId(String trackingId);
+    public ResponseEntity<Parcel> getParcelByTrackingId(@Parameter(example = "ABCD",description = "blabla") String trackingId);*/
 }
