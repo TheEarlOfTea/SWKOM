@@ -1,6 +1,5 @@
 package io.swagger.persistence.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

@@ -1,7 +1,10 @@
 package io.swagger.persistence.entities;
 
 import io.swagger.services.dto.TrackingInformation;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;

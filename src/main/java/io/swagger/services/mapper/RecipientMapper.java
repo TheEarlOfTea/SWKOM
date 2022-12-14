@@ -3,7 +3,6 @@ package io.swagger.services.mapper;
 import io.swagger.persistence.entities.RecipientEntity;
 import io.swagger.services.dto.Recipient;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

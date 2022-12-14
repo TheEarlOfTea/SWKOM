@@ -2,7 +2,6 @@ package io.swagger.persistence.entities;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Type;
 import org.springframework.data.geo.Point;
 
 import javax.persistence.*;

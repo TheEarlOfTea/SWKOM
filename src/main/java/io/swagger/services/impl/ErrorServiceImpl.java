@@ -19,26 +19,31 @@ public class ErrorServiceImpl implements ErrorService {
     private ErrorRepository repository;
 
     @Override
-    public void save(ErrorEntity entity) {
-        repository.save(entity);
+    public void saveError(Error error) {
+        repository.save(ErrorMapper.INSTANCE.fromDTO(error));
 
     }
 
     @Override
-    public List<ErrorEntity> findAll() {
-        return repository.findAll();
+    public List<Error> findAllErrors() {
+        List<ErrorEntity> list=repository.findAll();
+        LinkedList<Error> returnList= new LinkedList<Error>();
+        for(ErrorEntity e: list){
+            returnList.add(ErrorMapper.INSTANCE.fromEntity(e));
+        }
+        return returnList;
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteErrorById(long id) {
         repository.deleteById(id);
     }
 
     @Override
-    public ErrorEntity getById(long id) {
+    public Error getErrorById(long id) {
         Optional<ErrorEntity> entity= repository.findById(id);
         if(entity.isPresent()){
-            return entity.get();
+            return ErrorMapper.INSTANCE.fromEntity(entity.get());
         }
         return null;
     }

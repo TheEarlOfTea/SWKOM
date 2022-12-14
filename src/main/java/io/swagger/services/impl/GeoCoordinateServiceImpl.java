@@ -1,14 +1,14 @@
 package io.swagger.services.impl;
 
 import io.swagger.persistence.entities.GeoCoordinateEntity;
-import io.swagger.persistence.repositories.ErrorRepository;
 import io.swagger.persistence.repositories.GeoCoordinateRepository;
 import io.swagger.services.GeoCoordinateService;
 import io.swagger.services.dto.GeoCoordinate;
+import io.swagger.services.mapper.GeoCoordinateMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,25 +19,30 @@ public class GeoCoordinateServiceImpl implements GeoCoordinateService {
     private GeoCoordinateRepository repository;
 
     @Override
-    public void save(GeoCoordinateEntity entity) {
-        repository.save(entity);
+    public void saveGeoCoordinate(GeoCoordinate geoCoordinate) {
+        repository.save(GeoCoordinateMapper.INSTANCE.fromDTO(geoCoordinate));
     }
 
     @Override
-    public List<GeoCoordinateEntity> findAll() {
-        return repository.findAll();
+    public List<GeoCoordinate> findAllGeoCoordinates() {
+        List<GeoCoordinateEntity> list=repository.findAll();
+        LinkedList<GeoCoordinate> returnList= new LinkedList<GeoCoordinate>();
+        for(GeoCoordinateEntity e: list){
+            returnList.add(GeoCoordinateMapper.INSTANCE.fromEntity(e));
+        }
+        return returnList;
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteGeoCoordinateById(long id) {
         repository.deleteById(id);
     }
 
     @Override
-    public GeoCoordinateEntity getById(long id) {
+    public GeoCoordinate getGeoCoordinateById(long id) {
         Optional<GeoCoordinateEntity> entity= repository.findById(id);
         if(entity.isPresent()){
-            return entity.get();
+            return GeoCoordinateMapper.INSTANCE.fromEntity(entity.get());
         }
         return null;
     }

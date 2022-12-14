@@ -1,8 +1,9 @@
 package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.connector.impl.ParcelConnector;
+import io.swagger.services.HopArrivalService;
 import io.swagger.services.ParcelService;
+import io.swagger.services.RecipientService;
 import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
 import io.swagger.services.dto.TrackingInformation;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,17 +33,19 @@ public class ParcelApiController implements ParcelApi {
     private static final Logger log = LoggerFactory.getLogger(ParcelApiController.class);
 
     private final ObjectMapper objectMapper;
-
     private final HttpServletRequest request;
 
     private final ParcelService parcelService;
 
-    @org.springframework.beans.factory.annotation.Autowired
+
+    @Autowired
     public ParcelApiController(ObjectMapper objectMapper, HttpServletRequest request, ParcelService parcelService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.parcelService = parcelService;
     }
+
+    //TODO: alles außer submit
 
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
         String accept = request.getHeader("Accept");
@@ -72,9 +76,9 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<NewParcelInfo> submitParcel(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
-        // serice.save
         if (accept != null && accept.contains("application/json")) {
             try{
+                parcelService.saveParcel(body);
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,9 +93,6 @@ public class ParcelApiController implements ParcelApi {
     }
 
     public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
-
-        //Parcel parcel= parcelService.findByTrackingId(trackingId);
-        //return ResponseEntity.ok(new TrackingInformation());
 
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {

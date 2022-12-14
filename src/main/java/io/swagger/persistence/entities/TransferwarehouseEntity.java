@@ -1,9 +1,12 @@
 package io.swagger.persistence.entities;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
 @Entity

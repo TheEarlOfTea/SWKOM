@@ -1,15 +1,17 @@
 package io.swagger.services;
-import io.swagger.persistence.entities.ParcelEntity;
+
+import io.swagger.services.dto.NewParcelInfo;
 import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.TrackingInformation;
 
 import java.util.List;
 
 public interface ParcelService {
 
-    void save(ParcelEntity entity);
-    List<Parcel> findAll();
-    void deleteById(long id);
-    Parcel getById(long id);
+    void saveParcel(Parcel parcel);
+    List<Parcel> findAllParcels();
+    void deleteParcelById(long id);
+    Parcel getParcelById(long id);
     Parcel findByTrackingId(String trackingId);
 
 }

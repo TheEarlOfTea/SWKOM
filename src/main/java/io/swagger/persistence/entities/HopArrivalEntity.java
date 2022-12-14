@@ -1,15 +1,17 @@
 package io.swagger.persistence.entities;
 
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.threeten.bp.OffsetDateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-
-import org.threeten.bp.OffsetDateTime;
 
 @Entity
 @Table(name = "t_hoparrivals")

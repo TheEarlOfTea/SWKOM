@@ -2,9 +2,10 @@ package io.swagger.services.mapper;
 
 import io.swagger.persistence.entities.HopArrivalEntity;
 import io.swagger.persistence.entities.ParcelEntity;
-import io.swagger.persistence.entities.WarehouseEntity;
-import io.swagger.persistence.entities.WarehouseNextHopsEntity;
-import io.swagger.services.dto.*;
+import io.swagger.services.dto.HopArrival;
+import io.swagger.services.dto.NewParcelInfo;
+import io.swagger.services.dto.Parcel;
+import io.swagger.services.dto.TrackingInformation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
