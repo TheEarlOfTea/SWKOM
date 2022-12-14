@@ -1,4 +1,4 @@
-package io.swagger.controller.rest.legacy;
+package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.connector.impl.ParcelConnector;
@@ -34,7 +34,6 @@ public class ParcelApiController implements ParcelApi {
 
     private final HttpServletRequest request;
 
-    private final ParcelConnector connector;
     private final ParcelService parcelService;
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -42,14 +41,12 @@ public class ParcelApiController implements ParcelApi {
         this.objectMapper = objectMapper;
         this.request = request;
         this.parcelService = parcelService;
-        this.connector= new ParcelConnector();
     }
 
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try{
-                connector.reportParcelDelivery(trackingId);
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -63,7 +60,7 @@ public class ParcelApiController implements ParcelApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try{
-                connector.reportParcelHop(trackingId, code);
+
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,7 +75,6 @@ public class ParcelApiController implements ParcelApi {
         // serice.save
         if (accept != null && accept.contains("application/json")) {
             try{
-                connector.submitParcel(body);
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,34 +90,33 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
 
-        Parcel parcel= parcelService.findByTrackingId(trackingId);
-        return ResponseEntity.ok(new TrackingInformation());
+        //Parcel parcel= parcelService.findByTrackingId(trackingId);
+        //return ResponseEntity.ok(new TrackingInformation());
 
-        //String accept = request.getHeader("Accept");
-//        if (accept != null && accept.contains("application/json")) {
-//            try{
-//                connector.trackParcel(trackingId);
-//            }catch (ValidationException e){
-//                log.error("Validation exception: " + e.getMessage());
-//                return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//            try {
-//                return new ResponseEntity<TrackingInformation>(objectMapper.readValue("{\n  \"visitedHops\" : [ {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  }, {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  } ],\n  \"futureHops\" : [ null, null ],\n  \"state\" : \"Pickup\"\n}", TrackingInformation.class), HttpStatus.CREATED);
-//            } catch (IOException e) {
-//                log.error("Couldn't serialize response for content type application/json", e);
-//
-//            }
-//            return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")) {
+            try{
 
-        //return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_IMPLEMENTED);
+            }catch (ValidationException e){
+                log.error("Validation exception: " + e.getMessage());
+                return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            try {
+                return new ResponseEntity<TrackingInformation>(objectMapper.readValue("{\n  \"visitedHops\" : [ {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  }, {\n    \"dateTime\" : \"2000-01-23T04:56:07.000+00:00\",\n    \"code\" : \"code\",\n    \"description\" : \"description\"\n  } ],\n  \"futureHops\" : [ null, null ],\n  \"state\" : \"Pickup\"\n}", TrackingInformation.class), HttpStatus.CREATED);
+            } catch (IOException e) {
+                log.error("Couldn't serialize response for content type application/json", e);
+
+            }
+            return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<NewParcelInfo> transitionParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try{
-                connector.submitTransitionParcel(trackingId, body);
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);

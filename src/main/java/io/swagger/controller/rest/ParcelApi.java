@@ -3,7 +3,7 @@
  * https://github.com/swagger-api/swagger-codegen
  * Do not edit the class manually.
  */
-package io.swagger.controller.rest.legacy;
+package io.swagger.controller.rest;
 
 import io.swagger.services.dto.Error;
 import io.swagger.services.dto.NewParcelInfo;
@@ -37,9 +37,9 @@ public interface ParcelApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID. ") })
-    /*@RequestMapping(value = "/parcel/{trackingId}/reportDelivery/",
+    @RequestMapping(value = "/parcel/{trackingId}/reportDelivery/",
         produces = { "application/json" }, 
-        method = RequestMethod.POST)*/
+        method = RequestMethod.POST)
     ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId);
 
 
@@ -50,9 +50,9 @@ public interface ParcelApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID or hop with code not found. ") })
-    /*@RequestMapping(value = "/parcel/{trackingId}/reportHop/{code}",
+    @RequestMapping(value = "/parcel/{trackingId}/reportHop/{code}",
         produces = { "application/json" }, 
-        method = RequestMethod.POST)*/
+        method = RequestMethod.POST)
     ResponseEntity<Void> reportParcelHop(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId, @Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code);
 
 
@@ -63,10 +63,10 @@ public interface ParcelApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "404", description = "The address of sender or receiver was not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))) })
-    /*@RequestMapping(value = "/parcel",
+    @RequestMapping(value = "/parcel",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
-        method = RequestMethod.POST)*/
+        method = RequestMethod.POST)
     ResponseEntity<NewParcelInfo> submitParcel(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body);
 
 
@@ -90,10 +90,10 @@ public interface ParcelApi {
         @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))),
         
         @ApiResponse(responseCode = "409", description = "A parcel with the specified trackingID is already in the system.") })
-    /*@RequestMapping(value = "/parcel/{trackingId}",
+    @RequestMapping(value = "/parcel/{trackingId}",
         produces = { "application/json" },
         consumes = { "application/json" },
-        method = RequestMethod.POST)*/
+        method = RequestMethod.POST)
     ResponseEntity<NewParcelInfo> transitionParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId, @Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body);
 
 }

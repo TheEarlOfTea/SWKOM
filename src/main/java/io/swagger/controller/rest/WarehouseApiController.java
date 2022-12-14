@@ -1,4 +1,4 @@
-package io.swagger.controller.rest.legacy;
+package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.connector.impl.WarehouseConnector;
