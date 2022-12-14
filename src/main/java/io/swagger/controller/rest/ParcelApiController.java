@@ -43,7 +43,7 @@ public class ParcelApiController implements ParcelApi {
         this.parcelService = parcelService;
     }
 
-    //TODO: alles außer submit
+    //TODO: reportParcelHop
 
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
         String accept = request.getHeader("Accept");

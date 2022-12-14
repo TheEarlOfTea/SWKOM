@@ -1,6 +1,7 @@
 package io.swagger.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.services.HopService;
 import io.swagger.services.dto.Hop;
 import io.swagger.services.dto.Warehouse;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -30,11 +32,14 @@ public class WarehouseApiController implements WarehouseApi {
 
     private final HttpServletRequest request;
 
+    private final HopService hopService;
+
 
     @Autowired
-    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request) {
+    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, HopService hopService) {
         this.objectMapper = objectMapper;
         this.request = request;
+        this.hopService= hopService;
     }
 
     public ResponseEntity<Warehouse> exportWarehouses() {
@@ -44,10 +49,9 @@ public class WarehouseApiController implements WarehouseApi {
                 return new ResponseEntity<Warehouse>(objectMapper.readValue("\"\"", Warehouse.class), HttpStatus.CREATED);
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Warehouse>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<Warehouse>(HttpStatus.BAD_REQUEST);
             }
         }
-
         return new ResponseEntity<Warehouse>(HttpStatus.NOT_IMPLEMENTED);
     }
 
@@ -55,14 +59,10 @@ public class WarehouseApiController implements WarehouseApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-
-                return new ResponseEntity<Hop>(objectMapper.readValue("{\n  \"code\" : \"code\",\n  \"locationName\" : \"locationName\",\n  \"processingDelayMins\" : 0,\n  \"hopType\" : \"hopType\",\n  \"description\" : \"description\",\n  \"locationCoordinates\" : {\n    \"lon\" : 1.4658129805029452,\n    \"lat\" : 6.027456183070403\n  }\n}", Hop.class), HttpStatus.CREATED);
-            }catch(ValidationException e){
-                log.error("Validation exception: " + e.getMessage());
-                return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }catch (IOException e){
-                log.error("Validation exception: " + e.getMessage());
-                return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(hopService.getWarehouse(code), HttpStatus.OK) ;
+            }catch (HttpClientErrorException e){
+                log.error("HttpClientErrorException exception: " + e.getMessage());
+                return new ResponseEntity<Hop>(HttpStatus.NOT_FOUND);
             }
         }
         return new ResponseEntity<Hop>(HttpStatus.NOT_IMPLEMENTED);
@@ -72,10 +72,13 @@ public class WarehouseApiController implements WarehouseApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try{
-
+                hopService.importWarehouse(body);
             }catch (ValidationException e){
                 log.error("Validation exception: " + e.getMessage());
-                return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            }catch (HttpClientErrorException e){
+                log.error("HttpClientErrorException exception: " + e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<Void>(HttpStatus.CREATED);
         }

@@ -74,9 +74,9 @@ class HopRepositoryTest {
         for(WarehouseNextHopsEntity e : warehouseEntity.getNextHops()){
             warehouseNextHopsRepository.save(e);
         }
-        hopRepository.save(transferwarehouseEntity);
+        hopRepository.save(warehouseEntity);
 
-        assertEquals(4, hopRepository.count());
+        assertEquals(5, hopRepository.count());
         assertEquals(1, warehouseNextHopsRepository.count());
 
 
