@@ -1,6 +1,7 @@
 package io.swagger.persistence.repositories;
 
 import io.swagger.persistence.entities.ParcelEntity;
+import io.swagger.services.dto.TrackingInformation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

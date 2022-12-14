@@ -38,7 +38,7 @@ public interface ParcelApi {
         
         @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID. ") })
     @RequestMapping(value = "/parcel/{trackingId}/reportDelivery/",
-        produces = { "application/json" }, 
+        produces = { "application/json" },
         method = RequestMethod.POST)
     ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId);
 

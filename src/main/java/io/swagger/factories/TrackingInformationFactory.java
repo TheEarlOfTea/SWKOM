@@ -12,6 +12,6 @@ public class TrackingInformationFactory {
         futureHops.add(new HopArrival().code("ABCD12").dateTime(OffsetDateTime.MAX).description("SA"));
         LinkedList<HopArrival> visitedHops= new LinkedList<HopArrival>();
         visitedHops.add(new HopArrival().code("DDDD12").dateTime(OffsetDateTime.MAX).description("DA"));
-        return new TrackingInformation().futureHops(futureHops).visitedHops(visitedHops).state(TrackingInformation.StateEnum.INTRANSPORT);
+        return new TrackingInformation().futureHops(futureHops).visitedHops(visitedHops).state(TrackingInformation.StateEnum.PICKUP);
     }
 }

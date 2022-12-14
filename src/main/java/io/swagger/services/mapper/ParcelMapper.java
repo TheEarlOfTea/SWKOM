@@ -52,5 +52,12 @@ public interface ParcelMapper {
     @Mapping(source = "entity.weight", target = "weight")
     @Mapping(source = "entity.recipient", target = "recipient")
     @Mapping(source = "entity.sender", target = "sender")
-    Parcel fromEntity(ParcelEntity entity);
+    Parcel parcelFromEntity(ParcelEntity entity);
+
+    @Mapping(source = "entity.visitedHops", target = "visitedHops", qualifiedByName = "hopArrivalListEntityToDto")
+    @Mapping(source = "entity.futureHops", target = "futureHops", qualifiedByName = "hopArrivalListEntityToDto")
+    @Mapping(source = "entity.state", target = "state")
+    TrackingInformation trackingInformationFromEntity(ParcelEntity entity);
+
+
 }
