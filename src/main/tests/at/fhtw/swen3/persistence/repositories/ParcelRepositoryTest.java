@@ -3,7 +3,6 @@ package at.fhtw.swen3.persistence.repositories;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
-import at.fhtw3.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

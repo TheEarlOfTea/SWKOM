@@ -2,8 +2,6 @@ package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw3.swen3.persistence.entities.*;
-import at.fhtw3.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.TransferwarehouseMapper;
 import at.fhtw.swen3.services.mapper.TruckMapper;

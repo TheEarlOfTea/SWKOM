@@ -20,7 +20,7 @@ public class SwaggerDocumentationConfig {
     public Docket customImplementation(){
         return new Docket(DocumentationType.OAS_30)
                 .select()
-                    .apis(RequestHandlerSelectors.basePackage("at.fhtw3.swen3.rest"))
+                    .apis(RequestHandlerSelectors.basePackage("at.fhtw.swen3.rest"))
                     .build()
                 .directModelSubstitute(org.threeten.bp.LocalDate.class, java.sql.Date.class)
                 .directModelSubstitute(org.threeten.bp.OffsetDateTime.class, java.util.Date.class)

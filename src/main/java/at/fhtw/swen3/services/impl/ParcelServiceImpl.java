@@ -10,7 +10,6 @@ import at.fhtw.swen3.services.HopArrivalService;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.RecipientService;
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw3.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;

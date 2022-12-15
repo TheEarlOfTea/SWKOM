@@ -1,7 +1,6 @@
 package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw3.swen3.services.dto.*;
 import org.junit.jupiter.api.Test;
 import org.threeten.bp.OffsetDateTime;
 
