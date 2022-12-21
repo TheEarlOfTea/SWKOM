@@ -14,7 +14,7 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 
 @EnableOpenApi
-@ComponentScan(basePackages = { "io.swagger", "at.fhtw.swen3.services", "at.fhtw.swen3.configuration"})
+@ComponentScan(basePackages = { "at.fhtw.swen3", "at.fhtw.swen3.services", "at.fhtw.swen3.configuration"})
 //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class,})
 @SpringBootApplication
 public class Swagger2SpringBoot implements CommandLineRunner {
