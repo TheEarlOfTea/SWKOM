@@ -1,10 +1,13 @@
 package io.swagger.gps.service.impl;
+
+import at.fhtw3.swen3.services.dto.GeoCoordinate;
 import io.swagger.gps.GeoEncodingService;
-import io.swagger.services.dto.GeoCoordinate;
-import io.swagger.services.dto.Recipient;
+
+import io.swagger.gps.service.Address;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,71 +17,48 @@ import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
 
+@Service
 public class BingEncodingProxy implements GeoEncodingService {
-    private GeoCoordinate geoCoordinate =new GeoCoordinate();
 
-// todo try catch/exceptions
+    private final static String openstreetmapUrl = "https://nominatim.openstreetmap.org/search?addressdetails=1&q=";
 
     @Override
-    public GeoCoordinate encodeAddress(GeoCoordinate address) throws IOException, InterruptedException {
-        URI url = URI.create(("https://nominatim.openstreetmap.org/search?addressdetails=1&q="
-                +address.getLat()+" "
-                +address.getLon()+"&format=json").replaceAll(" ", "%20"));
+    public GeoCoordinate encodeAddress(Address address) {
+        URI url = URI.create((openstreetmapUrl + getQueryFromAddress(address) +
+                "&format=json").replaceAll(" ", "%20"));
 
         System.out.println(url);
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder(url).GET().build();
 
-        CompletableFuture<HttpResponse<String>> future = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
-        future.thenApply(HttpResponse::body).thenAccept((response) -> {
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            JSONArray json = null;
-            JSONObject obj = null;
+            JSONArray json = new JSONArray(response.body());
+            JSONObject jsonResponse = (JSONObject) json.get(0);
 
-            try {
+            String lat = jsonResponse.getString("lat");
+            String lon = jsonResponse.getString("lon");
 
-                json = new JSONArray(response);
-                 obj = (JSONObject) json.get(0);
+            System.out.println("lat: " + lat);
+            System.out.println("lon: " + lon);
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            GeoCoordinate geoCoordinate = new GeoCoordinate();
+            geoCoordinate.setLon(Double.valueOf(lon));
+            geoCoordinate.setLat(Double.valueOf(lat));
 
-
-            String lat = null;
-            try {
-
-                assert obj != null;
-                lat = obj.getString("lat");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            String lon = null;
-            try {
-                lon = obj.getString("lon");
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            System.out.println("lat: "+ lat);
-            System.out.println("lon: "+ lon);
-
-                    this.geoCoordinate.setLon(Double.valueOf(lon));
-                    this.geoCoordinate.setLat(Double.valueOf(lat));
-        }).join();
-
-
-        return geoCoordinate;
-
-
-
+            return geoCoordinate;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    private String getQueryFromAddress(Address address) {
+        return address.getCountry() + "+" +
+                address.getCity() + "+" +
+                address.getStreet() + "+" +
+                address.getPostalCode();
+    }
 
 
 }

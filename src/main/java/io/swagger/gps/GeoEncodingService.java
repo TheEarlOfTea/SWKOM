@@ -1,13 +1,12 @@
 package io.swagger.gps;
 
-
-import io.swagger.services.dto.GeoCoordinate;
+import at.fhtw3.swen3.services.dto.GeoCoordinate;
+import io.swagger.gps.service.Address;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 
 public interface GeoEncodingService {
 
-        GeoCoordinate encodeAddress(GeoCoordinate address)throws IOException, InterruptedException;
+        GeoCoordinate encodeAddress(Address address)throws IOException, InterruptedException;
 
 }
