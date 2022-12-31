@@ -2,24 +2,28 @@ package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.factories.NewParcelInfoFactory;
 import at.fhtw.swen3.factories.TrackingInformationFactory;
-import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
+import at.fhtw.swen3.persistence.repositories.HopArrivalRepository;
+import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
-import at.fhtw.swen3.services.HopArrivalService;
+import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.ParcelService;
-import at.fhtw.swen3.services.RecipientService;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
+import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.ValidationException;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ParcelServiceImpl implements ParcelService {
@@ -27,49 +31,19 @@ public class ParcelServiceImpl implements ParcelService {
     @Autowired
     private ParcelRepository parcelRepository;
     @Autowired
-    private RecipientService recipientService;
+    private RecipientRepository recipientRepository;
     @Autowired
-    private HopArrivalService hopArrivalService;
+    private HopArrivalRepository hopArrivalRepository;
+    @Autowired
+    private HopRepository hopRepository;
 
     private void validateParcel(Parcel parcel) throws ValidationException{
         Validator.validate(parcel);
     }
 
-    private RecipientEntity getRecipientEntity(Recipient recipient){
-        RecipientEntity recipientEntity= recipientService.findRecipient(recipient);
-        if(recipientEntity==null){
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-        }
-        return recipientEntity;
-    }
 
-    private List<HopArrivalEntity> getHopArrivalEntities(List<HopArrival> list) throws HttpClientErrorException{
-        LinkedList<HopArrivalEntity> newList= new LinkedList<HopArrivalEntity>();
-        HopArrivalEntity currentHop;
-        for(HopArrival h : list){
-            currentHop= hopArrivalService.findHopArrival(h);
-            if(currentHop==null){
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
-            }
-            newList.add(currentHop);
-        }
-        return newList;
-    }
 
-    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws HttpClientErrorException{
 
-        ParcelEntity entity= ParcelMapper.INSTANCE.fromDTO(newParcelInfo, parcel, trackingInformation);
-
-        entity.setRecipient(getRecipientEntity(parcel.getRecipient()));
-        entity.setSender(getRecipientEntity(parcel.getSender()));
-
-        //check for existing HopArrivals
-        entity.setVisitedHops(getHopArrivalEntities(trackingInformation.getVisitedHops()));
-        entity.setFutureHops(getHopArrivalEntities(trackingInformation.getFutureHops()));
-
-        parcelRepository.save(entity);
-        return newParcelInfo;
-    }
 
     @Override
     public NewParcelInfo saveDomesticParcel(Parcel parcel) throws ValidationException, HttpClientErrorException {
@@ -79,6 +53,55 @@ public class ParcelServiceImpl implements ParcelService {
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
+    }
+
+    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws HttpClientErrorException{
+
+        ParcelEntity entity= ParcelMapper.INSTANCE.fromDTO(newParcelInfo, parcel, trackingInformation);
+
+        entity.setRecipient(getRecipientEntity(parcel.getRecipient()));
+        entity.setSender(getRecipientEntity(parcel.getSender()));
+
+
+        //check for existing hops
+        /*for(HopArrival h: trackingInformation.getVisitedHops()){
+            if(!doesHopExist(h.getCode())){
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+            }
+        }
+        for(HopArrival h: trackingInformation.getFutureHops()){
+            if(!doesHopExist(h.getCode())){
+                throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
+            }
+        }*/
+
+        parcelRepository.save(entity);
+        return newParcelInfo;
+    }
+
+    private boolean doesHopExist(String code) {
+        List<HopEntity> hopEntityList= hopRepository.findByCode(code);
+        return hopEntityList.size()==1;
+    }
+
+    @Override
+    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws ValidationException, HttpClientErrorException{
+        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
+        Validator.validate(newParcelInfo);
+
+        validateParcel(parcel);
+
+        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
+
+        return saveParcel(newParcelInfo, parcel, trackingInformation);
+    }
+
+    private RecipientEntity getRecipientEntity(Recipient recipient){
+        RecipientEntity recipientEntity= findRecipient(recipient);
+        if(recipientEntity==null){
+            recipientEntity= recipientRepository.save(RecipientMapper.INSTANCE.fromDTO(recipient));
+        }
+        return recipientEntity;
     }
 
     @Override
@@ -114,21 +137,20 @@ public class ParcelServiceImpl implements ParcelService {
         return ParcelMapper.INSTANCE.trackingInformationFromEntity(entity);
     }
 
-    @Override
-    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws ValidationException, HttpClientErrorException{
-        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
-        Validator.validate(newParcelInfo);
 
-        validateParcel(parcel);
-
-        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
-
-        return saveParcel(newParcelInfo, parcel, trackingInformation);
-    }
 
     @Override
     public void reportParcelHop(String trackingId, String code) {
 
+    }
+
+    private RecipientEntity findRecipient(Recipient recipient) {
+        ExampleMatcher matcher= ExampleMatcher.matching().withIgnorePaths("id");
+        Optional<RecipientEntity> entity=recipientRepository.findOne(Example.of(RecipientMapper.INSTANCE.fromDTO(recipient), matcher));
+        if(entity.isPresent()){
+            return entity.get();
+        }
+        return null;
     }
 
 
