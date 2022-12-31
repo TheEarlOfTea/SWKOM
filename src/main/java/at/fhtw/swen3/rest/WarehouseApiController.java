@@ -1,6 +1,6 @@
 package at.fhtw.swen3.rest;
 
-import at.fhtw.swen3.services.HopService;
+import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,14 +32,14 @@ public class WarehouseApiController implements WarehouseApi {
 
     private final HttpServletRequest request;
 
-    private final HopService hopService;
+    private final WarehouseService warehouseService;
 
 
     @Autowired
-    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, HopService hopService) {
+    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, WarehouseService warehouseService) {
         this.objectMapper = objectMapper;
         this.request = request;
-        this.hopService= hopService;
+        this.warehouseService = warehouseService;
     }
 
     public ResponseEntity<Warehouse> exportWarehouses() {
@@ -59,7 +59,7 @@ public class WarehouseApiController implements WarehouseApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<>(hopService.getWarehouse(code), HttpStatus.OK) ;
+                return new ResponseEntity<>(warehouseService.getWarehouse(code), HttpStatus.OK) ;
             }catch (HttpClientErrorException e){
                 log.error("HttpClientErrorException exception: " + e.getMessage());
                 return new ResponseEntity<Hop>(HttpStatus.NOT_FOUND);
@@ -68,21 +68,18 @@ public class WarehouseApiController implements WarehouseApi {
         return new ResponseEntity<Hop>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> importWarehouses(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Warehouse body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try{
-                hopService.importWarehouse(body);
-            }catch (ValidationException e){
-                log.error("Validation exception: " + e.getMessage());
-                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-            }catch (HttpClientErrorException e){
-                log.error("HttpClientErrorException exception: " + e.getMessage());
-                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<Void>(HttpStatus.CREATED);
+    public ResponseEntity<Void> importWarehouses(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @RequestBody Warehouse body) {
+        try{
+            warehouseService.importWarehouse(body);
+        }catch (ValidationException e){
+            log.error("Validation exception: " + e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }catch (HttpClientErrorException e){
+            log.error("HttpClientErrorException exception: " + e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Void>(HttpStatus.CREATED);
+
     }
 
 }

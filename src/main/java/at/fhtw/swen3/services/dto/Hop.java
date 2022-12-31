@@ -38,7 +38,7 @@ public class Hop   {
 
   @JsonProperty("description")
   @NotNull(message= "description may not be null")
-  @Pattern(regexp="^[A-Z0-9\\- ]*", message="description has to match \'^[A-Z0-9\\- ]*\'")
+  @Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="description has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
   private String description = null;
 
   @JsonProperty("processingDelayMins")
@@ -47,7 +47,7 @@ public class Hop   {
   private Integer processingDelayMins = null;
 
   @JsonProperty("locationName")
-  @Pattern(regexp="^[A-Z0-9\\- ]*", message="location has to match \'^[A-Z0-9\\- ]*\'")
+  @Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="location has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
   @NotNull(message= "locationName may not be null")
   private String locationName = null;
 

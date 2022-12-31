@@ -11,6 +11,7 @@ import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.Validator;
@@ -28,22 +29,23 @@ import java.util.Optional;
 @Service
 public class ParcelServiceImpl implements ParcelService {
 
-    @Autowired
+
     private ParcelRepository parcelRepository;
-    @Autowired
     private RecipientRepository recipientRepository;
-    @Autowired
     private HopArrivalRepository hopArrivalRepository;
-    @Autowired
     private HopRepository hopRepository;
+
+    @Autowired
+    public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository) {
+        this.parcelRepository = parcelRepository;
+        this.recipientRepository = recipientRepository;
+        this.hopArrivalRepository = hopArrivalRepository;
+        this.hopRepository = hopRepository;
+    }
 
     private void validateParcel(Parcel parcel) throws ValidationException{
         Validator.validate(parcel);
     }
-
-
-
-
 
     @Override
     public NewParcelInfo saveDomesticParcel(Parcel parcel) throws ValidationException, HttpClientErrorException {
@@ -64,7 +66,7 @@ public class ParcelServiceImpl implements ParcelService {
 
 
         //check for existing hops
-        /*for(HopArrival h: trackingInformation.getVisitedHops()){
+        for(HopArrival h: trackingInformation.getVisitedHops()){
             if(!doesHopExist(h.getCode())){
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
             }
@@ -73,7 +75,15 @@ public class ParcelServiceImpl implements ParcelService {
             if(!doesHopExist(h.getCode())){
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
             }
-        }*/
+        }
+
+        //save hopArrivals
+        for(HopArrival h: trackingInformation.getVisitedHops()){
+            hopArrivalRepository.save(HopArrivalMapper.INSTANCE.fromDTO(h));
+        }
+        for(HopArrival h: trackingInformation.getFutureHops()){
+            hopArrivalRepository.save(HopArrivalMapper.INSTANCE.fromDTO(h));
+        }
 
         parcelRepository.save(entity);
         return newParcelInfo;
