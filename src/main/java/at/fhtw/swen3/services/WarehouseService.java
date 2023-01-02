@@ -7,6 +7,7 @@ public interface WarehouseService {
 
         Hop getWarehouse(String code);
         void importWarehouse(Warehouse warehouse);
+        Warehouse exportWarehouses();
 
 
 }

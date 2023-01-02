@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class WarehouseNextHopsEntity{
 
     @Id
@@ -32,13 +31,10 @@ public class WarehouseNextHopsEntity{
     private Integer traveltimeMins;
 
     @OneToOne
-    @JoinColumn(name = "fk_hop")
+    @JoinColumn(name = "fk_next_hop")
     private HopEntity hop;
 
     @ManyToOne
     @JoinColumn(name = "fk_warehouse")
     private WarehouseEntity warehouse;
-
-
-
 }

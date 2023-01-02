@@ -46,8 +46,8 @@ public class WarehouseApiController implements WarehouseApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<Warehouse>(objectMapper.readValue("\"\"", Warehouse.class), HttpStatus.CREATED);
-            } catch (IOException e) {
+                return new ResponseEntity<Warehouse>(warehouseService.exportWarehouses(), HttpStatus.OK);
+            } catch (Exception e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<Warehouse>(HttpStatus.BAD_REQUEST);
             }
