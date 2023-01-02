@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class NewParcelInfo   {
   @JsonProperty("trackingId")
-  @Pattern(regexp="^[A-Z0-9]{9}$", message = "has to match \'^[A-Z0-9]{9}$\'")
+  @Pattern(regexp="^[a-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
   @NotNull(message = "trackingId may not be null")
   private String trackingId = null;
 
