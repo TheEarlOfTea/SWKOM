@@ -30,12 +30,12 @@ public class HopArrivalEntity{
 
     @Column
     @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "has to match \'^[A-Z]{4}\\d{1,4}$\'")
-    @NotNull(message = "trackingId may not be null")
+    @NotNull(message = "code may not be null")
     private String code;
 
     @Column
     @NotNull(message= "description may not be null")
-    @Pattern(regexp="^[A-Z0-9\\- ]*", message="has to match \'^[A-Z0-9\\- ]*\'")
+    @Pattern(regexp="^[A-Za-z0-9\\- ]*", message="has to match \'^[A-Za-z0-9\\- ]*\'")
     private String description;
 
     @Column(name = "dateTime")

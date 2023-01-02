@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class NewParcelInfo   {
   @JsonProperty("trackingId")
-  @Pattern(regexp="^[a-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
+  @Pattern(regexp="^[A-Za-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
   @NotNull(message = "trackingId may not be null")
   private String trackingId = null;
 
@@ -32,7 +32,7 @@ public class NewParcelInfo   {
    **/
   @Schema(example = "PYJRB4HZ6", description = "The tracking ID of the parcel. ")
   
-  @Pattern(regexp="^[A-Z0-9]{9}$")   public String getTrackingId() {
+  @Pattern(regexp="^[A-Za-z0-9\\-]{36}$")   public String getTrackingId() {
     return trackingId;
   }
 

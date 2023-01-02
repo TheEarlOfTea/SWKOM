@@ -27,7 +27,7 @@ public class ParcelEntity{
     protected long id;
 
     @Column
-    @Pattern(regexp="^[a-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
+    @Pattern(regexp="^[A-Za-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
     @NotNull(message = "trackingId may not be null")
     private String trackingId;
 
