@@ -1,0 +1,20 @@
+services:
+  app:
+    image: theearloftea/swkom
+    ports:
+      - "8080:8080"
+    environment:
+      db-url: jdbc:postgresql://db:5432/postgres
+      db-username: postgres
+      db-password: postgres
+    command: ['java', '-jar', 'swagger-spring-1.0.0.jar']
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - /data
