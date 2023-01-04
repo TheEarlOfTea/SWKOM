@@ -2,8 +2,7 @@ package at.fhtw.swen3.rest;
 
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadParcelDataException;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadTrackingIdException;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
@@ -46,17 +45,21 @@ public class ParcelApiController implements ParcelApi {
         this.parcelService = parcelService;
     }
 
-    //TODO: reportParcelHop
-
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Za-z0-9\\-]{36}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
             try{
                 parcelService.reportParcelDelivery(trackingId);
                 return new ResponseEntity<Void>(HttpStatus.OK);
             }catch (BadTrackingIdException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
-            }catch (ParcelNotFoundException e){
+            }catch (FutureHopsIsNotEmptyException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+            }catch (ParcelNotFoundException e) {
+                System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
             }
+
     }
 
     public ResponseEntity<Void> reportParcelHop(@Pattern(regexp="^[A-Za-z0-9\\-]{36}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
@@ -64,10 +67,13 @@ public class ParcelApiController implements ParcelApi {
                 parcelService.reportParcelHop(trackingId, code);
                 return new ResponseEntity<Void>(HttpStatus.CREATED);
             }catch (BadTrackingIdException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
             }catch (ParcelNotFoundException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
             }catch (HopNotFoundException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
             }
 
@@ -80,9 +86,16 @@ public class ParcelApiController implements ParcelApi {
                 NewParcelInfo newParcelInfo = parcelService.saveDomesticParcel(body);
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.BAD_REQUEST);
+            }catch (BadAddressException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_FOUND);
+            }catch (DuplicateTrackingIdException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            //todo: recipient adresse nicht gefunden exception
+
         }
         return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);
     }
@@ -95,8 +108,10 @@ public class ParcelApiController implements ParcelApi {
                 TrackingInformation trackingInformation = parcelService.trackParcel(trackingId);
                 return new ResponseEntity<TrackingInformation>(trackingInformation, HttpStatus.OK);
             }catch (BadTrackingIdException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.BAD_REQUEST);
             }catch (ParcelNotFoundException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_FOUND);
             }
         }
@@ -110,13 +125,20 @@ public class ParcelApiController implements ParcelApi {
                 NewParcelInfo newParcelInfo=parcelService.saveTransitionParcel(trackingId, body);
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.BAD_REQUEST);
             }catch (BadTrackingIdException e){
+                System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.BAD_REQUEST);
+            }catch (BadAddressException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_FOUND);
+            }catch (DuplicateTrackingIdException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.CONFLICT);
             }
-            //todo: trackingId already Exists
         }
-        return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

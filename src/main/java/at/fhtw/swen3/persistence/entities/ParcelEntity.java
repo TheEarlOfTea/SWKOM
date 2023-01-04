@@ -13,22 +13,25 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@Entity
-@Table(name="t_parcels")
+
+
 @AllArgsConstructor
 @SuperBuilder
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name="t_parcels")
 public class ParcelEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     protected long id;
 
-    @Column
+
     @Pattern(regexp="^[A-Za-z0-9\\-]{36}$", message = "has to match \'^[a-z0-9\\-]{36}$\'")
     @NotNull(message = "trackingId may not be null")
+    @Column(unique = true)
     private String trackingId;
 
     @Column

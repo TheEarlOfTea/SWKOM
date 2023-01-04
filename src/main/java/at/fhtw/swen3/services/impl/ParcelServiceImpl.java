@@ -5,8 +5,7 @@ import at.fhtw.swen3.factories.TrackingInformationFactory;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadParcelDataException;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadTrackingIdException;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
@@ -14,6 +13,7 @@ import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -46,10 +46,14 @@ public class ParcelServiceImpl implements ParcelService {
 
 
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException {
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException {
+
+        //throws BadParcelDataException
         validateParcel(parcel);
 
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
+
+        //throws BadAddressException
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
@@ -57,24 +61,33 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException {
+    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException {
+        //throws BadTrackingIdException
         validateTrackingId(trackingId);
-
+        //throws BadParcelDataException
         validateParcel(parcel);
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
+
+        //throws BadAddressException
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
+
     }
 
 
     @Override
-    public void reportParcelDelivery(String trackingId) throws BadTrackingIdException, ParcelNotFoundException {
+    public void reportParcelDelivery(String trackingId) throws BadTrackingIdException, ParcelNotFoundException, FutureHopsIsNotEmptyException {
 
+        //throws BadTrackingIdException
         validateTrackingId(trackingId);
 
+        //throws ParcelNotFoundException
         ParcelEntity entity=getParcel(trackingId);
+        if(!entity.getFutureHops().isEmpty()){
+            throw new FutureHopsIsNotEmptyException("Parcel cannot be delivered before it hasn't passed all future hops");
+        }
 
         entity.setState(TrackingInformation.StateEnum.DELIVERED);
         parcelRepository.save(entity);
@@ -83,8 +96,10 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public TrackingInformation trackParcel(String trackingId) throws BadTrackingIdException, ParcelNotFoundException {
+        //throws BadTrackingIdException
         validateTrackingId(trackingId);
 
+        //throws ParcelNotFoundException
         ParcelEntity entity= getParcel(trackingId);
 
         return ParcelMapper.INSTANCE.trackingInformationFromEntity(entity);
@@ -97,11 +112,19 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     @Transactional
     public void reportParcelHop(String trackingId, String code) throws BadTrackingIdException, ParcelNotFoundException, HopNotFoundException {
+        //throws BadTrackingIdException
         validateTrackingId(trackingId);
 
+        //throws ParcelNotFoundException
         ParcelEntity parcelEntity= getParcel(trackingId);
 
+        //throws HopNotFoundException
         String hopType= getHopType(code);
+
+        //todo: testen
+        if(parcelEntity.getFutureHops().get(0).getCode()!=code){
+            throw new HopNotFoundException("Hop with given code is not the next hop of the parcel");
+        }
 
         switch (hopType){
             case "truck":
@@ -123,7 +146,7 @@ public class ParcelServiceImpl implements ParcelService {
             Validator.validate(newParcelInfo);
         }catch (ValidationException e){
             log.error("Tracking-Id failed validation. " + e.getMessage());
-            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
+            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards. Nested Exception: " + e.getMessage());
         }
     }
 
@@ -131,30 +154,24 @@ public class ParcelServiceImpl implements ParcelService {
         try{
             Validator.validate(parcel);
         }catch (ValidationException e){
-            log.error("Parcel received failed validation. ValidationException: " + e.getMessage());
-            throw new BadParcelDataException("Parcel received failed validation. Please validate parcel data and try again. Nested Exception: " + e.getMessage());
+            log.error("Parcel failed validation. " + e.getMessage());
+            throw new BadParcelDataException("Parcel received failed validation. Nested Exception: " + e.getMessage());
         }
     }
 
-    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) {
+    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws DuplicateTrackingIdException {
+
+        Optional<String> trackingId= parcelRepository.doesTrackingIdExist(newParcelInfo.getTrackingId());
+        if(trackingId.isPresent()){
+            log.error("Tracking-Id " + newParcelInfo.getTrackingId() + " already exists in Database");
+            throw new DuplicateTrackingIdException("Tracking-Id already exists");
+        }
 
         ParcelEntity entity= ParcelMapper.INSTANCE.fromDTO(newParcelInfo, parcel, trackingInformation);
 
         entity.setRecipient(getRecipient(parcel.getRecipient()));
         entity.setSender(getRecipient(parcel.getSender()));
 
-
-        //probably unnecessary, due to trackinginformation not beeing user input
-        /*for(HopArrival h: trackingInformation.getVisitedHops()){
-            if(!doesHopExist(h.getCode())){
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-            }
-        }
-        for(HopArrival h: trackingInformation.getFutureHops()){
-            if(!doesHopExist(h.getCode())){
-                throw new HttpClientErrorException(HttpStatus.NOT_FOUND);
-            }
-        }*/
 
         //save hopArrivals
         for(HopArrivalEntity h: entity.getVisitedHops()){
@@ -165,6 +182,7 @@ public class ParcelServiceImpl implements ParcelService {
         }
 
         parcelRepository.save(entity);
+
         return newParcelInfo;
     }
 
