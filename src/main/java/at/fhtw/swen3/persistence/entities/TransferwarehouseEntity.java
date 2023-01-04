@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -18,6 +19,7 @@ public class TransferwarehouseEntity extends HopEntity {
 
     @Column
     @NotNull(message = "regiongGeoJson may not be null")
+    @Lob
     private String regionGeoJson;
 
     @Column
