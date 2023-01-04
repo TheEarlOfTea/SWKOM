@@ -47,12 +47,7 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException {
-        try{
-            Validator.validate(parcel);
-        }catch (ValidationException e){
-            log.error("Parcel failed validation. " + e.getMessage());
-            throw new BadParcelDataException("Parcel received failed validation. Please validate parcel data and try again. Validaation error: " + e.getMessage());
-        }
+        validateParcel(parcel);
 
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
@@ -63,22 +58,11 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException {
+        validateTrackingId(trackingId);
+
+        validateParcel(parcel);
+
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
-
-        try{
-            Validator.validate(newParcelInfo);
-        }catch (ValidationException e){
-            log.error("Tracking-Id failed validation. " + e.getMessage());
-            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
-        }
-
-        try{
-            Validator.validate(parcel);
-        }catch (ValidationException e){
-            log.error("Parcel received failed validation. ValidationException: " + e.getMessage());
-            throw new BadParcelDataException("Parcel received failed validation. Please validate parcel data and try again. Validation error: " + e.getMessage());
-        }
-
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
@@ -88,21 +72,9 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void reportParcelDelivery(String trackingId) throws BadTrackingIdException, ParcelNotFoundException {
 
-        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
-        try{
-            Validator.validate(newParcelInfo);
-        }catch (ValidationException e){
-            log.error("Tracking-Id failed validation. " + e.getMessage());
-            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
-        }
+        validateTrackingId(trackingId);
 
-        ParcelEntity entity;
-        try {
-            entity = getParcelEntity(trackingId);
-        } catch (ParcelNotFoundException e) {
-            log.error("Invalid Tracking-Id given by user. Parcel with given TrackingId " + trackingId + " could not be found");
-            throw new ParcelNotFoundException("Parcel with Tracking-Id " + trackingId + " could not be found. Please validate Tracking-Id and try again");
-        }
+        ParcelEntity entity=getParcel(trackingId);
 
         entity.setState(TrackingInformation.StateEnum.DELIVERED);
         parcelRepository.save(entity);
@@ -111,53 +83,25 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public TrackingInformation trackParcel(String trackingId) throws BadTrackingIdException, ParcelNotFoundException {
-        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
-        try{
-            Validator.validate(newParcelInfo);
-        }catch (ValidationException e){
-            log.error("Tracking-Id failed validation. " + e.getMessage());
-            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
-        }
+        validateTrackingId(trackingId);
 
-        ParcelEntity entity;
-        try {
-            entity = getParcelEntity(trackingId);
-        } catch (ParcelNotFoundException e) {
-            log.error("Invalid Tracking-Id given by user. Parcel with given TrackingId " + trackingId + " could not be found");
-            throw new ParcelNotFoundException("Parcel with Tracking-Id " + trackingId + " could not be found. Please validate Tracking-Id and try again");
-        }
+        ParcelEntity entity= getParcel(trackingId);
 
         return ParcelMapper.INSTANCE.trackingInformationFromEntity(entity);
     }
 
 
 
+
+
     @Override
     @Transactional
     public void reportParcelHop(String trackingId, String code) throws BadTrackingIdException, ParcelNotFoundException, HopNotFoundException {
-        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
-        try{
-            Validator.validate(newParcelInfo);
-        }catch (ValidationException e){
-            log.error("Tracking-Id failed validation. " + e.getMessage());
-            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
-        }
+        validateTrackingId(trackingId);
 
-        ParcelEntity parcelEntity;
-        try {
-            parcelEntity = getParcel(trackingId);
-        } catch (ParcelNotFoundException e) {
-            log.error("Invalid Tracking-Id given by user. Parcel with given TrackingId " + trackingId + " could not be found");
-            throw new ParcelNotFoundException("Parcel with Tracking-Id " + trackingId + " could not be found. Please validate Tracking-Id and try again");
-        }
+        ParcelEntity parcelEntity= getParcel(trackingId);
 
-        String hopType;
-        try {
-            hopType = getHopType(code);
-        } catch (HopNotFoundException e) {
-            log.error(e.getMessage());
-            throw new HopNotFoundException("Hop with code " + code + " could not be found. Please validate code and try again");
-        }
+        String hopType= getHopType(code);
 
         switch (hopType){
             case "truck":
@@ -171,6 +115,25 @@ public class ParcelServiceImpl implements ParcelService {
         parcelEntity.getVisitedHops().add(parcelEntity.getFutureHops().remove(0));
         parcelRepository.save(parcelEntity);
 
+    }
+
+    public void validateTrackingId(String trackingId) throws BadTrackingIdException {
+        NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
+        try{
+            Validator.validate(newParcelInfo);
+        }catch (ValidationException e){
+            log.error("Tracking-Id failed validation. " + e.getMessage());
+            throw new BadTrackingIdException("Tracking-Id received does not conform with our UUID standards.");
+        }
+    }
+
+    public void validateParcel(Parcel parcel) throws BadParcelDataException {
+        try{
+            Validator.validate(parcel);
+        }catch (ValidationException e){
+            log.error("Parcel received failed validation. ValidationException: " + e.getMessage());
+            throw new BadParcelDataException("Parcel received failed validation. Please validate parcel data and try again. Nested Exception: " + e.getMessage());
+        }
     }
 
     private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) {
@@ -215,21 +178,12 @@ public class ParcelServiceImpl implements ParcelService {
         try{
             parcelEntity= parcelRepository.findByTrackingId(trackingId).get(0);
         }catch (IndexOutOfBoundsException e){
+            log.error("Invalid Tracking-Id given by user. Parcel with given TrackingId " + trackingId + " could not be found");
             throw new ParcelNotFoundException("Parcel with given trackingId " + trackingId + " does not exist");
         }
         return parcelEntity;
     }
 
-    private ParcelEntity getParcelEntity(String trackingId) throws ParcelNotFoundException{
-        ParcelEntity entity;
-        try {
-            entity = getParcel(trackingId);
-        } catch (ParcelNotFoundException e) {
-            log.error(e.getMessage());
-            throw e;
-        }
-        return entity;
-    }
 
     private RecipientEntity getRecipient(Recipient recipient){
         RecipientEntity recipientEntity= findRecipient(recipient);
@@ -243,6 +197,7 @@ public class ParcelServiceImpl implements ParcelService {
         if(doesHopExist(code)){
             return hopRepository.getHoptypeByCode(code).get();
         }
+        log.error("User gave non-existing code of a hop as input. Code: " + code);
         throw new HopNotFoundException("Hop with code " + code + " does not exist.");
 
     }
@@ -255,6 +210,4 @@ public class ParcelServiceImpl implements ParcelService {
         }
         return null;
     }
-
-
 }
