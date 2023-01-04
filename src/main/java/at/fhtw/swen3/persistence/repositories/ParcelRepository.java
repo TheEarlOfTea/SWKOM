@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
+//TODO: change to optional
 @Repository
 public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 

@@ -7,17 +7,18 @@ import javax.validation.Validation;
 import javax.validation.ValidationException;
 import java.util.Set;
 
-@Log4j2
 public class Validator {
     private static javax.validation.Validator validator= Validation.buildDefaultValidatorFactory().getValidator();
 
     public static void validate(Object o) throws ValidationException{
         Set<ConstraintViolation<Object>> violations = validator.validate(o);
-        for (ConstraintViolation<Object> violation : violations) {
-            log.error("Message: " + violation.getMessage() + "; Propertypath: " + violation.getPropertyPath());
-        }
         if(!violations.isEmpty()){
-            throw new ValidationException();
+            StringBuilder builder= new StringBuilder();
+            builder.append("Following Validation errors were encountered:\n");
+            for (ConstraintViolation<Object> violation : violations) {
+                builder.append("Message: " + violation.getMessage() + "; Propertypath: " + violation.getPropertyPath()+ "\n");
+            }
+            throw new ValidationException(builder.toString());
         }
     }
 }
