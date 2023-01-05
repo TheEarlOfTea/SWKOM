@@ -49,8 +49,5 @@ public class HopEntity{
 
     @Column
     @NotNull(message= "locationCoordinates may not be null")
-    private Point locationCoordinates;
-
-
-
+    private GeoCoordinateEntity locationCoordinates; //beim point hab ich nicht verstanden.Wir brauchen geocoordinate
 }

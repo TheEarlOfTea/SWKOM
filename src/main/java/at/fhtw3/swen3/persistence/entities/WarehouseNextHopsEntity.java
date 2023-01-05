@@ -39,6 +39,4 @@ public class WarehouseNextHopsEntity{
     @JoinColumn(name = "fk_warehouse")
     private WarehouseEntity warehouse;
 
-
-
 }

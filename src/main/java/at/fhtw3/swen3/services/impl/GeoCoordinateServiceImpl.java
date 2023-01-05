@@ -44,6 +44,8 @@ public class GeoCoordinateServiceImpl implements GeoCoordinateService {
         if(entity.isPresent()){
             return GeoCoordinateMapper.INSTANCE.fromEntity(entity.get());
         }
+        //return null glaub ist nicht gut, besser Exception zum beispiel so, bin nicht sicher ob richtig ist
+        //return entity.map(GeoCoordinateMapper.INSTANCE::fromEntity).orElseThrow(RuntimeException::new);
         return null;
     }
 }
