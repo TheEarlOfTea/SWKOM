@@ -6,13 +6,11 @@ import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.http.*;
 
 
-@Service
 public class BingEncodingProxy implements GeoEncodingService {
 
     private final static String openstreetmapUrl = "https://nominatim.openstreetmap.org/search?addressdetails=1&q=";

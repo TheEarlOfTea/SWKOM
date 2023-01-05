@@ -1,28 +1,39 @@
 package at.fhtw.swen3.gps.service.impl;
 
 import at.fhtw.swen3.gps.service.Address;
-import at.fhtw.swen3.services.dto.Recipient;
-import org.junit.jupiter.api.BeforeEach;
+import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
+import at.fhtw.swen3.services.dto.GeoCoordinate;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
+
 class BingEncodingProxyTest {
-
-    @Autowired
-    BingEncodingProxy proxy;
-
-    String city= "Wien";
-    String country="Österreich";
-    String postalCode= "1200";
-    String street="Höchstädtplatz 6";
+    @Test
+    public void successTest() {
+        BingEncodingProxy bingEncodingProxy = new BingEncodingProxy();
+        GeoCoordinate geoCoordinate = bingEncodingProxy.encodeAddress(Address.builder()
+                .country("Österreich")
+                .city("Wien")
+                .street("Molkereistrasse")
+                .postalCode("1020")
+                .build());
+        assertNotNull(geoCoordinate);
+    }
 
     @Test
-    void encodeAddress() {
-        Address address= new Address(street, postalCode, city, country);
-        System.out.println(proxy.encodeAddress(address));
+    public void successTestWithCorrectLatLon() {
+        BingEncodingProxy bingEncodingProxy = new BingEncodingProxy();
+        GeoCoordinate geoCoordinate = bingEncodingProxy.encodeAddress(Address.builder()
+                .country("Österreich")
+                .city("Wien")
+                .street("Molkereistrasse")
+                .postalCode("1020")
+                .build());
+        assertNotNull(geoCoordinate);
+        assertEquals(new Double(48.2179768), geoCoordinate.getLat());
+        assertEquals(new Double(16.4011212), geoCoordinate.getLon());
     }
 }
