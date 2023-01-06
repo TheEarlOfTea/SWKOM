@@ -2,6 +2,8 @@ package at.fhtw.swen3;
 
 import at.fhtw.swen3.configuration.LocalDateConverter;
 import at.fhtw.swen3.configuration.LocalDateTimeConverter;
+import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
+import at.fhtw.swen3.services.dto.Recipient;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +30,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
 
     public static void main(String[] args) throws Exception {
         new SpringApplication(Swagger2SpringBoot.class).run(args);
+
     }
 
     @Configuration

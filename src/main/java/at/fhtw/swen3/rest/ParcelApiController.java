@@ -3,6 +3,7 @@ package at.fhtw.swen3.rest;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
+import at.fhtw.swen3.services.EmailNotificationService;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
@@ -36,13 +37,15 @@ public class ParcelApiController implements ParcelApi {
     private final ObjectMapper objectMapper;
     private final HttpServletRequest request;
     private final ParcelService parcelService;
+    private final EmailNotificationService emailNotificationService;
 
 
     @Autowired
-    public ParcelApiController(ObjectMapper objectMapper, HttpServletRequest request, ParcelService parcelService) {
+    public ParcelApiController(ObjectMapper objectMapper, HttpServletRequest request, ParcelService parcelService, EmailNotificationService emailNotificationService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.parcelService = parcelService;
+        this.emailNotificationService = emailNotificationService;
     }
 
     public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Za-z0-9\\-]{36}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
@@ -81,6 +84,7 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<NewParcelInfo> submitParcel(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
+        emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "test", "test");
         if (accept != null && accept.contains("application/json")) {
             try {
                 NewParcelInfo newParcelInfo = parcelService.saveDomesticParcel(body);

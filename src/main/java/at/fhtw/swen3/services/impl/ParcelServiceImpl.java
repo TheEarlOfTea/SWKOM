@@ -7,6 +7,7 @@ import at.fhtw.swen3.persistence.repositories.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
+import at.fhtw.swen3.services.EmailNotificationService;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
@@ -40,6 +41,9 @@ public class ParcelServiceImpl implements ParcelService {
         this.hopArrivalRepository = hopArrivalRepository;
         this.hopRepository = hopRepository;
     }
+
+
+
 
 
 
