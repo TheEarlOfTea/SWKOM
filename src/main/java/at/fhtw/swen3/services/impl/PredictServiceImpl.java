@@ -2,14 +2,18 @@ package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.PredictService;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.WarehouseNotFoundException;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.HopArrival;
+import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.mapper.GeoCoordinateMapper;
 import at.fhtw.swen3.gps.service.Address;
 import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
+import at.fhtw.swen3.services.mapper.RecipientMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.threeten.bp.OffsetDateTime;
 
@@ -23,11 +27,17 @@ public class PredictServiceImpl implements PredictService {
     private final WarehouseRepository warehouseRepository;
     private final BingEncodingProxy bingEncodingProxy;
 
-    @Override
-    public List<HopArrival> predict(ParcelEntity parcelEntity) {
+    @Autowired
+    public PredictServiceImpl(WarehouseRepository warehouseRepository) {
+        this.warehouseRepository = warehouseRepository;
+        this.bingEncodingProxy= new BingEncodingProxy();
+    }
 
-        RecipientEntity recipient = parcelEntity.getRecipient();
-        RecipientEntity sender = parcelEntity.getSender();
+    @Override
+    public List<HopArrival> predict(Parcel parcel) throws WarehouseNotFoundException {
+
+        RecipientEntity recipient = RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient());
+        RecipientEntity sender = RecipientMapper.INSTANCE.fromDTO(parcel.getSender());
 
         GeoCoordinate geoCoordinateSender = bingEncodingProxy.encodeAddress(Address.builder()
                 .country(sender.getCountry())
@@ -43,16 +53,15 @@ public class PredictServiceImpl implements PredictService {
                 .build());
 
         WarehouseEntity warehouseForSender =
-                warehouseRepository.findByGeoCoordinate(GeoCoordinateMapper.INSTANCE.fromDTO(geoCoordinateSender))
+                warehouseRepository.findByLocationCoordinates(geoCoordinateSender)
                         .orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
 
         WarehouseEntity warehouseForRecipient =
-                warehouseRepository.findByGeoCoordinate(GeoCoordinateMapper.INSTANCE.fromDTO(geoCoordinateRecipient))
-                        .orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
+                warehouseRepository.findByLocationCoordinates(geoCoordinateRecipient).orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
 
         List<HopArrival> hopArrivals = new LinkedList<>();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
-        List<HopEntity> allNextHopsUntilGeoCoordinate = getAllNextHopsUntilGeoCoordinate(warehouseForSender, warehouseForRecipient.getLocationCoordinates());
+        List<HopEntity> allNextHopsUntilGeoCoordinate = getAllNextHopsUntilGeoCoordinate(warehouseForSender, new GeoCoordinateEntity(warehouseForRecipient.getLocationCoordinates()));
         for (HopEntity hop : allNextHopsUntilGeoCoordinate) {
             HopArrival hopArrival = new HopArrival();
             hopArrival.setCode(hop.getCode());

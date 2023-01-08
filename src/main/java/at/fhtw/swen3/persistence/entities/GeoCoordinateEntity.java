@@ -2,6 +2,7 @@ package at.fhtw.swen3.persistence.entities;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.geo.Point;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
@@ -36,6 +37,10 @@ public class GeoCoordinateEntity{
     @DecimalMax(value="180.0000000", message="longitude cannot be higher than 180")
     private Double lon;
 
+    public GeoCoordinateEntity(Point point) {
+        this.lat=point.getY();
+        this.lon=point.getX();
+    }
 }
 
 
