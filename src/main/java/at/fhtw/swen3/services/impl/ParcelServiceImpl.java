@@ -1,6 +1,7 @@
 package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.factories.NewParcelInfoFactory;
+import at.fhtw.swen3.factories.TrackingInformationFactory;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
@@ -55,12 +56,7 @@ public class ParcelServiceImpl implements ParcelService {
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
 
-        TrackingInformation trackingInformation=new TrackingInformation();
-        try {
-            trackingInformation.futureHops(predictService.predict(parcel)).visitedHops(new LinkedList<HopArrival>());
-        } catch (WarehouseNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
@@ -75,12 +71,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
-        TrackingInformation trackingInformation=new TrackingInformation();
-        try {
-            trackingInformation.futureHops(predictService.predict(parcel)).visitedHops(new LinkedList<HopArrival>());
-        } catch (WarehouseNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
+        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 

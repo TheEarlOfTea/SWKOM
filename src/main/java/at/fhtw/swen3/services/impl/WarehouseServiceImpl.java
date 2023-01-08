@@ -65,7 +65,6 @@ public class WarehouseServiceImpl implements WarehouseService {
             log.error("Given warehouse hierachy failed validation. Validation errors: " + e.getMessage());
             throw new BadWareHouseDataException("Given warehouse hierachy failed validation");
         }
-        nextHopsRepository.deleteAll();
         hopRepository.deleteAll();
         saveWarehouse(WarehouseMapper.INSTANCE.fromDTO(warehouse));
     }
