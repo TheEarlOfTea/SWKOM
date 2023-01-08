@@ -80,7 +80,7 @@ public interface ParcelApi {
     @RequestMapping(value = "/parcel/{trackingId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Za-z0-9\\-]{36}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId);
+    ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId);
 
 
     @Operation(summary = "Transfer an existing parcel into the system from the service of a logistics partner. ", description = "", tags={ "logisticsPartner" })

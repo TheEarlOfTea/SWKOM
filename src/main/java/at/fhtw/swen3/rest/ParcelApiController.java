@@ -104,7 +104,7 @@ public class ParcelApiController implements ParcelApi {
         return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Za-z0-9\\-]{36}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
+    public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
 
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
