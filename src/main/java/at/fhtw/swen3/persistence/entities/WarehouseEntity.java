@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -28,7 +29,7 @@ public class WarehouseEntity extends HopEntity {
     private Integer level;
 
     @Column
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @NotNull(message = "may not be null")
     private List<WarehouseNextHopsEntity> nextHops = new ArrayList();
 

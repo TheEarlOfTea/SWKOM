@@ -5,10 +5,12 @@ import at.fhtw.swen3.factories.TrackingInformationFactory;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.WarehouseNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
 import at.fhtw.swen3.services.EmailNotificationService;
 import at.fhtw.swen3.services.ParcelService;
+import at.fhtw.swen3.services.PredictService;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
+import java.util.LinkedList;
 import java.util.Optional;
 
 @Service
@@ -33,21 +36,16 @@ public class ParcelServiceImpl implements ParcelService {
     private final RecipientRepository recipientRepository;
     private final HopArrivalRepository hopArrivalRepository;
     private final HopRepository hopRepository;
+    private final PredictService predictService;
 
     @Autowired
-    public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository) {
+    public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository, PredictService predictService) {
         this.parcelRepository = parcelRepository;
         this.recipientRepository = recipientRepository;
         this.hopArrivalRepository = hopArrivalRepository;
         this.hopRepository = hopRepository;
+        this.predictService = predictService;
     }
-
-
-
-
-
-
-
 
     @Override
     public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException {
@@ -57,7 +55,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
-        //throws BadAddressException
+
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
@@ -73,7 +71,6 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
-        //throws BadAddressException
         TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);

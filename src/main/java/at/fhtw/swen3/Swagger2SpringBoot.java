@@ -4,6 +4,7 @@ import at.fhtw.swen3.configuration.LocalDateConverter;
 import at.fhtw.swen3.configuration.LocalDateTimeConverter;
 import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
 import at.fhtw.swen3.services.dto.Recipient;
+import io.swagger.models.auth.In;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import springfox.documentation.oas.annotations.EnableOpenApi;
+
+import java.util.Random;
 
 
 @EnableOpenApi
@@ -31,6 +34,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     public static void main(String[] args) throws Exception {
         new SpringApplication(Swagger2SpringBoot.class).run(args);
     }
+
 
     @Configuration
     static class CustomDateConfig extends WebMvcConfigurerAdapter {
