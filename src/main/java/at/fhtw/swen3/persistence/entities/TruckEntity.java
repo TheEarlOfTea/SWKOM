@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.geo.Polygon;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -21,7 +23,7 @@ public class TruckEntity extends HopEntity {
     @Column(columnDefinition = "text")
     @Lob
     @NotNull(message = "regionGeoJson may not be null")
-    private String regionGeoJson;
+    private Polygon regionGeoJson;
 
     @Column
     @NotNull(message = "numberPlate may not be null")

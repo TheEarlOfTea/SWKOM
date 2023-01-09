@@ -15,6 +15,7 @@ import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.Validator;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,12 +49,14 @@ public class ParcelServiceImpl implements ParcelService {
         this.predictService = predictService;
     }
 
+    @SneakyThrows
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException {
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) {
 
         //throws BadParcelDataException
         validateParcel(parcel);
 
+        predictService.predict(parcel);
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
 
@@ -123,7 +127,7 @@ public class ParcelServiceImpl implements ParcelService {
         String hopType= getHopType(code);
 
         //todo: testen
-        if(parcelEntity.getFutureHops().get(0).getCode()!=code){
+        if(!Objects.equals(parcelEntity.getFutureHops().get(0).getCode(), code)){
             throw new HopNotFoundException("Hop with given code is not the next hop of the parcel");
         }
 

@@ -1,6 +1,7 @@
 package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.persistence.entities.*;
+import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.PredictService;
@@ -8,6 +9,7 @@ import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundEx
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.HopArrival;
 import at.fhtw.swen3.services.dto.Parcel;
+import at.fhtw.swen3.services.dto.Truck;
 import at.fhtw.swen3.services.mapper.GeoCoordinateMapper;
 import at.fhtw.swen3.gps.service.Address;
 import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
@@ -16,6 +18,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.threeten.bp.OffsetDateTime;
+import org.wololo.geojson.GeoJSON;
+import org.wololo.geojson.Geometry;
+import org.wololo.geojson.Polygon;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,10 +31,12 @@ public class PredictServiceImpl implements PredictService {
 
     private final WarehouseRepository warehouseRepository;
     private final BingEncodingProxy bingEncodingProxy;
+    private final HopRepository hopRepository;
 
     @Autowired
-    public PredictServiceImpl(WarehouseRepository warehouseRepository) {
+    public PredictServiceImpl(WarehouseRepository warehouseRepository, HopRepository hopRepository) {
         this.warehouseRepository = warehouseRepository;
+        this.hopRepository = hopRepository;
         this.bingEncodingProxy= new BingEncodingProxy();
     }
 
@@ -55,9 +62,11 @@ public class PredictServiceImpl implements PredictService {
         WarehouseEntity warehouseForSender =
                 warehouseRepository.findByLocationCoordinates(geoCoordinateSender)
                         .orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
+        getHopByGeoCoordinate(geoCoordinateSender);
 
         WarehouseEntity warehouseForRecipient =
                 warehouseRepository.findByLocationCoordinates(geoCoordinateRecipient).orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
+        getHopByGeoCoordinate(geoCoordinateRecipient);
 
         List<HopArrival> hopArrivals = new LinkedList<>();
         OffsetDateTime offsetDateTime = OffsetDateTime.now();
@@ -87,5 +96,19 @@ public class PredictServiceImpl implements PredictService {
             }
         }
         return allNextHops;
+    }
+
+    private HopEntity getHopByGeoCoordinate(GeoCoordinate geoCoordinate) {
+        List<HopEntity> all = hopRepository.findAllTrucksAndTransfers();
+        for (HopEntity hop : all) {
+            if (hop instanceof TransferwarehouseEntity) {
+                TransferwarehouseEntity transferwarehouseEntity = (TransferwarehouseEntity) hop;
+                transferwarehouseEntity.getRegionGeoJson();
+            }
+            if (hop instanceof TruckEntity) {
+                TruckEntity truckEntity = (TruckEntity) hop;
+
+            }
+        }
     }
 }

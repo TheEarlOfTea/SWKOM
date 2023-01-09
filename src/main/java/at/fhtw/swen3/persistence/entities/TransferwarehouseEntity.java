@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.geo.Point;
+import org.springframework.data.geo.Polygon;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +22,7 @@ public class TransferwarehouseEntity extends HopEntity {
     @Column
     @NotNull(message = "regiongGeoJson may not be null")
     @Lob
-    private String regionGeoJson;
+    private Polygon regionGeoJson;
 
     @Column
     @NotNull(message = "logisticsPartner may not be null")
