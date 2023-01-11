@@ -156,12 +156,7 @@
         <dependency>
             <groupId>org.wololo</groupId>
             <artifactId>jts2geojson</artifactId>
-            <version>0.18.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.geotools</groupId>
-            <artifactId>gt-main</artifactId>
-            <version>27.2</version>
+            <version>0.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -196,15 +191,6 @@
             <id>Hibernate Spatial repo</id>
             <url>http://www.hibernatespatial.org/repository</url>
         </repository>
-<!--        <repository>-->
-<!--            <snapshots>-->
-<!--                <enabled>true</enabled>-->
-<!--            </snapshots>-->
-<!--            <id>geotools</id>-->
-<!--            <name>OpenGeo Maven Repository</name>-->
-<!--            <url>http://repo.osgeo.org.repository/geotools-releases/</url>-->
-<!--        </repository>-->
-        <!-- add JBOSS repository for easy access to Hibernate libraries -->
         <repository>
             <id>JBOSS</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>

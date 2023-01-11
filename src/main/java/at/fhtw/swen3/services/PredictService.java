@@ -9,5 +9,5 @@ import at.fhtw.swen3.services.dto.Parcel;
 import java.util.List;
 
 public interface PredictService {
-    List<HopArrival> predict(Parcel parcel) throws WarehouseNotFoundException;
+    List<HopArrival> predict(Parcel parcel);
 }

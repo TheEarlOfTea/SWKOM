@@ -30,11 +30,11 @@ public class WarehouseNextHopsEntity{
     @Min(value = 1, message = "traveltimeMins may not be lower than 1")
     private Integer traveltimeMins;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_next_hop")
     private HopEntity hop;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_warehouse")
     private WarehouseEntity warehouse;
 }

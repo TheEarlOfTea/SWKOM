@@ -5,7 +5,10 @@ import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
 import at.fhtw.swen3.services.dto.TrackingInformation;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
@@ -109,17 +112,30 @@ public class TestIntegration {
                 .andDo(print())
                 .andReturn();
 
-//        TrackingInformation trackingInformation = gson.fromJson(trackingInfo.getResponse().getContentAsString(), TrackingInformation.class);
-//
-//        assertEquals(PICKUP, trackingInformation.getState());
+        ObjectMapper objectMapper = new ObjectMapper();
+        assertNotNull(trackingInfo.getResponse().getContentAsString());
+        JsonNode trackingInfoJson = objectMapper.readTree(trackingInfo.getResponse().getContentAsString());
+        assertEquals("Pickup", trackingInfoJson.get("state").asText());
 
-        mockMvc.perform(post(String.format("/parcel/%s/reportHop/%s", parcelId, "WTTA01"))
+        mockMvc.perform(post(String.format("/parcel/%s/reportHop/%s", parcelId, "WTTA056"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
 
-        MvcResult newTrackingInfo = mockMvc.perform(get(String.format("/parcel/%s", parcelId))
+        mockMvc.perform(get(String.format("/parcel/%s", parcelId))
+                        .header("Accept", "application/json"))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print())
+                .andReturn();
+
+        mockMvc.perform(post(String.format("/parcel/%s/reportHop/%s", parcelId, "WENB01"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Accept", "application/json"))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+
+        mockMvc.perform(get(String.format("/parcel/%s", parcelId))
                         .header("Accept", "application/json"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print())

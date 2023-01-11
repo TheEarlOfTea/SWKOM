@@ -1,101 +1,121 @@
 package at.fhtw.swen3.services.impl;
 
+import at.fhtw.swen3.gps.service.Address;
+import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
-import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
+import at.fhtw.swen3.persistence.repositories.WarehouseNextHopsRepository;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.PredictService;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.WarehouseNotFoundException;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.HopArrival;
 import at.fhtw.swen3.services.dto.Parcel;
-import at.fhtw.swen3.services.dto.Truck;
-import at.fhtw.swen3.services.mapper.GeoCoordinateMapper;
-import at.fhtw.swen3.gps.service.Address;
-import at.fhtw.swen3.gps.service.impl.BingEncodingProxy;
+import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.threeten.bp.OffsetDateTime;
-import org.wololo.geojson.GeoJSON;
-import org.wololo.geojson.Geometry;
-import org.wololo.geojson.Polygon;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PredictServiceImpl implements PredictService {
 
-    private final WarehouseRepository warehouseRepository;
     private final BingEncodingProxy bingEncodingProxy;
     private final HopRepository hopRepository;
+    private final WarehouseNextHopsRepository warehouseNextHopsRepository;
 
     @Autowired
-    public PredictServiceImpl(WarehouseRepository warehouseRepository, HopRepository hopRepository) {
-        this.warehouseRepository = warehouseRepository;
+    public PredictServiceImpl(HopRepository hopRepository, WarehouseNextHopsRepository warehouseNextHopsRepository) {
         this.hopRepository = hopRepository;
         this.bingEncodingProxy= new BingEncodingProxy();
+        this.warehouseNextHopsRepository = warehouseNextHopsRepository;
     }
 
     @Override
-    public List<HopArrival> predict(Parcel parcel) throws WarehouseNotFoundException {
+    @Transactional
+    public List<HopArrival> predict(Parcel parcel) {
 
         RecipientEntity recipient = RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient());
         RecipientEntity sender = RecipientMapper.INSTANCE.fromDTO(parcel.getSender());
 
-        GeoCoordinate geoCoordinateSender = bingEncodingProxy.encodeAddress(Address.builder()
-                .country(sender.getCountry())
-                .city(sender.getCity())
-                .street(sender.getStreet())
-                .postalCode(sender.getPostalCode())
-                .build());
-        GeoCoordinate geoCoordinateRecipient = bingEncodingProxy.encodeAddress(Address.builder()
-                .country(recipient.getCountry())
-                .city(recipient.getCity())
-                .street(recipient.getStreet())
-                .postalCode(recipient.getPostalCode())
-                .build());
-
-        WarehouseEntity warehouseForSender =
-                warehouseRepository.findByLocationCoordinates(geoCoordinateSender)
-                        .orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
-        getHopByGeoCoordinate(geoCoordinateSender);
-
-        WarehouseEntity warehouseForRecipient =
-                warehouseRepository.findByLocationCoordinates(geoCoordinateRecipient).orElseThrow(() -> new WarehouseNotFoundException("no warehouse found"));
-        getHopByGeoCoordinate(geoCoordinateRecipient);
-
-        List<HopArrival> hopArrivals = new LinkedList<>();
-        OffsetDateTime offsetDateTime = OffsetDateTime.now();
-        List<HopEntity> allNextHopsUntilGeoCoordinate = getAllNextHopsUntilGeoCoordinate(warehouseForSender, new GeoCoordinateEntity(warehouseForRecipient.getLocationCoordinates()));
-        for (HopEntity hop : allNextHopsUntilGeoCoordinate) {
-            HopArrival hopArrival = new HopArrival();
-            hopArrival.setCode(hop.getCode());
-            hopArrival.setDescription(hop.getDescription());
-            hopArrival.setDateTime(offsetDateTime.plusMinutes(hop.getProcessingDelayMins()));
-            hopArrivals.add(hopArrival);
-        }
-        return hopArrivals;
-
+        return buildRoad(
+                    getHopByGeoCoordinate(bingEncodingProxy.encodeAddress(Address.builder()
+                            .country(sender.getCountry())
+                            .city(sender.getCity())
+                            .street(sender.getStreet())
+                            .postalCode(sender.getPostalCode())
+                            .build())),
+                    getHopByGeoCoordinate(bingEncodingProxy.encodeAddress(Address.builder()
+                            .country(recipient.getCountry())
+                            .city(recipient.getCity())
+                            .street(recipient.getStreet())
+                            .postalCode(recipient.getPostalCode())
+                            .build())))
+                .stream()
+                .map(HopArrivalMapper.INSTANCE::fromEntity)
+                .collect(Collectors.toList());
     }
 
-    private List<HopEntity> getAllNextHopsUntilGeoCoordinate(WarehouseEntity warehouse, GeoCoordinateEntity geoCoordinate) {
-        List<WarehouseNextHopsEntity> nextHops = warehouse.getNextHops();
-        List<HopEntity> allNextHops = new LinkedList<>();
-        if (warehouse.getLocationCoordinates().equals(geoCoordinate)) {
-            return List.of(warehouse);
+    private List<HopArrivalEntity> buildRoad(HopEntity senderHop, HopEntity recipientHop) {
+        List<HopArrivalEntity> hopArrivals = new LinkedList<>();
+
+        // add start
+        hopArrivals.add(createArrival(senderHop, OffsetDateTime.now()));
+
+        // find road
+        findCommonMotherWarehouseAndBuildRoad(hopArrivals, senderHop, recipientHop);
+
+        //add finish
+        hopArrivals.add(createArrival(recipientHop, hopArrivals.get(hopArrivals.size() - 1).getDateTime()));
+        return hopArrivals;
+    }
+
+    private void findCommonMotherWarehouseAndBuildRoad(List<HopArrivalEntity> road, HopEntity senderHop, HopEntity recipientHop) {
+        WarehouseEntity senderMotherWarehouse = warehouseNextHopsRepository.findByHopId(senderHop.getId())
+                .orElseThrow(() -> new HopNotFoundException(""))
+                .getWarehouse();
+
+        WarehouseEntity recipientMotherWarehouse = warehouseNextHopsRepository.findByHopId(recipientHop.getId())
+                .orElseThrow(() -> new HopNotFoundException(""))
+                .getWarehouse();
+
+        if (senderMotherWarehouse.getLevel() > recipientMotherWarehouse.getLevel()) {
+            road.add(createArrival(recipientMotherWarehouse, road.get(road.size() - 1).getDateTime()));
+
+            findCommonMotherWarehouseAndBuildRoad(road,
+                    warehouseNextHopsRepository.findByHopId(recipientMotherWarehouse.getId())
+                            .orElseThrow(() -> new HopNotFoundException(""))
+                            .getWarehouse(),
+                    recipientHop);
+
+        } else if (senderMotherWarehouse.getLevel() < recipientMotherWarehouse.getLevel()) {
+            road.add(createArrival(senderMotherWarehouse, road.get(road.size() - 1).getDateTime()));
+
+            findCommonMotherWarehouseAndBuildRoad(road,
+                    warehouseNextHopsRepository.findByHopId(senderMotherWarehouse.getId())
+                        .orElseThrow(() -> new HopNotFoundException(""))
+                        .getWarehouse(),
+                    recipientHop);
+
+        } else {
+            road.add(createArrival(senderMotherWarehouse, road.get(road.size() - 1).getDateTime()));
         }
-        for (WarehouseNextHopsEntity nextHop : nextHops) {
-            if (nextHop.getHop() instanceof WarehouseEntity) {
-                allNextHops.addAll(getAllNextHopsUntilGeoCoordinate((WarehouseEntity) nextHop.getHop(), geoCoordinate));
-            } else {
-                allNextHops.add(nextHop.getHop());
-            }
-        }
-        return allNextHops;
+    }
+
+    private HopArrivalEntity createArrival(HopEntity hop, OffsetDateTime offsetDateTime) {
+        HopArrivalEntity hopArrivalEntity = new HopArrivalEntity();
+        hopArrivalEntity.setCode(hop.getCode());
+        hopArrivalEntity.setDescription(hop.getDescription());
+        hopArrivalEntity.setDateTime(offsetDateTime.plusMinutes(hop.getProcessingDelayMins()));
+        return hopArrivalEntity;
     }
 
     private HopEntity getHopByGeoCoordinate(GeoCoordinate geoCoordinate) {
@@ -103,12 +123,17 @@ public class PredictServiceImpl implements PredictService {
         for (HopEntity hop : all) {
             if (hop instanceof TransferwarehouseEntity) {
                 TransferwarehouseEntity transferwarehouseEntity = (TransferwarehouseEntity) hop;
-                transferwarehouseEntity.getRegionGeoJson();
+                if (transferwarehouseEntity.getRegionGeoJson().contains(new GeometryFactory().createPoint(new Coordinate(geoCoordinate.getLon(), geoCoordinate.getLat())))) {
+                    return hop;
+                }
             }
             if (hop instanceof TruckEntity) {
                 TruckEntity truckEntity = (TruckEntity) hop;
-
+                if (truckEntity.getRegionGeoJson().contains(new GeometryFactory().createPoint(new Coordinate(geoCoordinate.getLon(), geoCoordinate.getLat())))) {
+                    return hop;
+                }
             }
         }
+        throw new HopNotFoundException("");
     }
 }
