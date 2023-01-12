@@ -1,7 +1,6 @@
 package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.factories.NewParcelInfoFactory;
-import at.fhtw.swen3.factories.TrackingInformationFactory;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.persistence.repositories.HopArrivalRepository;
@@ -27,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +59,7 @@ public class ParcelServiceImpl implements ParcelService {
         List<HopArrival> predict = predictService.predict(parcel);
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
-        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
+        TrackingInformation trackingInformation= new TrackingInformation().futureHops(predict).visitedHops(new LinkedList<HopArrival>());
 
         return saveParcel(newParcelInfo, parcel, trackingInformation, predict);
 
@@ -79,7 +75,7 @@ public class ParcelServiceImpl implements ParcelService {
         List<HopArrival> predict = predictService.predict(parcel);
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
-        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
+        TrackingInformation trackingInformation= new TrackingInformation().futureHops(predict).visitedHops(new LinkedList<HopArrival>());
 
         return saveParcel(newParcelInfo, parcel, trackingInformation, predict);
 
