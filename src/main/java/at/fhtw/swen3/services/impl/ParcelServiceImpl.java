@@ -49,10 +49,10 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
-
+        //Throws BadAddressException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
-        System.out.println(trackingInformation);
+        //Throws DuplicateTrackingIdException
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
     }
@@ -66,8 +66,10 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
+        //Throws BadAddressException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
+        //Throws DuplicateTrackingIdException
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
     }
@@ -117,7 +119,6 @@ public class ParcelServiceImpl implements ParcelService {
         //throws HopNotFoundException
         String hopType= getHopType(code);
 
-        //todo: testen
         if(!parcelEntity.getFutureHops().get(0).getCode().equals(code)){
             throw new HopNotFoundException("Hop with given code is not the next hop of the parcel");
         }
