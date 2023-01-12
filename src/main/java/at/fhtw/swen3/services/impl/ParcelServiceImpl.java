@@ -22,6 +22,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.threeten.bp.OffsetDateTime;
 
 import javax.validation.ValidationException;
 import java.util.LinkedList;
@@ -123,7 +124,7 @@ public class ParcelServiceImpl implements ParcelService {
         String hopType= getHopType(code);
 
         //todo: testen
-        if(parcelEntity.getFutureHops().get(0).getCode()!=code){
+        if(!parcelEntity.getFutureHops().get(0).getCode().equals(code)){
             throw new HopNotFoundException("Hop with given code is not the next hop of the parcel");
         }
 
@@ -136,7 +137,10 @@ public class ParcelServiceImpl implements ParcelService {
                 parcelEntity.setState(TrackingInformation.StateEnum.TRANSFERRED);
         }
 
-        parcelEntity.getVisitedHops().add(parcelEntity.getFutureHops().remove(0));
+        HopArrivalEntity hopArrival= parcelEntity.getFutureHops().remove(0);
+        hopArrival.setDateTime(OffsetDateTime.now());
+
+        parcelEntity.getVisitedHops().add(hopArrival);
         parcelRepository.save(parcelEntity);
 
     }
