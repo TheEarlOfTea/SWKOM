@@ -30,7 +30,6 @@ public class RecipientEntity{
     private String name;
 
     @Column
-    @Pattern(regexp = "^[A-Za-zß0-9 \\/-]*", message = "pattern must match ^[A-Za-zß0-9 \\/-]*")
     private String street;
 
     @Column
@@ -43,7 +42,6 @@ public class RecipientEntity{
 
     @Column
     @NotNull(message = "country may not be null")
-    @Pattern(regexp = "[A-Za-z]*", message = "Country must match pattern [A-Za-z]*")
     private String country;
 
 }

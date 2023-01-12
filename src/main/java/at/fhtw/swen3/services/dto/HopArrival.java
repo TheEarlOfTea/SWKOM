@@ -25,7 +25,6 @@ public class HopArrival   {
 
   @JsonProperty("description")
   @NotNull(message= "description may not be null")
-  @Pattern(regexp="^[A-Za-z0-9\\- ]*", message="has to match \'^[A-Za-z0-9\\- ]*\'")
   private String description = null;
 
   @JsonProperty("dateTime")

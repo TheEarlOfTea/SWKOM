@@ -21,7 +21,6 @@ public class Recipient   {
   private String name = null;
 
   @JsonProperty("street")
-  @Pattern(regexp = "^[A-Za-zß0-9 \\/-]*", message = "pattern must match ^[A-Za-zß0-9 \\/-]*")
   private String street = null;
 
   @JsonProperty("postalCode")
@@ -34,7 +33,6 @@ public class Recipient   {
 
   @JsonProperty("country")
   @NotNull(message = "country may not be null")
-  @Pattern(regexp = "[A-Za-z]*", message = "Country must match pattern [A-Za-z]*")
   private String country = null;
 
   public Recipient name(String name) {

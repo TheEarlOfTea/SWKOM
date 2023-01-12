@@ -3,6 +3,7 @@ package at.fhtw.swen3.gps.service.impl;
 import at.fhtw.swen3.gps.service.Address;
 import at.fhtw.swen3.gps.service.GeoEncodingService;
 
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadAddressException;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,7 +17,7 @@ public class BingEncodingProxy implements GeoEncodingService {
     private final static String openstreetmapUrl = "https://nominatim.openstreetmap.org/search?addressdetails=1&q=";
 
     @Override
-    public GeoCoordinate encodeAddress(Address address) {
+    public GeoCoordinate encodeAddress(Address address) throws BadAddressException {
         URI url = URI.create((openstreetmapUrl + getQueryFromAddress(address) +
                 "&format=json").replaceAll(" ", "%20"));
 
@@ -42,7 +43,7 @@ public class BingEncodingProxy implements GeoEncodingService {
 
             return geoCoordinate;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new BadAddressException(e.getMessage());
         }
     }
 

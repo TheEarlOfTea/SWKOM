@@ -1,23 +1,18 @@
 package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.factories.NewParcelInfoFactory;
-import at.fhtw.swen3.factories.TrackingInformationFactory;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
-import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.WarehouseNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
-import at.fhtw.swen3.services.EmailNotificationService;
 import at.fhtw.swen3.services.ParcelService;
-import at.fhtw.swen3.services.PredictService;
+import at.fhtw.swen3.services.PredictionService;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import at.fhtw.swen3.services.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.util.PSQLException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -25,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.threeten.bp.OffsetDateTime;
 
 import javax.validation.ValidationException;
-import java.util.LinkedList;
 import java.util.Optional;
 
 @Service
@@ -37,15 +31,14 @@ public class ParcelServiceImpl implements ParcelService {
     private final RecipientRepository recipientRepository;
     private final HopArrivalRepository hopArrivalRepository;
     private final HopRepository hopRepository;
-    private final PredictService predictService;
+    private final PredictionService predictionService;
 
-    @Autowired
-    public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository, PredictService predictService) {
+    public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository, PredictionService predictionService) {
         this.parcelRepository = parcelRepository;
         this.recipientRepository = recipientRepository;
         this.hopArrivalRepository = hopArrivalRepository;
         this.hopRepository = hopRepository;
-        this.predictService = predictService;
+        this.predictionService = predictionService;
     }
 
     @Override
@@ -57,8 +50,9 @@ public class ParcelServiceImpl implements ParcelService {
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
 
-        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
+        TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
+        System.out.println(trackingInformation);
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
     }
@@ -72,7 +66,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
-        TrackingInformation trackingInformation= TrackingInformationFactory.getTrackingInformation();
+        TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
         return saveParcel(newParcelInfo, parcel, trackingInformation);
 
