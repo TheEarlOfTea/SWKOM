@@ -47,7 +47,7 @@ public class ParcelApiController implements ParcelApi {
         this.emailNotificationService = emailNotificationService;
     }
 
-    public ResponseEntity<Void> reportParcelDelivery(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
+    public ResponseEntity<Void> reportParcelDelivery(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
             try{
                 parcelService.reportParcelDelivery(trackingId);
                 return new ResponseEntity<Void>(HttpStatus.OK);
@@ -64,7 +64,7 @@ public class ParcelApiController implements ParcelApi {
 
     }
 
-    public ResponseEntity<Void> reportParcelHop(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
+    public ResponseEntity<Void> reportParcelHop(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
             try{
                 parcelService.reportParcelHop(trackingId, code);
                 return new ResponseEntity<Void>(HttpStatus.CREATED);
@@ -103,7 +103,7 @@ public class ParcelApiController implements ParcelApi {
         return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<TrackingInformation> trackParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
+    public ResponseEntity<TrackingInformation> trackParcel(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema(), example = "ABCD12345") @PathVariable("trackingId") String trackingId) {
 
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
@@ -121,7 +121,7 @@ public class ParcelApiController implements ParcelApi {
         return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<NewParcelInfo> transitionParcel(@Pattern(regexp="^[A-Z0-9]{9}$") @Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
+    public ResponseEntity<NewParcelInfo> transitionParcel(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try{
