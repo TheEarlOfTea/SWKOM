@@ -43,6 +43,8 @@ public class PredictServiceImpl implements PredictService {
     @Override
     @Transactional
     public List<HopArrival> predict(Parcel parcel) throws BadAddressException {
+        System.out.println(parcel.getRecipient());
+        System.out.println(parcel.getSender());
 
         RecipientEntity recipient = RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient());
         RecipientEntity sender = RecipientMapper.INSTANCE.fromDTO(parcel.getSender());

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 
-//TODO: change to optional
 @Repository
 public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 
@@ -18,5 +17,4 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 
     @Query(value = "SELECT tracking_id FROM t_parcels WHERE tracking_Id = ?1", nativeQuery = true)
     Optional<String> doesTrackingIdExist(String trackingId);
-
 }

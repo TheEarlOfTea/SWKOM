@@ -124,7 +124,6 @@ public class ParcelServiceImpl implements ParcelService {
         //throws HopNotFoundException
         String hopType= getHopType(code);
 
-        //todo: testen
         if(!Objects.equals(parcelEntity.getFutureHops().get(0).getCode(), code)){
             throw new HopNotFoundException("Hop with given code is not the next hop of the parcel");
         }
