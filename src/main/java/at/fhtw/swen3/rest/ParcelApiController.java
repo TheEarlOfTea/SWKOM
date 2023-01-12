@@ -40,7 +40,6 @@ public class ParcelApiController implements ParcelApi {
     private final EmailNotificationService emailNotificationService;
 
 
-    @Autowired
     public ParcelApiController(ObjectMapper objectMapper, HttpServletRequest request, ParcelService parcelService, EmailNotificationService emailNotificationService) {
         this.objectMapper = objectMapper;
         this.request = request;

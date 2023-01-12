@@ -39,7 +39,6 @@ public class WarehouseApiController implements WarehouseApi {
     private final WarehouseService warehouseService;
 
 
-    @Autowired
     public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, WarehouseService warehouseService) {
         this.objectMapper = objectMapper;
         this.request = request;

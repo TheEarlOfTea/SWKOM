@@ -31,7 +31,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     private WarehouseNextHopsRepository nextHopsRepository;
     private WarehouseRepository warehouseRepository;
 
-    @Autowired
     public WarehouseServiceImpl(HopRepository hopRepository, WarehouseNextHopsRepository nextHopsRepository, WarehouseRepository warehouseRepository) {
         this.hopRepository = hopRepository;
         this.nextHopsRepository = nextHopsRepository;

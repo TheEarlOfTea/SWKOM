@@ -6,6 +6,7 @@ import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseNextHopsRepository;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadAddressException;
 import at.fhtw.swen3.services.PredictService;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.HopArrival;
@@ -41,7 +42,7 @@ public class PredictServiceImpl implements PredictService {
 
     @Override
     @Transactional
-    public List<HopArrival> predict(Parcel parcel) {
+    public List<HopArrival> predict(Parcel parcel) throws BadAddressException {
 
         RecipientEntity recipient = RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient());
         RecipientEntity sender = RecipientMapper.INSTANCE.fromDTO(parcel.getSender());
@@ -118,7 +119,7 @@ public class PredictServiceImpl implements PredictService {
         return hopArrivalEntity;
     }
 
-    private HopEntity getHopByGeoCoordinate(GeoCoordinate geoCoordinate) {
+    private HopEntity getHopByGeoCoordinate(GeoCoordinate geoCoordinate) throws BadAddressException {
         List<HopEntity> all = hopRepository.findAllTrucksAndTransfers();
         for (HopEntity hop : all) {
             if (hop instanceof TransferwarehouseEntity) {
@@ -134,6 +135,6 @@ public class PredictServiceImpl implements PredictService {
                 }
             }
         }
-        throw new HopNotFoundException("");
+        throw new BadAddressException("No hop for given address could be found");
     }
 }

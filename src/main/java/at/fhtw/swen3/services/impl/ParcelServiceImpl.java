@@ -20,8 +20,10 @@ import at.fhtw.swen3.services.validation.Validator;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Component
 @Slf4j
 public class ParcelServiceImpl implements ParcelService {
 
@@ -40,7 +43,6 @@ public class ParcelServiceImpl implements ParcelService {
     private final HopRepository hopRepository;
     private final PredictService predictService;
 
-    @Autowired
     public ParcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, HopArrivalRepository hopArrivalRepository, HopRepository hopRepository, PredictService predictService) {
         this.parcelRepository = parcelRepository;
         this.recipientRepository = recipientRepository;
@@ -48,20 +50,19 @@ public class ParcelServiceImpl implements ParcelService {
         this.hopRepository = hopRepository;
         this.predictService = predictService;
     }
-
-    @SneakyThrows
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) {
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, DuplicateTrackingIdException, BadAddressException {
 
         //throws BadParcelDataException
         validateParcel(parcel);
 
-        List<HopArrival> predict = predictService.predict(parcel);
+
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
 
-        TrackingInformation trackingInformation= new TrackingInformation().futureHops(predict).visitedHops(new LinkedList<HopArrival>());
+        //throws HopNotFoundException
+        TrackingInformation trackingInformation= getTrackingInformation(parcel);
 
-        return saveParcel(newParcelInfo, parcel, trackingInformation, predict);
+        return saveParcel(newParcelInfo, parcel, trackingInformation);
 
     }
 
@@ -72,12 +73,12 @@ public class ParcelServiceImpl implements ParcelService {
         //throws BadParcelDataException
         validateParcel(parcel);
 
-        List<HopArrival> predict = predictService.predict(parcel);
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
 
-        TrackingInformation trackingInformation= new TrackingInformation().futureHops(predict).visitedHops(new LinkedList<HopArrival>());
+        //throws HopNotFoundException
+        TrackingInformation trackingInformation= getTrackingInformation(parcel);
 
-        return saveParcel(newParcelInfo, parcel, trackingInformation, predict);
+        return saveParcel(newParcelInfo, parcel, trackingInformation);
 
     }
 
@@ -110,10 +111,6 @@ public class ParcelServiceImpl implements ParcelService {
 
         return ParcelMapper.INSTANCE.trackingInformationFromEntity(entity);
     }
-
-
-
-
 
     @Override
     @Transactional
@@ -165,7 +162,7 @@ public class ParcelServiceImpl implements ParcelService {
         }
     }
 
-    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation, List<HopArrival> predict) throws DuplicateTrackingIdException {
+    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws DuplicateTrackingIdException {
 
         Optional<String> trackingId= parcelRepository.doesTrackingIdExist(newParcelInfo.getTrackingId());
         if(trackingId.isPresent()){
@@ -177,7 +174,6 @@ public class ParcelServiceImpl implements ParcelService {
 
         entity.setRecipient(getRecipient(parcel.getRecipient()));
         entity.setSender(getRecipient(parcel.getSender()));
-        entity.setFutureHops(predict.stream().map(HopArrivalMapper.INSTANCE::fromDTO).collect(Collectors.toList()));
 
         //save hopArrivals
         hopArrivalRepository.saveAll(entity.getVisitedHops());
@@ -186,6 +182,17 @@ public class ParcelServiceImpl implements ParcelService {
         parcelRepository.save(entity);
 
         return newParcelInfo;
+    }
+
+    private TrackingInformation getTrackingInformation(Parcel parcel) throws BadAddressException {
+        TrackingInformation trackingInformation;
+        try{
+            trackingInformation= new TrackingInformation().futureHops(predictService.predict(parcel)).visitedHops(new LinkedList<HopArrival>());
+        } catch (BadAddressException e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+        return trackingInformation;
     }
 
 
