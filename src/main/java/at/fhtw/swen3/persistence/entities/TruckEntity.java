@@ -23,7 +23,7 @@ public class TruckEntity extends HopEntity {
     @Column(columnDefinition = "text")
     @Lob
     @NotNull(message = "regionGeoJson may not be null")
-    private Geometry regionGeoJson;
+    private String regionGeoJson;
 
     @Column
     @NotNull(message = "numberPlate may not be null")

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.threeten.bp.OffsetDateTime;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,8 +44,7 @@ public class PredictServiceImpl implements PredictService {
     @Override
     @Transactional
     public List<HopArrival> predict(Parcel parcel) throws BadAddressException {
-        System.out.println(parcel.getRecipient());
-        System.out.println(parcel.getSender());
+        /*
 
         RecipientEntity recipient = RecipientMapper.INSTANCE.fromDTO(parcel.getRecipient());
         RecipientEntity sender = RecipientMapper.INSTANCE.fromDTO(parcel.getSender());
@@ -65,8 +65,11 @@ public class PredictServiceImpl implements PredictService {
                 .stream()
                 .map(HopArrivalMapper.INSTANCE::fromEntity)
                 .collect(Collectors.toList());
-    }
 
+                */
+        return  new ArrayList<HopArrival>();
+    }
+/*
     private List<HopArrivalEntity> buildRoad(HopEntity senderHop, HopEntity recipientHop) {
         List<HopArrivalEntity> hopArrivals = new LinkedList<>();
 
@@ -138,5 +141,5 @@ public class PredictServiceImpl implements PredictService {
             }
         }
         throw new BadAddressException("No hop for given address could be found");
-    }
+    }*/
 }
