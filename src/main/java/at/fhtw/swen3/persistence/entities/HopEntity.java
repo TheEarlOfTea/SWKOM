@@ -28,14 +28,10 @@ public class HopEntity{
     private String hopType;
 
     @Column
-    @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "code has to match \'^[A-Z]{4}\\d{1,4}$\'")
     @NotNull(message = "code may not be null")
     private String code;
 
     @Column
-    /*@NotNull(message= "description may not be null")
-    @Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="description has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
-    */
     private String description;
 
     @Column
@@ -44,9 +40,6 @@ public class HopEntity{
     private Integer processingDelayMins;
 
     @Column
-    /*@Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="location has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
-    @NotNull(message= "locationName may not be null")
-     */
     private String locationName;
 
     @Column

@@ -1,5 +1,6 @@
 package at.fhtw.swen3.persistence.repositories;
 
+import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.dto.Recipient;
 import at.fhtw.swen3.services.mapper.RecipientMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,31 +8,32 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class RecipientRepositoryTest {
     @Autowired
-    RecipientRepository recipientRepository;
-    @Autowired
-    ParcelRepository parcelRepository;
+    RecipientRepository repository;
 
     public Recipient dummyRecipient;
 
     @BeforeEach
     void init() {
-        parcelRepository.deleteAll();
-        recipientRepository.deleteAll();
         dummyRecipient= new Recipient();
         dummyRecipient.setDummyData();
     }
 
     @Test
-    public void testSave() {
+    public void testDB() {
 
 
-        recipientRepository.save(RecipientMapper.INSTANCE.fromDTO(dummyRecipient));
+        RecipientEntity recipientEntity= repository.save(RecipientMapper.INSTANCE.fromDTO(dummyRecipient));
+        Optional<RecipientEntity> optionalRecipientEntity= repository.findById(recipientEntity.getId());
 
-        assertEquals(1, recipientRepository.count());
+        assert(optionalRecipientEntity.isPresent());
+
+        repository.delete(recipientEntity);
     }
 }

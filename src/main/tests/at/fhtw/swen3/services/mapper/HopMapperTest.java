@@ -11,6 +11,7 @@ class HopMapperTest {
 
     Hop hop= new Hop().processingDelayMins(2).code("ABC1").hopType("test").description("ABC").locationName("ABC").locationCoordinates(new GeoCoordinate().lon(19.2).lat(91.2));
 
+
     @Test
     void fromDTO() {
         HopEntity entity= HopMapper.INSTANCE.fromDTO(hop);
