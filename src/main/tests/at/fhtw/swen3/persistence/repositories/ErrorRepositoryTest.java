@@ -1,10 +1,14 @@
 package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.ErrorEntity;
+import at.fhtw.swen3.services.dto.Error;
+import at.fhtw.swen3.services.mapper.ErrorMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,21 +18,16 @@ public class ErrorRepositoryTest {
     @Autowired
     ErrorRepository repository;
 
-    public ErrorEntity entity;
-
-    @BeforeEach
-    void init() {
-        repository.deleteAll();
-        entity = new ErrorEntity();
-        entity.setErrorMessage("test");
-    }
 
     @Test
-    public void testSave() {
+    public void testDb() {
 
+        ErrorEntity entity= repository.save(ErrorMapper.INSTANCE.fromDTO(new Error().errorMessage("test")));
 
-        repository.save(entity);
+        Optional<ErrorEntity> optionalErrorEntity= repository.findById(entity.getId());
 
-        assertEquals(1, repository.count());
+        assert(optionalErrorEntity.isPresent());
+
+        repository.delete(entity);
     }
 }

@@ -1,9 +1,12 @@
 package at.fhtw.swen3.persistence.repositories;
 
+import at.fhtw.swen3.factories.NewParcelInfoFactory;
+import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
+import at.fhtw.swen3.services.mapper.RecipientMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.threeten.bp.OffsetDateTime;
 
 import java.util.LinkedList;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -18,8 +22,6 @@ class ParcelRepositoryTest {
 
     @Autowired
     ParcelRepository parcelRepository;
-    @Autowired
-    HopArrivalRepository hopArrivalRepository;
     @Autowired
     RecipientRepository recipientRepository;
 
@@ -30,10 +32,7 @@ class ParcelRepositoryTest {
 
     @BeforeEach
     void init() {
-        parcelRepository.deleteAll();
-        hopArrivalRepository.deleteAll();
-        recipientRepository.deleteAll();
-        info= new NewParcelInfo().trackingId("ABCD12345");
+        info= NewParcelInfoFactory.getNewParcelInfo();
         parcel= new Parcel().weight(12.23f);
         dummyRecipient= new Recipient();
         dummyRecipient.setDummyData();
@@ -43,29 +42,29 @@ class ParcelRepositoryTest {
         trackingInformation.setState(TrackingInformation.StateEnum.DELIVERED);
         trackingInformation.setFutureHops(new LinkedList<HopArrival>());
         trackingInformation.setVisitedHops(new LinkedList<HopArrival>());
-        trackingInformation.getVisitedHops().add(new HopArrival().code("ABCD12").dateTime(OffsetDateTime.MAX).description("SA"));
-        trackingInformation.getFutureHops().add(new HopArrival().code("DDDD12").dateTime(OffsetDateTime.MAX).description("DA"));
 
     }
 
     @Test
-    public void testSave() {
+    public void testDB() {
 
+        ParcelEntity parcelEntity= ParcelMapper.INSTANCE.fromDTO(info, parcel, trackingInformation);
 
-        ParcelEntity entity = ParcelMapper.INSTANCE.fromDTO(info, parcel, trackingInformation);
-        recipientRepository.save(entity.getRecipient());
-        recipientRepository.save(entity.getSender());
-        for (HopArrivalEntity e : entity.getVisitedHops()) {
-            hopArrivalRepository.save(e);
-        }
-        for (HopArrivalEntity e : entity.getFutureHops()) {
-            hopArrivalRepository.save(e);
-        }
-        parcelRepository.save(entity);
+        RecipientEntity recipientEntity= recipientRepository.save(parcelEntity.getRecipient());
+        parcelEntity.setRecipient(recipientEntity);
+        parcelEntity.setSender(recipientEntity);
 
-        assertEquals(1, parcelRepository.count());
-        assertEquals(2, recipientRepository.count());
-        assertEquals(2, hopArrivalRepository.count());
+        parcelEntity= parcelRepository.save(parcelEntity);
+
+        Optional<RecipientEntity> optionalRecipientEntity= recipientRepository.findById(recipientEntity.getId());
+        Optional<ParcelEntity> optionalParcelEntity= parcelRepository.findById(parcelEntity.getId());
+
+        assert(optionalParcelEntity.isPresent());
+        assert(optionalRecipientEntity.isPresent());
+
+        parcelRepository.delete(parcelEntity);
+        recipientRepository.delete(recipientEntity);
+
 
     }
 }

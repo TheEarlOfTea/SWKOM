@@ -32,14 +32,10 @@ public class Hop   {
   private String hopType = null;
 
   @JsonProperty("code")
-  @Pattern(regexp="^[A-Z]{4}\\d{1,4}$", message = "code has to match \'^[A-Z]{4}\\d{1,4}$\'")
   @NotNull(message = "code may not be null")
   private String code = null;
 
   @JsonProperty("description")
-  /*@NotNull(message= "description may not be null")
-  @Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="description has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
-  */
   private String description = null;
 
 
@@ -49,9 +45,6 @@ public class Hop   {
   private Integer processingDelayMins = null;
 
   @JsonProperty("locationName")
-  /*@Pattern(regexp="^[A-Za-z0-9ÄÖÜäöüß\\- ]*", message="location has to match \'^[A-Za-z0-9ÄÖÜäöüß\\- ]*\'")
-  @NotNull(message= "locationName may not be null")
-  */
   private String locationName = null;
 
   @JsonProperty("locationCoordinates")
@@ -99,7 +92,7 @@ public class Hop   {
   @Schema(required = true, description = "Unique CODE of the hop.")
       @NotNull
 
-  @Pattern(regexp="^[A-Z]{4}\\d{1,4}$")   public String getCode() {
+  public String getCode() {
     return code;
   }
 

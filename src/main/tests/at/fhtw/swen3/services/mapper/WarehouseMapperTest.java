@@ -1,10 +1,14 @@
 package at.fhtw.swen3.services.mapper;
 
+import at.fhtw.swen3.services.dto.HopArrival;
+import at.fhtw.swen3.services.dto.Truck;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.threeten.bp.OffsetDateTime;
 
 import java.util.LinkedList;
 
@@ -12,14 +16,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WarehouseMapperTest {
 
-    Warehouse warehouse= new Warehouse().level(1).nextHops(new LinkedList<WarehouseNextHops>());
-
     @Test
-    void fromDTO() {
-        warehouse.setDummyData();
-        warehouse.addNextHopsItem(new WarehouseNextHops().traveltimeMins(3));
-        WarehouseEntity entity= WarehouseMapper.INSTANCE.fromDTO(warehouse);
+    void testFromDTO() {
 
+        Warehouse warehouse= new Warehouse().level(1).nextHops(new LinkedList<WarehouseNextHops>());
+        warehouse.setDummyData();
+
+        Truck truck= new Truck();
+        truck.setDummyData();
+        truck.setCode("TRUCK");
+        truck.setNumberPlate("abc");
+        truck.setRegionGeoJson("abc");
+
+        warehouse.addNextHopsItem(new WarehouseNextHops().traveltimeMins(3).hop(truck));
+
+        WarehouseEntity entity= WarehouseMapper.INSTANCE.fromDTO(warehouse);
         assertEquals(warehouse.getCode(), entity.getCode());
         assertEquals(warehouse.getDescription(), entity.getDescription());
         assertEquals(warehouse.getHopType(), entity.getHopType());
@@ -34,8 +45,17 @@ class WarehouseMapperTest {
     @Test
     void fromEntity() {
 
+        Warehouse warehouse= new Warehouse().level(1).nextHops(new LinkedList<WarehouseNextHops>());
         warehouse.setDummyData();
-        warehouse.addNextHopsItem(Mockito.mock(WarehouseNextHops.class));
+
+        Truck truck= new Truck();
+        truck.setDummyData();
+        truck.setCode("TRUCK");
+        truck.setNumberPlate("abc");
+        truck.setRegionGeoJson("abc");
+
+        warehouse.addNextHopsItem(new WarehouseNextHops().traveltimeMins(3).hop(truck));
+
         WarehouseEntity entity= WarehouseMapper.INSTANCE.fromDTO(warehouse);
         Warehouse newWarehouse= WarehouseMapper.INSTANCE.fromEntity(entity);
 
