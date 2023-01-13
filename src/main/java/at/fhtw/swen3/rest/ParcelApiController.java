@@ -64,7 +64,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -87,7 +87,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -114,7 +114,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (Exception e){
-                System.out.println(e.getMessage());
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -137,7 +137,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -169,7 +169,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }

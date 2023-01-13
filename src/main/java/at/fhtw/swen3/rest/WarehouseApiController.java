@@ -55,7 +55,7 @@ public class WarehouseApiController implements WarehouseApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Warehouse>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<Warehouse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -72,7 +72,7 @@ public class WarehouseApiController implements WarehouseApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Hop>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
                 return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -87,7 +87,7 @@ public class WarehouseApiController implements WarehouseApi {
             System.out.println(e.getMessage());
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
         }catch (Exception e){
-            System.out.println("Something went wrong. Please contact your System Admin,");
+            System.out.println("Something went wrong. Please contact your System Admin.");
             log.error(e.getMessage());
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,10 +1,8 @@
 package at.fhtw.swen3.configuration;
 
 import at.fhtw.swen3.persistence.repositories.*;
-import at.fhtw.swen3.services.ParcelService;
-import at.fhtw.swen3.services.PredictService;
-import at.fhtw.swen3.services.PredictionService;
-import at.fhtw.swen3.services.WarehouseService;
+import at.fhtw.swen3.services.*;
+import at.fhtw.swen3.services.impl.EmailNotificationServiceImpl;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 import at.fhtw.swen3.services.impl.PredictionServiceImpl;
 import at.fhtw.swen3.services.impl.WarehouseServiceImpl;
@@ -12,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 
 @Configuration
 @ComponentScan("at.fhtw.swen3")
@@ -29,6 +29,8 @@ public class DependencyInjectionConfig {
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
     @Autowired
     private WarehouseRepository warehouseRepository;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Bean
     public ParcelService parcelService(){
@@ -43,5 +45,10 @@ public class DependencyInjectionConfig {
     @Bean
     public PredictionService predictionService(){
         return new PredictionServiceImpl(hopRepository, warehouseRepository);
+    }
+
+    @Bean
+    public EmailNotificationService emailNotificationService(){
+        return new EmailNotificationServiceImpl(mailSender);
     }
 }
