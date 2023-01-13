@@ -5,6 +5,7 @@ import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundEx
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadWareHouseDataException;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Warehouse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -53,9 +54,10 @@ public class WarehouseApiController implements WarehouseApi {
             } catch(HierachyNotLoadedException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Warehouse>(HttpStatus.NOT_FOUND);
-            } catch (Exception e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<Warehouse>(HttpStatus.BAD_REQUEST);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
+                return new ResponseEntity<Warehouse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<Warehouse>(HttpStatus.NOT_IMPLEMENTED);
@@ -70,8 +72,9 @@ public class WarehouseApiController implements WarehouseApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Hop>(HttpStatus.NOT_FOUND);
             }catch (Exception e){
-                System.out.println(e.getMessage());
-                return new ResponseEntity<Hop>(HttpStatus.BAD_REQUEST);
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
+                return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<Hop>(HttpStatus.NOT_IMPLEMENTED);
@@ -83,6 +86,10 @@ public class WarehouseApiController implements WarehouseApi {
         }catch (BadWareHouseDataException e){
             System.out.println(e.getMessage());
             return new ResponseEntity<Void>(HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            System.out.println("Something went wrong. Please contact your System Admin,");
+            log.error(e.getMessage());
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);
 

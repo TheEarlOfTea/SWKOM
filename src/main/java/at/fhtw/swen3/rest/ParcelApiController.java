@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Pattern;
+import java.sql.SQLException;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-24T14:25:41.651Z[GMT]")
 @RestController
@@ -50,7 +52,7 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<Void> reportParcelDelivery(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
             try{
                 parcelService.reportParcelDelivery(trackingId);
-                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel sucessfully delivered", "Parcel was successfuly submited. Tracking-Id: " + trackingId);
+                emailNotificationService.sendEmail("Parcel sucessfully delivered", "Parcel was successfuly delivered. Tracking-Id: " + trackingId);
                 return new ResponseEntity<Void>(HttpStatus.OK);
             }catch (BadTrackingIdException e){
                 System.out.println(e.getMessage());
@@ -61,6 +63,10 @@ public class ParcelApiController implements ParcelApi {
             }catch (ParcelNotFoundException e) {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
     }
@@ -68,7 +74,7 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<Void> reportParcelHop(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
             try{
                 parcelService.reportParcelHop(trackingId, code);
-                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel arrived at new Hop", "Parcel arrived at new Hop.\nTracking-Id: " + trackingId + "\nHop-Code: " + code);
+                emailNotificationService.sendEmail("Parcel arrived at new Hop", "Parcel arrived at new Hop.\nTracking-Id: " + trackingId + "\nHop-Code: " + code);
 
                 return new ResponseEntity<Void>(HttpStatus.CREATED);
             }catch (BadTrackingIdException e){
@@ -80,6 +86,10 @@ public class ParcelApiController implements ParcelApi {
             }catch (HopNotFoundException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
+                return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
     }
@@ -89,7 +99,7 @@ public class ParcelApiController implements ParcelApi {
         if (accept != null && accept.contains("application/json")) {
             try {
                 NewParcelInfo newParcelInfo = parcelService.saveDomesticParcel(body);
-                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel sucessfully submitted", "New Parcel successfully submitted.\nTracking-Id: " + newParcelInfo.getTrackingId());
+                emailNotificationService.sendEmail("Parcel sucessfully submitted", "New Parcel successfully submitted.\nTracking-Id: " + newParcelInfo.getTrackingId());
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
                 System.out.println(e.getMessage());
@@ -102,6 +112,10 @@ public class ParcelApiController implements ParcelApi {
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (HopNotFoundException e){
                 System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -122,6 +136,10 @@ public class ParcelApiController implements ParcelApi {
             }catch (ParcelNotFoundException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_FOUND);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
+                return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<TrackingInformation>(HttpStatus.NOT_IMPLEMENTED);
@@ -132,7 +150,7 @@ public class ParcelApiController implements ParcelApi {
         if (accept != null && accept.contains("application/json")) {
             try{
                 NewParcelInfo newParcelInfo=parcelService.saveTransitionParcel(trackingId, body);
-                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Transition-Parcel sucessfully submitted", "Transition-Parcel successfully submitted.\nTracking-Id: " + trackingId);
+                emailNotificationService.sendEmail("Transition-Parcel sucessfully submitted", "Transition-Parcel successfully submitted.\nTracking-Id: " + trackingId);
 
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
@@ -149,6 +167,10 @@ public class ParcelApiController implements ParcelApi {
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.CONFLICT);
             }catch (HopNotFoundException e){
                 System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (Exception e){
+                System.out.println("Something went wrong. Please contact your System Admin,");
+                log.error(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }

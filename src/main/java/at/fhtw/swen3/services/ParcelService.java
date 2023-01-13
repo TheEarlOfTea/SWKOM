@@ -6,6 +6,9 @@ import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputE
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
+import org.postgresql.util.PSQLException;
+
+import java.sql.SQLException;
 
 public interface ParcelService {
 

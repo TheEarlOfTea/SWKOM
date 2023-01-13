@@ -15,9 +15,9 @@ public class EmailNotificationServiceImpl implements EmailNotificationService {
     }
 
     @Override
-    public void sendEmail(String receiver, String subject, String body) {
+    public void sendEmail(String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(receiver);
+        message.setTo(System.getenv("mail-receiver"));
         message.setSubject(subject);
         message.setText(body);
         mailSender.send(message);

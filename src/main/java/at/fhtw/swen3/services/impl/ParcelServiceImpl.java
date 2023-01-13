@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.threeten.bp.OffsetDateTime;
 
 import javax.validation.ValidationException;
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException {
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException{
 
         //throws BadParcelDataException
         validateParcel(parcel);
