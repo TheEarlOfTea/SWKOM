@@ -114,7 +114,7 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (Exception e){
-                System.out.println("Something went wrong. Please contact your System Admin,");
+                System.out.println(e.getMessage());
                 log.error(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
