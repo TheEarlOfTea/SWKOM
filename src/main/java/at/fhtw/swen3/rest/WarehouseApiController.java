@@ -3,6 +3,7 @@ package at.fhtw.swen3.rest;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HierachyNotLoadedException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadWareHouseDataException;
+import at.fhtw.swen3.services.EmailNotificationService;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
@@ -38,12 +39,14 @@ public class WarehouseApiController implements WarehouseApi {
     private final HttpServletRequest request;
 
     private final WarehouseService warehouseService;
+    private final EmailNotificationService emailNotificationService;
 
 
-    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, WarehouseService warehouseService) {
+    public WarehouseApiController(ObjectMapper objectMapper, HttpServletRequest request, WarehouseService warehouseService, EmailNotificationService emailNotificationService) {
         this.objectMapper = objectMapper;
         this.request = request;
         this.warehouseService = warehouseService;
+        this.emailNotificationService = emailNotificationService;
     }
 
     public ResponseEntity<Warehouse> exportWarehouses() {
@@ -57,6 +60,7 @@ public class WarehouseApiController implements WarehouseApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to export the warehouse hierachy.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<Warehouse>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -74,6 +78,7 @@ public class WarehouseApiController implements WarehouseApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to retrieve a specific Hop.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<Hop>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -89,6 +94,7 @@ public class WarehouseApiController implements WarehouseApi {
         }catch (Exception e){
             System.out.println("Something went wrong. Please contact your System Admin.");
             log.error(e.getMessage());
+            emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to import a new warehouse hierachy.\n\nPlease check the logs for more info.");
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Void>(HttpStatus.OK);

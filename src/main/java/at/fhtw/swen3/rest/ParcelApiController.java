@@ -66,6 +66,7 @@ public class ParcelApiController implements ParcelApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to report a Parcel delivery.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -89,6 +90,7 @@ public class ParcelApiController implements ParcelApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to report the Arrival of a Parcel at a scheduled hop.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -116,6 +118,7 @@ public class ParcelApiController implements ParcelApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying submit a new parcel to the system.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
@@ -139,6 +142,7 @@ public class ParcelApiController implements ParcelApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to retrieve a Parcels tracking-information.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<TrackingInformation>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
@@ -171,6 +175,7 @@ public class ParcelApiController implements ParcelApi {
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
+                emailNotificationService.sendEmail("Unexpected Error during Runtime in Parcel TNT", "Something went wrong while trying to submit a transition-parcel to the system.\n\nPlease check the logs for more info.");
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
