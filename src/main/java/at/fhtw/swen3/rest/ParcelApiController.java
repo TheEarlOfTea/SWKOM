@@ -50,6 +50,7 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<Void> reportParcelDelivery(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId) {
             try{
                 parcelService.reportParcelDelivery(trackingId);
+                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel sucessfully delivered", "Parcel was successfuly submited. Tracking-Id: " + trackingId);
                 return new ResponseEntity<Void>(HttpStatus.OK);
             }catch (BadTrackingIdException e){
                 System.out.println(e.getMessage());
@@ -67,6 +68,8 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<Void> reportParcelHop(@Parameter(in = ParameterIn.PATH, description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required=true, schema=@Schema()) @PathVariable("trackingId") String trackingId,@Pattern(regexp="^[A-Z]{4}\\d{1,4}$") @Parameter(in = ParameterIn.PATH, description = "The Code of the hop (Warehouse or Truck).", required=true, schema=@Schema()) @PathVariable("code") String code) {
             try{
                 parcelService.reportParcelHop(trackingId, code);
+                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel arrived at new Hop", "Parcel arrived at new Hop.\nTracking-Id: " + trackingId + "\nHop-Code: " + code);
+
                 return new ResponseEntity<Void>(HttpStatus.CREATED);
             }catch (BadTrackingIdException e){
                 System.out.println(e.getMessage());
@@ -83,10 +86,10 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<NewParcelInfo> submitParcel(@Parameter(in = ParameterIn.DEFAULT, description = "", required=true, schema=@Schema()) @Valid @RequestBody Parcel body) {
         String accept = request.getHeader("Accept");
-        emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "test", "test");
         if (accept != null && accept.contains("application/json")) {
             try {
                 NewParcelInfo newParcelInfo = parcelService.saveDomesticParcel(body);
+                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Parcel sucessfully submitted", "New Parcel successfully submitted.\nTracking-Id: " + newParcelInfo.getTrackingId());
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
                 System.out.println(e.getMessage());
@@ -95,6 +98,9 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_FOUND);
             }catch (DuplicateTrackingIdException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (HopNotFoundException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -126,6 +132,8 @@ public class ParcelApiController implements ParcelApi {
         if (accept != null && accept.contains("application/json")) {
             try{
                 NewParcelInfo newParcelInfo=parcelService.saveTransitionParcel(trackingId, body);
+                emailNotificationService.sendEmail("julian.weghaupt@gmail.com", "Transition-Parcel sucessfully submitted", "Transition-Parcel successfully submitted.\nTracking-Id: " + trackingId);
+
                 return new ResponseEntity<NewParcelInfo>(newParcelInfo, HttpStatus.CREATED);
             }catch (BadParcelDataException e){
                 System.out.println(e.getMessage());
@@ -139,6 +147,9 @@ public class ParcelApiController implements ParcelApi {
             }catch (DuplicateTrackingIdException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.CONFLICT);
+            }catch (HopNotFoundException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return new ResponseEntity<NewParcelInfo>(HttpStatus.NOT_IMPLEMENTED);

@@ -9,9 +9,9 @@ import at.fhtw.swen3.services.dto.TrackingInformation;
 
 public interface ParcelService {
 
-    NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException;
+    NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException;
     void reportParcelDelivery(String trackingId) throws BadTrackingIdException, ParcelNotFoundException, FutureHopsIsNotEmptyException;
     TrackingInformation trackParcel(String trackingId) throws BadTrackingIdException, ParcelNotFoundException;
-    NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException;
+    NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException;
     void reportParcelHop(String trackingId, String code) throws BadTrackingIdException, ParcelNotFoundException, HopNotFoundException;
 }

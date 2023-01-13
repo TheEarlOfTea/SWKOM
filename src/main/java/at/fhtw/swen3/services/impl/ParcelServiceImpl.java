@@ -42,12 +42,18 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException {
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException {
 
         //throws BadParcelDataException
         validateParcel(parcel);
 
         NewParcelInfo newParcelInfo= NewParcelInfoFactory.getNewParcelInfo();
+
+        if(hopRepository.count()<=0){
+            log.error("No Database Entries for hops found, database might be empty");
+            throw new HopNotFoundException("No Hops found in Database. HopRepository might be empty.");
+
+        }
 
         //Throws BadAddressException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
@@ -58,13 +64,19 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException {
+    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException {
         //throws BadTrackingIdException
         validateTrackingId(trackingId);
         //throws BadParcelDataException
         validateParcel(parcel);
 
         NewParcelInfo newParcelInfo= new NewParcelInfo().trackingId(trackingId);
+
+        if(hopRepository.count()<=0){
+            log.error("No Database Entries for hops found, database might be empty");
+            throw new HopNotFoundException("No Hops found in Database. HopRepository might be empty.");
+
+        }
 
         //Throws BadAddressException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
@@ -159,7 +171,8 @@ public class ParcelServiceImpl implements ParcelService {
         }
     }
 
-    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws DuplicateTrackingIdException {
+    private NewParcelInfo saveParcel(NewParcelInfo newParcelInfo, Parcel parcel, TrackingInformation trackingInformation) throws DuplicateTrackingIdException{
+
 
         Optional<String> trackingId= parcelRepository.doesTrackingIdExist(newParcelInfo.getTrackingId());
         if(trackingId.isPresent()){
