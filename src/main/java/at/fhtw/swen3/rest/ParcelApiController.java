@@ -1,5 +1,6 @@
 package at.fhtw.swen3.rest;
 
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.GPSProxyException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
@@ -115,6 +116,9 @@ public class ParcelApiController implements ParcelApi {
             }catch (HopNotFoundException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (GPSProxyException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (Exception e){
                 System.out.println("Something went wrong. Please contact your System Admin.");
                 log.error(e.getMessage());
@@ -170,6 +174,9 @@ public class ParcelApiController implements ParcelApi {
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.CONFLICT);
             }catch (HopNotFoundException e){
+                System.out.println(e.getMessage());
+                return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (GPSProxyException e){
                 System.out.println(e.getMessage());
                 return new ResponseEntity<NewParcelInfo>(HttpStatus.INTERNAL_SERVER_ERROR);
             }catch (Exception e){

@@ -6,6 +6,7 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.GPSProxyException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.BadAddressException;
 import at.fhtw.swen3.services.PredictionService;
 import at.fhtw.swen3.services.dto.*;
@@ -33,26 +34,32 @@ public class PredictionServiceImpl implements PredictionService {
     }
 
     @Transactional
-    public TrackingInformation getTrackingInformation(Recipient sender, Recipient recipient) throws BadAddressException {
+    public TrackingInformation getTrackingInformation(Recipient sender, Recipient recipient) throws BadAddressException, GPSProxyException {
         List<HopArrival> futureHops;
         GeoCoordinate senderCoordinate;
-        GeoCoordinate recipientcoordinate;
+        GeoCoordinate recipientCoordinate;
 
         try{
             senderCoordinate= bingEncodingProxy.encodeAddress(Address.builder().city(sender.getCity()).country(sender.getCountry()).postalCode(sender.getPostalCode()).street(sender.getStreet()).build());
         }catch (BadAddressException e){
             log.error("Received Invalid Address for Sender. Exception: " + e.getMessage());
             throw e;
+        }catch (GPSProxyException e){
+            log.error(e.getMessage());
+            throw e;
         }
         try{
-            recipientcoordinate= bingEncodingProxy.encodeAddress(Address.builder().city(recipient.getCity()).country(recipient.getCountry()).postalCode(recipient.getPostalCode()).street(recipient.getStreet()).build());
+            recipientCoordinate= bingEncodingProxy.encodeAddress(Address.builder().city(recipient.getCity()).country(recipient.getCountry()).postalCode(recipient.getPostalCode()).street(recipient.getStreet()).build());
         }catch (BadAddressException e){
             log.error("Received Invalid Address for Recipient. Exception: " + e.getMessage());
+            throw e;
+        }catch (GPSProxyException e){
+            log.error(e.getMessage());
             throw e;
         }
 
 
-        futureHops= getHopArrivalPath(senderCoordinate, recipientcoordinate);
+        futureHops= getHopArrivalPath(senderCoordinate, recipientCoordinate);
 
         LinkedList<HopArrival> visitedHops= new LinkedList<HopArrival>();
         return new TrackingInformation().futureHops(futureHops).visitedHops(visitedHops).state(TrackingInformation.StateEnum.PICKUP);

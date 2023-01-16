@@ -23,7 +23,7 @@ class BingEncodingProxyTest {
                     .street("Molkereistrasse")
                     .postalCode("1020")
                     .build());
-        } catch (BadAddressException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(geoCoordinate);
@@ -40,7 +40,7 @@ class BingEncodingProxyTest {
                     .street("Molkereistrasse")
                     .postalCode("1020")
                     .build());
-        } catch (BadAddressException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assertNotNull(geoCoordinate);

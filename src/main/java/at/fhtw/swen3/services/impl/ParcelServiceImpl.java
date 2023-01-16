@@ -3,6 +3,7 @@ package at.fhtw.swen3.services.impl;
 import at.fhtw.swen3.factories.NewParcelInfoFactory;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
+import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.GPSProxyException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.HopNotFoundException;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.UserInputExceptions.*;
 import at.fhtw.swen3.services.CustomExceptions.ServiceLayerExceptions.NotFoundExceptions.ParcelNotFoundException;
@@ -43,7 +44,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException{
+    public NewParcelInfo saveDomesticParcel(Parcel parcel) throws BadParcelDataException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException, GPSProxyException {
 
         //throws BadParcelDataException
         validateParcel(parcel);
@@ -56,7 +57,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         }
 
-        //Throws BadAddressException
+        //Throws BadAddressException, GPSProxyException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
         //Throws DuplicateTrackingIdException
@@ -65,7 +66,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException {
+    public NewParcelInfo saveTransitionParcel(String trackingId, Parcel parcel) throws BadParcelDataException, BadTrackingIdException, BadAddressException, DuplicateTrackingIdException, HopNotFoundException , GPSProxyException {
         //throws BadTrackingIdException
         validateTrackingId(trackingId);
         //throws BadParcelDataException
@@ -79,7 +80,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         }
 
-        //Throws BadAddressException
+        //Throws BadAddressException, GPSProxyException
         TrackingInformation trackingInformation= predictionService.getTrackingInformation(parcel.getRecipient(), parcel.getSender());
 
         //Throws DuplicateTrackingIdException
