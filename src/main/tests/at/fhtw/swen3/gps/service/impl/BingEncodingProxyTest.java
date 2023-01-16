@@ -44,7 +44,7 @@ class BingEncodingProxyTest {
             e.printStackTrace();
         }
         assertNotNull(geoCoordinate);
-        assertEquals(new Double(48.2179768), geoCoordinate.getLat());
-        assertEquals(new Double(16.4011212), geoCoordinate.getLon());
+        assert(48.2179768==geoCoordinate.getLat());
+        assert(16.4011212==geoCoordinate.getLon());
     }
 }
